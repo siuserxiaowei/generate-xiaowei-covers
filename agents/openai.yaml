@@ -1,0 +1,4 @@
+interface:
+  display_name: "小伟 AI 封面 Skill"
+  short_description: "从一句选题生成封面提示词、官方依据和多平台成套封面"
+  default_prompt: "使用 $generate-xiaowei-covers 把我的选题整理成可复用封面提示词，并生成公众号与小红书封面。"

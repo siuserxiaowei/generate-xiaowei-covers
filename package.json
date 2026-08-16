@@ -1,0 +1,14 @@
+{
+  "name": "generate-xiaowei-covers",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Turn one topic into a reusable cover prompt and full-resolution Xiaohongshu and WeChat covers.",
+  "type": "module",
+  "scripts": {
+    "test": "node --check scripts/new-cover-project.mjs && node --check scripts/render-covers.mjs && node --check scripts/validate-repo.mjs && node scripts/validate-repo.mjs"
+  },
+  "license": "AGPL-3.0-only",
+  "engines": {
+    "node": ">=20"
+  }
+}
