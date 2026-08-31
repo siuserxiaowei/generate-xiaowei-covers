@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { spawnSync } from "node:child_process";
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
@@ -112,6 +113,21 @@ async function validateClaim2CoverFixture() {
   }
 }
 
+async function validateProvenanceFoundation() {
+  const provenance = await readFile(path.join(root, "PROVENANCE.md"), "utf8");
+  const foundation = provenance.match(
+    /stable public foundation before Claim2Cover is commit `([a-f0-9]{40})`/u,
+  )?.[1];
+  if (!foundation) fail("PROVENANCE.md must record a full foundation commit hash.");
+  const resolved = spawnSync("git", ["-C", root, "cat-file", "-e", `${foundation}^{commit}`], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  if (resolved.status !== 0) {
+    fail(`PROVENANCE.md foundation commit does not resolve: ${foundation}`);
+  }
+}
+
 async function validateTemplateAssets(relativeTemplatePath) {
   const templatePath = path.join(root, relativeTemplatePath);
   const html = await readFile(templatePath, "utf8");
@@ -141,6 +157,7 @@ async function validateTemplateAssets(relativeTemplatePath) {
 async function main() {
   for (const file of requiredFiles) await assertFile(file);
   await validateSkillFrontmatter();
+  await validateProvenanceFoundation();
   await validateClaim2CoverFixture();
   const verticalTextSafeAreas = await validateVerticalTextSafeAreas();
 

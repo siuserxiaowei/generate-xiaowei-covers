@@ -14,6 +14,8 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
+import { sanitizePublicTranscript } from "./claim-to-pixel.mjs";
+
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.dirname(scriptDir);
 const validFixture = path.join(root, "contest", "demo", "claim-to-pixel.json");
@@ -133,7 +135,7 @@ function importantPass(transcript) {
     .join("\n");
 }
 
-function shotList(outputDir) {
+function shotList() {
   return `# Claim2Cover 录屏镜头清单（72 秒）
 
 > 这组素材来自固定可复现 fixture，\`liveAiClaimed:false\`。录制时应明确：语义 brief 是 Agent 草案；本地 CLI 做确定性校验与渲染。真实 Skill 前向测试需另留运行证据。
@@ -151,7 +153,7 @@ function shotList(outputDir) {
 
 ## 建议录制顺序
 
-1. 先打开 \`${path.join(outputDir, "DEMO.html")}\` 全屏，完成开头与结尾镜头。
+1. 先打开 \`<output-dir>/DEMO.html\` 全屏，完成开头与结尾镜头。
 2. 中间切终端展示 \`FAIL.log\` 与 \`PASS.log\`，不要滚动无关日志。
 3. 三张 PNG 各停 2–3 秒；最后回到 1920×1080 看板。
 4. 不要展示或口播“实时 AI 调用”；这个固定 fixture 的职责是可复现回归。真实 Agent 前向测试另录。
@@ -166,18 +168,24 @@ async function main() {
   }
   if (args.length > 1) fail(usage());
   const outputDir = await reserveOutput(args[0]);
+  const publicTranscript = (value) => sanitizePublicTranscript(value, {
+    outputDir,
+    repositoryRoot: root,
+  });
 
   const failed = run("claim-to-pixel.mjs", ["validate", invalidFixture]);
   assert.notEqual(failed.status, 0, "Intentional negative fixture must fail.");
   for (const code of ["CTP_TITLE_UNVERIFIED", "CTP_TITLE_PROMISE_UNVERIFIED", "CTP_TITLE_LENGTH"]) {
     assert.match(failed.transcript, new RegExp(code, "u"));
   }
-  await writeFile(path.join(outputDir, "FAIL.log"), failed.transcript);
+  const publicFailedTranscript = publicTranscript(failed.transcript);
+  await writeFile(path.join(outputDir, "FAIL.log"), publicFailedTranscript);
 
   const buildDir = path.join(outputDir, "build");
   const passed = run("claim-to-pixel.mjs", ["build", validFixture, buildDir]);
   if (passed.status !== 0) fail(`Fixed fixture failed:\n${passed.transcript}`);
-  await writeFile(path.join(outputDir, "PASS.log"), passed.transcript);
+  const publicPassedTranscript = publicTranscript(passed.transcript);
+  await writeFile(path.join(outputDir, "PASS.log"), publicPassedTranscript);
 
   const report = JSON.parse(await readFile(path.join(buildDir, "CONTRACT_REPORT.json"), "utf8"));
   assert.equal(report.status, "PENDING HUMAN SIGN-OFF");
@@ -197,8 +205,8 @@ async function main() {
   await writeFile(path.join(outputDir, "STATUS_BEFORE_SIGNOFF.json"), `${JSON.stringify(beforeSignoff, null, 2)}\n`);
 
   const demoHtml = storyboardHtml(
-    importantFailures(failed.transcript),
-    importantPass(passed.transcript),
+    importantFailures(publicFailedTranscript),
+    importantPass(publicPassedTranscript),
     report,
   );
   const demoHtmlPath = path.join(outputDir, "DEMO.html");
@@ -206,7 +214,7 @@ async function main() {
   const boardDir = path.join(outputDir, "board");
   const boardRender = run("render-covers.mjs", [demoHtmlPath, boardDir]);
   if (boardRender.status !== 0) fail(`Demo board render failed:\n${boardRender.transcript}`);
-  await writeFile(path.join(outputDir, "BOARD_RENDER.log"), boardRender.transcript);
+  await writeFile(path.join(outputDir, "BOARD_RENDER.log"), publicTranscript(boardRender.transcript));
 
   const shots = [
     { order: 1, file: "FAIL.log", purpose: "Intentional negative gate output" },
@@ -222,7 +230,7 @@ async function main() {
     { order: 11, file: "STATUS_BEFORE_SIGNOFF.json", purpose: "Human boundary and next commands" },
   ];
   await writeFile(path.join(outputDir, "SHOTS.json"), `${JSON.stringify(shots, null, 2)}\n`);
-  await writeFile(path.join(outputDir, "SHOT_LIST.md"), shotList(outputDir));
+  await writeFile(path.join(outputDir, "SHOT_LIST.md"), shotList());
 
   const summary = {
     schemaVersion: 1,

@@ -208,18 +208,15 @@ function riskTokenCertified(certifiedToken, riskToken) {
   if (!normalizedCertified || normalizedCertified === normalizedRisk) {
     return normalizedCertified === normalizedRisk;
   }
+  return extractRiskTokens(certifiedToken)
+    .some((token) => normalizedText(token) === normalizedRisk);
+}
 
-  const certifiedAbsolute = ABSOLUTE_PHRASES.find(
-    (phrase) => normalizedText(phrase) === normalizedCertified,
-  );
-  const riskAbsolute = ABSOLUTE_PHRASES.find(
-    (phrase) => normalizedText(phrase) === normalizedRisk,
-  );
-  return Boolean(
-    certifiedAbsolute
-      && riskAbsolute
-      && normalizedText(certifiedAbsolute).includes(normalizedText(riskAbsolute)),
-  );
+function certifiedTokenOccursInClaim(claimText, certifiedToken) {
+  if (!normalizedText(claimText).includes(normalizedText(certifiedToken))) return false;
+  const claimRiskTokens = extractRiskTokens(claimText).map(normalizedText);
+  return extractRiskTokens(certifiedToken)
+    .every((token) => claimRiskTokens.includes(normalizedText(token)));
 }
 
 function runGit(startDirectory, args) {
@@ -255,6 +252,31 @@ function repositoryState(manifestPath) {
     dirty: changes.length > 0,
     changeCount: changes.length,
   };
+}
+
+function publicRepositoryState(repository) {
+  return repository.available
+    ? { ...repository, root: "." }
+    : { ...repository, root: null };
+}
+
+function publicManifestPath(manifestPath, repository) {
+  if (!repository.available) return path.basename(manifestPath);
+  return path.relative(repository.root, manifestPath).split(path.sep).join("/");
+}
+
+function sanitizePublicTranscript(value, { outputDir = "", repositoryRoot = "" } = {}) {
+  let sanitized = String(value || "");
+  for (const [privatePath, publicLabel] of [
+    [outputDir, "<output-dir>"],
+    [repositoryRoot, "<repo-root>"],
+  ]) {
+    if (privatePath) sanitized = sanitized.replaceAll(privatePath, publicLabel);
+  }
+  return sanitized
+    .replace(/\/Users\/[^)\n]+/gu, "<local-path>")
+    .replace(/\/home\/[^)\n]+/gu, "<local-path>")
+    .replace(/[A-Za-z]:\\Users\\[^)\n]+/gu, "<local-path>");
 }
 
 async function readManifest(manifestArg) {
@@ -567,7 +589,7 @@ async function validateContract(manifest, manifestPath) {
       );
     }
     for (const token of titleTokens) {
-      if (!nonEmpty(token) || !normalizedText(claim.text).includes(normalizedText(token))) {
+      if (!nonEmpty(token) || !certifiedTokenOccursInClaim(claim.text, token)) {
         issue(
           issues,
           "title-truth",
@@ -757,20 +779,19 @@ async function validateContract(manifest, manifestPath) {
         );
       }
     }
-    const riskTokens = extractRiskTokens(brief.title);
-    if (riskTokens.length) {
-      const certifiedTokens = headlineClaims
-        .filter((claim) => claim.type === "fact" && claim.status === "verified" && claim.coverAllowed === true)
-        .flatMap((claim) => (Array.isArray(claim.titleTokens) ? claim.titleTokens : []));
-      for (const riskToken of riskTokens) {
+    const certifiedTokens = headlineClaims
+      .filter((claim) => claim.type === "fact" && claim.status === "verified" && claim.coverAllowed === true)
+      .flatMap((claim) => (Array.isArray(claim.titleTokens) ? claim.titleTokens : []));
+    for (const [field, publicText] of [["title", brief.title], ["promise", brief.promise]]) {
+      for (const riskToken of extractRiskTokens(publicText)) {
         const certified = certifiedTokens.some((token) => riskTokenCertified(token, riskToken));
         if (!certified) {
           issue(
             issues,
             "title-truth",
             "CTP_TITLE_PROMISE_UNVERIFIED",
-            `${location}.title`,
-            `Numeric or absolute title token lacks a verified fact token: ${riskToken}`,
+            `${location}.${field}`,
+            `Numeric or absolute public-copy token lacks a verified fact token: ${riskToken}`,
           );
         }
       }
@@ -1261,18 +1282,19 @@ async function buildArtifacts(manifestPath, raw, manifest, validation, repositor
   await mkdir(briefsDir, { recursive: true });
 
   const manifestHash = sha256(raw);
+  const publicRepository = publicRepositoryState(repository);
   const report = {
     schemaVersion: CONTRACT_VERSION,
     contract: CONTRACT_NAME,
     manifest: {
-      path: manifestPath,
+      path: publicManifestPath(manifestPath, repository),
       sha256: manifestHash,
     },
     aiDraft: manifest.aiDraft,
     gates: validation.gates,
     status: contractStatus(manifest, validation),
     publishReady: publishReady(manifest, validation),
-    repository,
+    repository: publicRepository,
     render: {
       status: noRender ? "skipped" : "pending",
       outputs: [],
@@ -1294,7 +1316,10 @@ async function buildArtifacts(manifestPath, raw, manifest, validation, repositor
 
   let renderTranscript = "Rendering skipped by --no-render.\n";
   if (!noRender) {
-    renderTranscript = runRenderer(htmlPath, pngDir);
+    renderTranscript = sanitizePublicTranscript(runRenderer(htmlPath, pngDir), {
+      outputDir,
+      repositoryRoot: repository.root || "",
+    });
     report.render.status = "passed";
     report.render.outputs = Object.entries(SURFACES).map(([platform, spec]) => ({
       platform,
@@ -1461,7 +1486,9 @@ export {
   SIGNOFF_CONFIRMATION,
   SURFACES,
   approvalPayloadSha256,
+  certifiedTokenOccursInClaim,
   extractRiskTokens,
   riskTokenCertified,
+  sanitizePublicTranscript,
   validateContract,
 };

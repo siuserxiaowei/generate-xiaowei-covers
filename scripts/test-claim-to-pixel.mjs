@@ -17,6 +17,7 @@ import process from "node:process";
 import { fileURLToPath } from "node:url";
 import {
   SIGNOFF_CONFIRMATION,
+  certifiedTokenOccursInClaim,
   extractRiskTokens,
   riskTokenCertified,
 } from "./claim-to-pixel.mjs";
@@ -47,7 +48,10 @@ async function assertPng(filePath, width, height) {
 async function main() {
   assert.deepEqual(extractRiskTokens("全网唯一效率提升10倍"), ["全网唯一", "唯一", "10倍"]);
   assert.equal(riskTokenCertified("110倍", "10倍"), false);
+  assert.equal(riskTokenCertified("3种画幅", "3种"), true);
   assert.equal(riskTokenCertified("全网唯一", "唯一"), true);
+  assert.equal(certifiedTokenOccursInClaim("效率提升 110 倍。", "10倍"), false);
+  assert.equal(certifiedTokenOccursInClaim("支持 3 种画幅输出。", "3种画幅"), true);
 
   const tempRoot = await mkdtemp(path.join(os.tmpdir(), "claim2cover-test-"));
   const inRepoTemp = await mkdtemp(path.join(root, ".claim2cover-signoff-test-"));
@@ -80,6 +84,22 @@ async function main() {
     const summary = JSON.parse(await readFile(path.join(demoDir, "RUN_SUMMARY.json"), "utf8"));
     assert.equal(summary.liveAiClaimed, false);
     assert.equal(summary.fixedBuild.status, "PENDING HUMAN SIGN-OFF");
+    const publicArtifactText = (
+      await Promise.all([
+        "FAIL.log",
+        "PASS.log",
+        "DEMO.html",
+        "SHOT_LIST.md",
+        "RUN_SUMMARY.json",
+        "BOARD_RENDER.log",
+        "build/CONTRACT_REPORT.json",
+        "build/RENDER.log",
+      ].map((relative) => readFile(path.join(demoDir, relative), "utf8")))
+    ).join("\n");
+    assert.doesNotMatch(publicArtifactText, /\/Users\/|\/home\/|[A-Za-z]:\\Users\\/u);
+    assert.doesNotMatch(publicArtifactText, new RegExp(demoDir.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&"), "u"));
+    assert.equal(summary.sourceRevision.root, ".");
+    assert.equal(summary.fixedBuild.gatesPassed, true);
 
     const signedFixture = path.join(inRepoTemp, "signed.json");
     await cp(fixture, signedFixture);
@@ -118,6 +138,33 @@ async function main() {
     const substringValidation = run("claim-to-pixel.mjs", ["validate", substringFixturePath]);
     assert.notEqual(substringValidation.status, 0);
     assert.match(substringValidation.transcript, /CTP_TITLE_PROMISE_UNVERIFIED/u);
+
+    const falseLedgerTokenFixture = JSON.parse(await readFile(fixture, "utf8"));
+    falseLedgerTokenFixture.claims[0].text = "本流程经测试记录为 110 倍。";
+    falseLedgerTokenFixture.claims[0].titleTokens = ["10倍"];
+    const falseLedgerTokenPath = path.join(inRepoTemp, "false-ledger-token.json");
+    await writeFile(falseLedgerTokenPath, `${JSON.stringify(falseLedgerTokenFixture, null, 2)}\n`);
+    const falseLedgerTokenValidation = run("claim-to-pixel.mjs", ["validate", falseLedgerTokenPath]);
+    assert.notEqual(falseLedgerTokenValidation.status, 0);
+    assert.match(falseLedgerTokenValidation.transcript, /CTP_TOKEN_NOT_IN_CLAIM/u);
+
+    const certifiedPrefixFixture = JSON.parse(await readFile(fixture, "utf8"));
+    certifiedPrefixFixture.platforms.xiaohongshu.title = "独立输出3种画幅";
+    certifiedPrefixFixture.platforms.xiaohongshu.titleLines = ["独立输出3种画幅"];
+    certifiedPrefixFixture.platforms.xiaohongshu.headlineClaimIds = [certifiedPrefixFixture.claims[0].id];
+    const certifiedPrefixPath = path.join(inRepoTemp, "certified-numeric-prefix.json");
+    await writeFile(certifiedPrefixPath, `${JSON.stringify(certifiedPrefixFixture, null, 2)}\n`);
+    const certifiedPrefixValidation = run("claim-to-pixel.mjs", ["validate", certifiedPrefixPath]);
+    assert.equal(certifiedPrefixValidation.status, 0, certifiedPrefixValidation.transcript);
+
+    const riskyPromiseFixture = JSON.parse(await readFile(fixture, "utf8"));
+    riskyPromiseFixture.platforms.wechatWide.promise = "全网唯一效率提升10倍";
+    const riskyPromisePath = path.join(inRepoTemp, "risky-promise.json");
+    await writeFile(riskyPromisePath, `${JSON.stringify(riskyPromiseFixture, null, 2)}\n`);
+    const riskyPromiseValidation = run("claim-to-pixel.mjs", ["validate", riskyPromisePath]);
+    assert.notEqual(riskyPromiseValidation.status, 0);
+    assert.match(riskyPromiseValidation.transcript, /platforms\.wechatWide\.promise/u);
+    assert.match(riskyPromiseValidation.transcript, /CTP_TITLE_PROMISE_UNVERIFIED/u);
 
     const linkedCli = path.join(tempRoot, "claim-to-pixel-link.mjs");
     await symlink(path.join(scriptDir, "claim-to-pixel.mjs"), linkedCli);

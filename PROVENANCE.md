@@ -21,7 +21,7 @@ These mechanisms are implemented in `scripts/claim-to-pixel.mjs`, tested by `scr
 - AI coding agents: assisted with implementation, tests, documentation, and reproducible contest packaging under the owner's direction.
 - Git history: canonical record of file-level changes and public commit boundaries.
 
-The stable public foundation before Claim2Cover is commit `516d57c85a0ef69b77129397d1da966cda59a273` (`Initial public release of Xiaowei AI Cover Skill`). Version 0.3 work already present in the owner's worktree was preserved and incorporated; it was not discarded or rewritten from history.
+The stable public foundation before Claim2Cover is commit `516d57c85a0edb1678328960640bede4eaafabf3` (`Initial public release of Xiaowei AI Cover Skill`). Version 0.3 work already present in the owner's worktree was preserved and incorporated; it was not discarded or rewritten from history.
 
 The recorded contest fixture declares `liveAiClaimed: false`. Its prompt and responsibility split are preserved in `contest/demo/PROMPT.md`. A future live Skill run may be described as live only when the corresponding input, run trace, and output are retained.
 
