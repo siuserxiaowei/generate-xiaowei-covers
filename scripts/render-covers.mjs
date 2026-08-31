@@ -886,7 +886,16 @@ async function renderWithSystemChrome(htmlPath, outputDir, onlyTokens) {
   } finally {
     client?.close();
     await stopChild(child);
-    await rm(profileDir, { recursive: true, force: true });
+    // Chrome can finish creating profile files a few milliseconds after the
+    // browser process exits (especially on GitHub's Ubuntu runners). Let
+    // fs.rm retry transient ENOTEMPTY/EBUSY failures instead of turning a
+    // successful render into a failed build.
+    await rm(profileDir, {
+      recursive: true,
+      force: true,
+      maxRetries: 8,
+      retryDelay: 150,
+    });
   }
 }
 
