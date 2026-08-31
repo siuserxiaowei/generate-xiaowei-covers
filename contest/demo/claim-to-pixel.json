@@ -123,10 +123,11 @@
     }
   ],
   "humanSignoff": {
-    "status": "pending",
-    "reviewer": "",
-    "reviewedAt": "",
-    "note": "",
-    "confirmation": ""
+    "status": "approved",
+    "reviewer": "siuserxiaowei",
+    "reviewedAt": "2026-08-31T08:58:24.711Z",
+    "note": "已核对 facts、sources、素材权利、可编辑 HTML 和三个发布面，批准公开发布。",
+    "confirmation": "reviewed-facts-rights-previews",
+    "approvedPayloadSha256": "04517541af846f4ca1ecb1f016e44f044097726ec0f6ad751d6fe5ab4271a4bc"
   }
 }
