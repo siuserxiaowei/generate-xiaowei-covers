@@ -17,3 +17,5 @@ jobs:
         with:
           node-version: 22
       - run: npm test
+        env:
+          COVER_RENDERER: chrome

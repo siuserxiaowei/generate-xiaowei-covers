@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "id": "claim2cover-vibelab-negative-demo",
+    "name": "Claim2Cover｜负例门禁",
+    "publicationIntent": "public"
+  },
+  "aiDraft": {
+    "liveAiClaimed": false,
+    "mode": "recorded-agent-draft-fixture",
+    "semanticRole": "An Agent classifies claims and authors three platform-specific title and layout briefs.",
+    "deterministicRole": "The local CLI validates sources, title promises, rights, safe areas, repository state, and renders HTML to PNG without a model call.",
+    "promptSource": "contest/demo/PROMPT.md"
+  },
+  "claims": [
+    {
+      "id": "fact_three_surfaces",
+      "type": "fact",
+      "status": "verified",
+      "text": "本仓库的 Claim-to-Pixel CLI 会为 3 种画幅生成独立 brief、可编辑 HTML 与 PNG。",
+      "coverAllowed": true,
+      "sourceIds": [
+        "src_contract",
+        "src_reference"
+      ],
+      "titleTokens": [
+        "3种画幅"
+      ]
+    },
+    {
+      "id": "judgment_evidence_first",
+      "type": "judgment",
+      "status": "editorial",
+      "text": "封面不只是视觉包装，标题承诺应先通过证据门。",
+      "coverAllowed": true,
+      "sourceIds": [],
+      "titleTokens": []
+    },
+    {
+      "id": "unknown_ten_x",
+      "type": "unknown",
+      "status": "unverified",
+      "text": "这套流程能让封面效率提升 10 倍。",
+      "coverAllowed": false,
+      "sourceIds": [],
+      "titleTokens": []
+    }
+  ],
+  "sources": [
+    {
+      "id": "src_contract",
+      "kind": "repository",
+      "title": "Claim-to-Pixel executable contract",
+      "repoPath": "scripts/claim-to-pixel.mjs",
+      "checkedAt": "2026-08-31",
+      "note": "CLI source used by the reproducible demo."
+    },
+    {
+      "id": "src_reference",
+      "kind": "repository",
+      "title": "Claim-to-Pixel contract reference",
+      "repoPath": "references/claim-to-pixel-contract.md",
+      "checkedAt": "2026-08-31",
+      "note": "Human-readable field and gate definitions."
+    }
+  ],
+  "platforms": {
+    "xiaohongshu": {
+      "surface": "3:4",
+      "authorship": "ai-draft",
+      "title": "先查主张再画封面",
+      "titleLines": [
+        "先查主张",
+        "再画封面"
+      ],
+      "promise": "FACT / JUDGMENT / UNKNOWN 分开入账",
+      "layoutIntent": "vertical-ledger-stack",
+      "evidence": "三类主张台账与发布状态",
+      "headlineClaimIds": [
+        "judgment_evidence_first"
+      ],
+      "accent": "#F4C430"
+    },
+    "wechatWide": {
+      "surface": "21:9",
+      "authorship": "ai-draft",
+      "title": "全网唯一封面效率保证提升10倍",
+      "titleLines": [
+        "全网唯一封面效率",
+        "保证提升10倍"
+      ],
+      "promise": "未验证承诺不能进入标题",
+      "layoutIntent": "wide-contract-split",
+      "evidence": "左侧结论，右侧并列证据卡",
+      "headlineClaimIds": [
+        "unknown_ten_x"
+      ],
+      "accent": "#F4C430"
+    },
+    "wechatSquare": {
+      "surface": "1:1",
+      "authorship": "ai-draft",
+      "title": "证据链",
+      "titleLines": [
+        "证据链"
+      ],
+      "promise": "人工签核后再发布",
+      "layoutIntent": "square-status-seal",
+      "evidence": "三类主张计数与签核状态",
+      "headlineClaimIds": [
+        "judgment_evidence_first"
+      ],
+      "accent": "#F4C430"
+    }
+  },
+  "assets": [
+    {
+      "id": "generated_typography",
+      "path": "generated:inline-html-css",
+      "owner": "generate-xiaowei-covers repository",
+      "rightsStatus": "generated-owned",
+      "licenseOrBoundary": "Repository-authored typography and geometry under AGPL-3.0-only; no third-party image is embedded in this demo.",
+      "sourceIds": []
+    }
+  ],
+  "humanSignoff": {
+    "status": "pending",
+    "reviewer": "",
+    "reviewedAt": "",
+    "note": "",
+    "confirmation": ""
+  }
+}

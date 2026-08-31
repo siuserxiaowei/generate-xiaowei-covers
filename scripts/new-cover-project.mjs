@@ -171,6 +171,7 @@ async function main() {
 
   try {
     await mkdir(path.join(targetDir, "assets"), { recursive: false });
+    await mkdir(path.join(targetDir, "assets", "evidence"), { recursive: false });
     await mkdir(path.join(targetDir, "output"), { recursive: false });
 
     await cp(templatePath, path.join(targetDir, "cover.html"), {

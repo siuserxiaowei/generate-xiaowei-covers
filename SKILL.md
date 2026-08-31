@@ -1,17 +1,18 @@
 ---
 name: generate-xiaowei-covers
-description: Turn one topic, link, article, screenshot, or event photo into a reusable COVER_PROMPT.md creative brief and production-ready Xiaohongshu/Rednote 3:4 plus WeChat Official Account 21:9 and independently authored 1:1 cover images. Research current official facts, choose one of six content routes, write platform-specific Chinese cover copy, keep the user's portrait at lower-left on 3:4 and 21:9, render editable HTML to PNG, and preserve fact and asset provenance. Use when the user asks for 封面提示词、封面 prompt、小伟封面、公众号封面、小红书封面、横版首图、模型发布图、教程封面、对比封面、工作流封面或现场复盘封面。
+description: Create evidence-gated Chinese cover packages from a topic, link, article, screenshot, video, or event photo. Classify public claims as fact, judgment, or unknown; block unsupported numeric and absolute title promises; author independent Xiaohongshu 3:4, WeChat 21:9, and WeChat 1:1 briefs; render editable HTML to exact-size PNG; and preserve sources, asset rights, Git state, and human sign-off. Use when the user asks for Claim2Cover、封面证据链、封面提示词、封面 prompt、小伟封面、公众号封面、小红书封面、视频封面、横版首图、模型发布图、教程封面、对比封面、工作流封面或现场复盘封面。
 ---
 
-# Generate Xiaowei Covers
+# Claim2Cover | Generate Xiaowei Covers
 
-Turn a topic, link, article, screenshot, or photo into a credible cover package. Reuse the visual grammar and content routes; do not merely replace text in a frozen poster.
+Turn a topic, link, article, screenshot, video, or photo into a credible cover package. Reuse the visual grammar and content routes; do not merely replace text in a frozen poster.
 
 ## Read The Relevant References
 
 - Read `references/input-schema.md` when normalizing a loose request or deciding whether user input is sufficient.
 - Read `references/content-routing.md` before choosing one of the six content structures.
 - Read `references/brand-system.md` before composing, cropping the portrait, or adapting across ratios.
+- Read `references/claim-to-pixel-contract.md` for public multi-platform work, numeric or absolute title promises, or an auditable release package.
 
 ## Workflow
 
@@ -22,7 +23,7 @@ Accept one sentence or one source link as sufficient intake when safe. Normalize
 Require at least one of:
 
 - a topic or draft title;
-- a source URL, article, script, screenshot, or project artifact.
+- a source URL, article, script, screenshot, video, or project artifact.
 
 Use these defaults unless the user overrides them:
 
@@ -52,7 +53,25 @@ Record every factual statement that appears on a cover in the task project's `FA
 
 Treat bundled brand avatars as prototype fallbacks. Re-check official identity before public publishing. Do not reuse old sample numbers as current facts.
 
-### 3. Route The Content
+### 3. Compile Public Claims
+
+For public multi-platform work, create a `claim-to-pixel.json` manifest before composing. Separate Agent judgment from deterministic execution:
+
+- the Agent classifies `fact`, `judgment`, and `unknown`, then authors three platform-specific title and layout briefs;
+- `scripts/claim-to-pixel.mjs` validates the recorded inputs, sources, rights, title tokens, safe limits, repository state, and deterministic render;
+- the fixture must state whether a live model call is actually evidenced. Use `liveAiClaimed: false` for a stable replay and preserve its prompt source.
+
+Never certify an unknown claim, pending fact, number, ranking, version, or absolute phrase by wording alone. Keep unsupported claims in the ledger with `coverAllowed: false` so the rejection remains auditable.
+
+Validate before rendering:
+
+```bash
+node "$SKILL_DIR/scripts/claim-to-pixel.mjs" validate <claim-to-pixel.json>
+```
+
+Use the schema and failure semantics in `references/claim-to-pixel-contract.md`.
+
+### 4. Route The Content
 
 Choose exactly one primary route from `references/content-routing.md`:
 
@@ -65,7 +84,7 @@ Choose exactly one primary route from `references/content-routing.md`:
 
 Choose the route by the reader's promised value, not by which logo happens to appear. Downgrade claims when evidence is missing.
 
-### 4. Create A Project
+### 5. Create A Project
 
 Resolve this installed Skill's absolute directory as `SKILL_DIR`, then run one of:
 
@@ -76,6 +95,16 @@ node "$SKILL_DIR/scripts/new-cover-project.mjs" <target-dir> wechat
 
 The script copies the editable template, default portrait, cached prototype brand assets, `COVER_PROMPT.md`, `assets/SOURCES.md`, `FACTS.md`, the applicable license, and creates `output/`.
 
+When the user supplies a video, extract review candidates into the new project before composing:
+
+```bash
+node "$SKILL_DIR/scripts/extract-video-frames.mjs" \
+  <path/to/video> \
+  <target-dir>/assets/evidence/video-frames
+```
+
+Open `contact-sheet.jpg`, then inspect the strongest 2–3 full-size candidate JPEGs. Select for semantic relevance, sharpness, complete gestures or UI, and usable title space—not merely facial attractiveness. Record the selected timestamp and user-provided source video in `assets/SOURCES.md`; copy only the selected frame into the final evidence module. This preprocessing makes no API call and requires `ffmpeg` plus `ffprobe`.
+
 Use:
 
 - `assets/templates/vertical.html` for the six 1080×1440 structures;
@@ -83,7 +112,7 @@ Use:
 
 Replace sample copy and evidence with the current task. Keep the unused structures only while exploring; before delivery, export only requested variants.
 
-### 5. Write The Cover Prompt And Surface Copy
+### 6. Write The Cover Prompt And Surface Copy
 
 Fill the project root `COVER_PROMPT.md` after routing and research. Treat it as both the execution brief for Codex and a portable cover prompt for another design or image tool.
 
@@ -105,7 +134,7 @@ Author each surface independently:
 
 State facts as facts, inferences as judgments, and personal practice in first person. Do not leave generic placeholders in the final `COVER_PROMPT.md`.
 
-### 6. Compose The Evidence Module
+### 7. Compose The Evidence Module
 
 Match evidence to the chosen route:
 
@@ -118,7 +147,7 @@ Match evidence to the chosen route:
 
 Keep the portrait lower-left on 3:4 and 21:9. The 1:1 companion is an intentional pure-typography exception unless the user explicitly asks for a portrait. Prefer a contextual rectangle over a poor cutout. Preserve face, hand, microphone, table, and task-relevant objects. Set `object-position` explicitly.
 
-### 7. Render
+### 8. Render
 
 Mark every deliverable root with:
 
@@ -136,7 +165,9 @@ For a WeChat route, `--only release` exports its 21:9, independent 1:1, and pair
 
 The renderer waits for fonts and images, exports the selected marked nodes, and checks output dimensions against the DOM node.
 
-### 8. Review At Thumbnail Size
+Keep `data-text-safe` on fixed title and promise regions. The renderer rejects content whose measured text exceeds those safe areas instead of silently clipping it. Shorten or intentionally resize the copy when that check fails.
+
+### 9. Review At Thumbnail Size
 
 Before delivery:
 
@@ -150,6 +181,8 @@ Before delivery:
 
 Show the rendered images before running any optional heavy validator. Ask: `先你自己看，还是我先自动核查一遍？`
 
+For a Claim-to-Pixel build, leave the status at `PENDING HUMAN SIGN-OFF`. A real reviewer—not the Agent—must inspect the facts, source locators, asset-rights CSV, editable HTML, and all three PNGs before invoking `signoff`. Commit that reviewer record, then use `release-check` from a clean worktree. Do not sign on the user's behalf or describe a pending build as publish-ready.
+
 ## Non-Negotiables
 
 - Do not fake official pages, screenshots, benchmarks, quotes, percentages, or release facts.
@@ -158,4 +191,6 @@ Show the rendered images before running any optional heavy validator. Ask: `先�
 - Do not stretch or mechanically crop between 3:4, 21:9, and 1:1.
 - Do not use a low-quality portrait cutout when the contextual photo is available.
 - Do not publish web-sourced imagery without preserving provenance and surfacing rights uncertainty.
+- Do not move a Claim-to-Pixel project past `PENDING HUMAN SIGN-OFF` without an identified human reviewer who completed the stated checks.
+- Do not describe a recorded fixture as a live AI call; preserve `liveAiClaimed` and prompt provenance.
 - Do not delete source photos or final files without explicit authorization.

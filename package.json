@@ -1,11 +1,14 @@
 {
   "name": "generate-xiaowei-covers",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "private": true,
-  "description": "Turn one topic into a reusable cover prompt and full-resolution Xiaohongshu and WeChat covers.",
+  "description": "Turn a topic, source, or video into a reusable cover prompt and full-resolution Xiaohongshu and WeChat covers.",
   "type": "module",
   "scripts": {
-    "test": "node --check scripts/new-cover-project.mjs && node --check scripts/render-covers.mjs && node --check scripts/validate-repo.mjs && node scripts/validate-repo.mjs"
+    "test": "npm run test:static && npm run test:render",
+    "test:static": "node --check scripts/new-cover-project.mjs && node --check scripts/extract-video-frames.mjs && node --check scripts/render-covers.mjs && node --check scripts/claim-to-pixel.mjs && node --check scripts/demo-claim-to-pixel.mjs && node --check scripts/test-e2e.mjs && node --check scripts/test-claim-to-pixel.mjs && node --check scripts/validate-repo.mjs && node scripts/validate-repo.mjs",
+    "test:render": "node scripts/test-e2e.mjs && node scripts/test-claim-to-pixel.mjs",
+    "demo:claim2cover": "node scripts/demo-claim-to-pixel.mjs"
   },
   "license": "AGPL-3.0-only",
   "engines": {

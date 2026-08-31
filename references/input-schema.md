@@ -4,10 +4,11 @@
 
 ## 最小输入
 
-至少提供以下二者之一：
+至少提供以下三者之一：
 
 - `topic`：主题、选题、文章标题草案或想解决的问题。
 - `source_urls`：文章、公告、仓库、文档或其他原始材料链接。
+- `source_files`：用户提供的文章、截图、视频、录音转写或项目文件。
 
 建议但不强制提供：
 
@@ -21,12 +22,19 @@
 
 ## 规范化 JSON
 
-内部执行时将自然语言整理为以下对象。除 `topic` 与 `source_urls` 至少一个存在外，其余字段均可缺省。
+内部执行时将自然语言整理为以下对象。`topic`、`source_urls` 与 `source_files` 至少一个存在，其余字段均可缺省。
 
 ```json
 {
   "topic": "string",
   "source_urls": ["https://example.com/original-source"],
+  "source_files": [
+    {
+      "type": "video",
+      "path": "/path/to/source-video.mp4",
+      "usage_rights": "user_owned"
+    }
+  ],
   "targets": [
     {
       "platform": "xiaohongshu",
@@ -85,6 +93,14 @@
 - 多个链接应区分原始来源与二手参考；易变事实优先核对当前官方来源。
 - 用户只给二手链接时，执行端应继续寻找其引用的原始材料。
 
+### `source_files`
+
+- 类型：本地文件对象数组。
+- `type` 可为 `article`、`screenshot`、`video`、`transcript` 或 `project_artifact`。
+- 视频作为输入时，先运行 `scripts/extract-video-frames.mjs`，把候选帧、`contact-sheet.jpg`、时间戳清单和选择记录放入项目的 `assets/evidence/video-frames/`。
+- 候选帧只解决视觉取证，不自动证明标题里的版本、价格或能力结论；这些事实仍需进入 `FACTS.md`。
+- 用户提供的视频默认只视为当前任务的素材，不推定拥有公开发布、肖像或第三方画面授权。
+
 ### `targets`
 
 - 类型：平台配置数组。
@@ -116,7 +132,7 @@
 
 - 类型：素材对象数组。
 - 素材对象字段：
-  - `type`：`portrait`、`screenshot`、`logo`、`product_image`、`chart`、`document` 或 `other`。
+  - `type`：`portrait`、`screenshot`、`video_frame`、`logo`、`product_image`、`chart`、`document` 或 `other`。
   - `path_or_url`：本地路径或来源链接。
   - `required`：是否必须进入成品。
   - `placement`：可选位置偏好，如 `bottom_left`、`right`、`background`、`auto`。
@@ -167,6 +183,7 @@
 - 经原始资料验证的版本号、发布日期、参数与功能描述。
 - 六种内容结构的选择、标题候选、配色和版式变体。
 - 默认人物照片和既有品牌资产，但必须确认路径存在且使用权明确。
+- 视频候选帧的时间点、联系图和选择记录；选中帧仍需人工或 Agent 语义判断。
 
 自动补齐事实后，仍必须把采用的精确文案、官方 URL、核验日期和证据位置写入 `FACTS.md`；没有入账的事实不能进入成品。
 

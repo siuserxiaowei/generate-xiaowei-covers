@@ -13,6 +13,10 @@ const requiredFiles = [
   "agents/openai.yaml",
   "LICENSE",
   "NOTICE.md",
+  "PROVENANCE.md",
+  "SOURCES.md",
+  "THIRD_PARTY_NOTICES.md",
+  "ASSET_RIGHTS.csv",
   "assets/COVER_PROMPT.template.md",
   "assets/FACTS.template.md",
   "assets/SOURCES.md",
@@ -21,8 +25,20 @@ const requiredFiles = [
   "references/brand-system.md",
   "references/content-routing.md",
   "references/input-schema.md",
+  "references/claim-to-pixel-contract.md",
   "scripts/new-cover-project.mjs",
+  "scripts/extract-video-frames.mjs",
   "scripts/render-covers.mjs",
+  "scripts/claim-to-pixel.mjs",
+  "scripts/demo-claim-to-pixel.mjs",
+  "scripts/test-e2e.mjs",
+  "scripts/test-claim-to-pixel.mjs",
+  "contest/README.md",
+  "contest/WEIBO_DRAFT.md",
+  "contest/DEMO_SCRIPT_75S.md",
+  "contest/demo/PROMPT.md",
+  "contest/demo/claim-to-pixel.json",
+  "contest/demo/claim-to-pixel.invalid.json",
 ];
 
 function fail(message) {
@@ -48,6 +64,33 @@ async function validateSkillFrontmatter() {
   if (!description || description.length > 1024) fail("Skill description is missing or too long.");
   const unexpectedKeys = keys.filter((key) => !["name", "description"].includes(key));
   if (unexpectedKeys.length) fail(`Unexpected SKILL.md frontmatter keys: ${unexpectedKeys.join(", ")}`);
+}
+
+async function validateVerticalTextSafeAreas() {
+  const html = await readFile(path.join(root, "assets/templates/vertical.html"), "utf8");
+  const safeAreas = [...html.matchAll(/\sdata-text-safe=(?:"[^"]*"|'[^']*')/gu)].length;
+  if (safeAreas !== 12) {
+    fail(`Expected 12 vertical text-safe regions, found ${safeAreas}.`);
+  }
+  return safeAreas;
+}
+
+async function validateClaim2CoverFixture() {
+  const fixture = JSON.parse(
+    await readFile(path.join(root, "contest/demo/claim-to-pixel.json"), "utf8"),
+  );
+  if (fixture.schemaVersion !== 1) fail("Claim2Cover fixture must use schemaVersion 1.");
+  if (fixture.aiDraft?.liveAiClaimed !== false) {
+    fail("Recorded Claim2Cover fixture must declare liveAiClaimed: false.");
+  }
+  const platformKeys = Object.keys(fixture.platforms || {}).sort();
+  if (platformKeys.join(",") !== "wechatSquare,wechatWide,xiaohongshu") {
+    fail("Claim2Cover fixture must contain exactly three platform briefs.");
+  }
+  const types = new Set((fixture.claims || []).map((claim) => claim.type));
+  for (const required of ["fact", "judgment", "unknown"]) {
+    if (!types.has(required)) fail(`Claim2Cover fixture is missing ${required}.`);
+  }
 }
 
 async function validateTemplateAssets(relativeTemplatePath) {
@@ -79,6 +122,8 @@ async function validateTemplateAssets(relativeTemplatePath) {
 async function main() {
   for (const file of requiredFiles) await assertFile(file);
   await validateSkillFrontmatter();
+  await validateClaim2CoverFixture();
+  const verticalTextSafeAreas = await validateVerticalTextSafeAreas();
 
   const verticalExports = await validateTemplateAssets("assets/templates/vertical.html");
   const wechatExports = await validateTemplateAssets("assets/templates/wechat.html");
@@ -89,6 +134,8 @@ async function main() {
   console.log("Repository validation passed.");
   console.log(`Vertical exports: ${verticalExports}`);
   console.log(`WeChat exports: ${wechatExports}`);
+  console.log(`Vertical text-safe regions: ${verticalTextSafeAreas}`);
+  console.log("Claim2Cover recorded fixture: valid metadata");
 }
 
 main().catch((error) => {

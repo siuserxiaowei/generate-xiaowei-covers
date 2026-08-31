@@ -1,0 +1,12 @@
+path,category,source_or_owner,rights_status,license_or_boundary,public_use,notes
+assets/templates/*.html,template,generate-xiaowei-covers repository,repository-authored,AGPL-3.0-only,yes,Current implementation; see PROVENANCE.md
+scripts/*.mjs,code,generate-xiaowei-covers repository,repository-authored,AGPL-3.0-only,yes,AI-assisted implementation is disclosed in PROVENANCE.md
+contest/demo/artifacts/**,generated-demo,generate-xiaowei-covers repository,generated-owned,AGPL-3.0-only,yes,Typography and geometry only; liveAiClaimed:false
+assets/portrait/xiaowei-original.jpg,portrait,repository owner event album,limited-display-authorization,Public display in this repository and its examples only,limited,Not a stock-photo or identity-reuse license
+assets/portrait/xiaowei-context.jpg,portrait-crop,derived from xiaowei-original.jpg,limited-display-authorization,Same boundary as source portrait,limited,Preserves contextual crop
+assets/brand/qwen.png,trademark-avatar,QwenLM official GitHub organization,trademark-context-only,Product-identification example only,review-required,Source URL in assets/SOURCES.md
+assets/brand/deepseek.png,trademark-avatar,deepseek-ai official GitHub organization,trademark-context-only,Product-identification example only,review-required,Source URL in assets/SOURCES.md
+assets/brand/openai.png,trademark-avatar,OpenAI official GitHub organization,trademark-context-only,Product-identification example only,review-required,Source URL in assets/SOURCES.md
+assets/brand/kimi.png,trademark-avatar,MoonshotAI official GitHub organization,trademark-context-only,Product-identification example only,review-required,Source URL in assets/SOURCES.md
+assets/brand/grok.png,trademark-avatar,xai-org official GitHub organization,trademark-context-only,Product-identification example only,review-required,Source URL in assets/SOURCES.md
+docs/images/showcase/**,rendered-examples,mixed repository templates and documented assets,mixed,Template layer AGPL; embedded portrait and marks keep their own boundaries,limited,See NOTICE.md and assets/SOURCES.md

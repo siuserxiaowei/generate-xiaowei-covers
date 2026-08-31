@@ -539,6 +539,21 @@ function validateExportItems(exports, htmlPath) {
   });
 }
 
+function validateTextSafeAreas(items, outputName) {
+  const overflow = items.filter(
+    (item) => item.scrollWidth > item.clientWidth + 1 || item.scrollHeight > item.clientHeight + 1,
+  );
+  if (!overflow.length) return;
+  const details = overflow
+    .map(
+      (item) =>
+        `${item.label}: content ${item.scrollWidth}x${item.scrollHeight}, ` +
+        `safe area ${item.clientWidth}x${item.clientHeight}`,
+    )
+    .join("; ");
+  fail(`${outputName}: text safe-area overflow. ${details}`);
+}
+
 async function validatePngOutput(outputPath, expectedWidth, expectedHeight) {
   const png = await readFile(outputPath);
   const pngSize = readPngDimensions(png, outputPath);
@@ -608,6 +623,16 @@ async function renderWithPlaywright(browser, htmlPath, outputDir, onlyTokens) {
     for (const item of exports) {
       const outputPath = path.join(outputDir, item.fileName);
       const locator = page.locator("[data-export]").nth(item.exportIndex);
+      const safeAreas = await locator.locator("[data-text-safe]").evaluateAll((elements) =>
+        elements.map((element, index) => ({
+          label: element.getAttribute("data-text-safe") || element.id || `safe-area-${index + 1}`,
+          clientWidth: element.clientWidth,
+          clientHeight: element.clientHeight,
+          scrollWidth: element.scrollWidth,
+          scrollHeight: element.scrollHeight,
+        })),
+      );
+      validateTextSafeAreas(safeAreas, item.fileName);
       await locator.scrollIntoViewIfNeeded();
       await page.evaluate(
         () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
@@ -802,6 +827,18 @@ async function renderWithSystemChrome(htmlPath, outputDir, onlyTokens) {
 
     let exported = 0;
     for (const item of exports) {
+      const safeAreas = await evaluateCdp(
+        client,
+        String.raw`[...document.querySelectorAll("[data-export]")[${item.exportIndex}]
+          .querySelectorAll("[data-text-safe]")].map((element, index) => ({
+            label: element.getAttribute("data-text-safe") || element.id || "safe-area-" + (index + 1),
+            clientWidth: element.clientWidth,
+            clientHeight: element.clientHeight,
+            scrollWidth: element.scrollWidth,
+            scrollHeight: element.scrollHeight,
+          }))`,
+      );
+      validateTextSafeAreas(safeAreas, item.fileName);
       const captureRect = await evaluateCdp(
         client,
         String.raw`(async () => {
@@ -868,13 +905,21 @@ async function main() {
   const outputDir = path.resolve(outputArg || path.join(path.dirname(htmlPath), "output"));
   await mkdir(outputDir, { recursive: true });
 
+  const rendererPreference = (process.env.COVER_RENDERER || "auto").trim().toLowerCase();
+  if (!["auto", "playwright", "chrome"].includes(rendererPreference)) {
+    fail("COVER_RENDERER must be auto, playwright, or chrome.");
+  }
+
   let playwright;
   let browser;
-  try {
-    playwright = await loadPlaywright(path.dirname(htmlPath));
-    browser = await launchChromium(playwright.chromium);
-  } catch (error) {
-    console.warn(`Playwright unavailable; using local Chrome fallback. ${error.message}`);
+  if (rendererPreference !== "chrome") {
+    try {
+      playwright = await loadPlaywright(path.dirname(htmlPath));
+      browser = await launchChromium(playwright.chromium);
+    } catch (error) {
+      if (rendererPreference === "playwright") throw error;
+      console.warn(`Playwright unavailable; using local Chrome fallback. ${error.message}`);
+    }
   }
 
   if (browser) {

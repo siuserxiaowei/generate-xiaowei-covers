@@ -30,6 +30,8 @@ node scripts/render-covers.mjs \
 
 Check that the exact output dimensions match the template and that no title, face, hand, evidence label, or footer is clipped.
 
+`npm test` now creates both project formats and performs real release-route rendering. Keep `data-text-safe` on fixed title and promise regions; a long-copy regression must fail instead of being silently clipped. For video-intake changes, also run `scripts/extract-video-frames.mjs` against a short local test video and inspect its contact sheet and manifest.
+
 ## Pull requests
 
 Describe:

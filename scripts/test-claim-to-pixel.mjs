@@ -1,0 +1,120 @@
+#!/usr/bin/env node
+
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import {
+  cp,
+  mkdtemp,
+  readFile,
+  rm,
+  stat,
+} from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import process from "node:process";
+import { fileURLToPath } from "node:url";
+import { SIGNOFF_CONFIRMATION, extractRiskTokens } from "./claim-to-pixel.mjs";
+
+const scriptDir = path.dirname(fileURLToPath(import.meta.url));
+const root = path.dirname(scriptDir);
+const fixture = path.join(root, "contest", "demo", "claim-to-pixel.json");
+const PNG_SIGNATURE = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+
+function run(script, args) {
+  const result = spawnSync(process.execPath, [path.join(scriptDir, script), ...args], {
+    cwd: root,
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+    env: process.env,
+  });
+  if (result.error) throw result.error;
+  return { status: result.status, transcript: `${result.stdout || ""}${result.stderr || ""}` };
+}
+
+async function assertPng(filePath, width, height) {
+  const data = await readFile(filePath);
+  assert.ok(data.length >= 24 && data.subarray(0, 8).equals(PNG_SIGNATURE), `${filePath} is a PNG`);
+  assert.equal(data.readUInt32BE(16), width, `${path.basename(filePath)} width`);
+  assert.equal(data.readUInt32BE(20), height, `${path.basename(filePath)} height`);
+}
+
+async function main() {
+  assert.deepEqual(extractRiskTokens("全网唯一效率提升10倍"), ["全网唯一", "唯一", "10倍"]);
+
+  const tempRoot = await mkdtemp(path.join(os.tmpdir(), "claim2cover-test-"));
+  const inRepoTemp = await mkdtemp(path.join(root, ".claim2cover-signoff-test-"));
+  try {
+    const demoDir = path.join(tempRoot, "demo");
+    const demo = run("demo-claim-to-pixel.mjs", [demoDir]);
+    assert.equal(demo.status, 0, demo.transcript);
+    assert.match(await readFile(path.join(demoDir, "FAIL.log"), "utf8"), /CTP_TITLE_UNVERIFIED/u);
+    assert.match(await readFile(path.join(demoDir, "PASS.log"), "utf8"), /GATES: PASS \(8\/8\)/u);
+    await assertPng(
+      path.join(demoDir, "build", "png", "claim2cover-xiaohongshu-3x4.png"),
+      1080,
+      1440,
+    );
+    await assertPng(
+      path.join(demoDir, "build", "png", "claim2cover-wechat-21x9.png"),
+      2100,
+      900,
+    );
+    await assertPng(
+      path.join(demoDir, "build", "png", "claim2cover-wechat-1x1.png"),
+      1080,
+      1080,
+    );
+    await assertPng(
+      path.join(demoDir, "board", "claim2cover-demo-board.png"),
+      1920,
+      1080,
+    );
+    const summary = JSON.parse(await readFile(path.join(demoDir, "RUN_SUMMARY.json"), "utf8"));
+    assert.equal(summary.liveAiClaimed, false);
+    assert.equal(summary.fixedBuild.status, "PENDING HUMAN SIGN-OFF");
+
+    const signedFixture = path.join(inRepoTemp, "signed.json");
+    await cp(fixture, signedFixture);
+    const signoff = run("claim-to-pixel.mjs", [
+      "signoff",
+      signedFixture,
+      "--reviewer",
+      "Automated contract test",
+      "--note",
+      "Test-only copy; verified signoff state transition.",
+      "--confirm",
+      SIGNOFF_CONFIRMATION,
+      "--reviewed-at",
+      "2026-08-31T00:00:00.000Z",
+    ]);
+    assert.equal(signoff.status, 0, signoff.transcript);
+    assert.match(signoff.transcript, /STATUS: HUMAN SIGNED OFF/u);
+    assert.match(signoff.transcript, /PUBLISH READY: YES/u);
+
+    const releasePending = run("claim-to-pixel.mjs", ["release-check", fixture]);
+    assert.notEqual(releasePending.status, 0);
+    assert.match(releasePending.transcript, /CTP_RELEASE_SIGNOFF/u);
+
+    const secondBuild = run("claim-to-pixel.mjs", [
+      "build",
+      fixture,
+      path.join(demoDir, "build"),
+      "--no-render",
+    ]);
+    assert.notEqual(secondBuild.status, 0);
+    assert.match(secondBuild.transcript, /CTP_OUTPUT_EXISTS/u);
+
+    const boardInfo = await stat(path.join(demoDir, "DEMO.html"));
+    assert.ok(boardInfo.isFile());
+  } finally {
+    await rm(tempRoot, { recursive: true, force: true });
+    await rm(inRepoTemp, { recursive: true, force: true });
+  }
+
+  console.log("Claim-to-Pixel contract, negative gate, rendering, and signoff transition passed.");
+}
+
+main().catch((error) => {
+  console.error(`test-claim-to-pixel: ${error.message}`);
+  process.exitCode = 1;
+});

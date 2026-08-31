@@ -100,7 +100,23 @@ $generate-xiaowei-covers
 - 共享主题和证据，不共享机械布局；
 - 逐个画幅进行缩略图检查。
 
-## 8. 只导出指定 route
+## 8. 从视频选择真实证据帧
+
+```text
+$generate-xiaowei-covers
+用这段录屏做小红书教程封面：/path/to/demo.mp4
+先看完整时间分布，选一张能证明功能跑通、同时给标题留空间的画面。
+```
+
+预期行为：
+
+- 创建项目后运行 `extract-video-frames.mjs`；
+- 先检查联系图，再打开最强的 2–3 张原始候选；
+- 在 `REVIEW.md` 记录选择理由和时间戳；
+- 把选中帧作为真实证据，不重新生成一个伪界面；
+- 在 `assets/SOURCES.md` 记录原视频由用户提供及其发布权利状态。
+
+## 9. 只导出指定 route
 
 ```bash
 node scripts/render-covers.mjs \

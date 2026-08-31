@@ -1,26 +1,39 @@
-# Xiaowei AI Cover Skill
+# Claim2Cover | Xiaowei AI Cover Evidence Chain
 
 > Turn one topic into a reusable cover prompt and a production-ready cover package for Xiaohongshu and WeChat.
 
-[中文说明](README.md) · [Full-resolution gallery](docs/gallery.md) · [Prompt examples](docs/usage-examples.md) · [Architecture](docs/architecture.md)
+[中文说明](README.md) · [Claim-to-Pixel contract](references/claim-to-pixel-contract.md) · [VibeLab pack](contest/README.md) · [Full-resolution gallery](docs/gallery.md) · [Architecture](docs/architecture.md)
 
 [![Validate Skill](https://github.com/siuserxiaowei/generate-xiaowei-covers/actions/workflows/validate.yml/badge.svg)](https://github.com/siuserxiaowei/generate-xiaowei-covers/actions/workflows/validate.yml)
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
 
 [![Full-resolution paired WeChat cover](docs/images/showcase/wechat/hero-field-recap-pair-1944x620.png)](docs/images/showcase/wechat/hero-field-recap-pair-1944x620.png)
 
-`generate-xiaowei-covers` is a Codex Skill for Chinese AI content creators. Give it a topic, first-party link, article, screenshot, or event photo. It will:
+`generate-xiaowei-covers` is a Codex Skill for Chinese AI content creators. Claim2Cover asks why a headline claim is allowed before deciding how the cover should look. Give it a topic, first-party link, article, screenshot, video, or event photo. It will:
 
 1. understand the actual editorial promise;
 2. research current first-party facts;
 3. select one of six evidence structures;
-4. write a task-specific `COVER_PROMPT.md`;
-5. compose Xiaohongshu 3:4, WeChat 21:9, and WeChat 1:1 independently;
-6. export full-resolution PNG, editable HTML, and provenance ledgers.
+4. extract timestamped video candidates and a contact sheet without API calls when needed;
+5. write a task-specific `COVER_PROMPT.md`;
+6. compose Xiaohongshu 3:4, WeChat 21:9, and WeChat 1:1 independently;
+7. export full-resolution PNG, editable HTML, and provenance ledgers.
 
 This is not a “make a pretty AI poster” prompt. It is an evidence-aware cover workflow:
 
 > editorial judgment + source verification + cover brief + structured layout + deterministic export
+
+## Claim-to-Pixel release contract
+
+For auditable public work, the Agent classifies `fact / judgment / unknown` and authors separate 3:4, 21:9, and 1:1 briefs. The local CLI then deterministically validates sources, risky title tokens, asset rights, copy limits, measured DOM safe areas, and Git state before it renders exact-size PNGs.
+
+```bash
+node scripts/claim-to-pixel.mjs validate contest/demo/claim-to-pixel.invalid.json
+node scripts/claim-to-pixel.mjs build contest/demo/claim-to-pixel.json /tmp/claim2cover-build
+npm run demo:claim2cover -- /tmp/claim2cover-demo
+```
+
+The intentional “10×” fixture fails. The corrected fixture passes 8/8 content gates but stays `PENDING HUMAN SIGN-OFF`; only a named reviewer may sign it, and release additionally requires a clean commit. The stable fixture is explicitly `liveAiClaimed:false` with its prompt provenance retained; it is not presented as a live model call.
 
 ## One sentence is enough
 
@@ -104,7 +117,7 @@ See all six routes in the [full-resolution gallery](docs/gallery.md).
 
 ## Install as a Codex Skill
 
-Requirements: Codex, Node.js 20+, and either Google Chrome or Playwright.
+Requirements: Codex, Node.js 20+, and either Google Chrome or Playwright. Video intake additionally requires `ffmpeg` and `ffprobe`.
 
 ```bash
 mkdir -p ~/.codex/skills
@@ -152,6 +165,10 @@ SKILL_DIR="$HOME/.codex/skills/generate-xiaowei-covers"
 node "$SKILL_DIR/scripts/new-cover-project.mjs" ./my-cover vertical
 node "$SKILL_DIR/scripts/new-cover-project.mjs" ./my-wechat-cover wechat
 
+node "$SKILL_DIR/scripts/extract-video-frames.mjs" \
+  ./demo.mp4 \
+  ./my-cover/assets/evidence/video-frames
+
 node "$SKILL_DIR/scripts/render-covers.mjs" \
   ./my-wechat-cover/cover.html \
   ./my-wechat-cover/output \
@@ -169,6 +186,7 @@ my-cover/
 ├── assets/
 │   ├── portrait/
 │   ├── brand/
+│   ├── evidence/
 │   └── SOURCES.md
 └── output/
 ```
@@ -199,13 +217,9 @@ It is not:
 npm test
 ```
 
-The validator checks required Skill files, frontmatter, local template assets, six vertical export nodes, eighteen WeChat export nodes, and JavaScript syntax. Release checks also render and inspect:
+The default test checks required Skill files, frontmatter, local template assets, six vertical export nodes, eighteen WeChat export nodes, JavaScript syntax, and real project creation. It renders `1080×1440`, `2100×900`, `1080×1080`, and `1944×620` outputs and verifies their PNG dimensions. Marked title regions that overflow their safe area are rejected instead of silently clipped. Thumbnail readability still receives a final human visual review.
 
-- 2100×900 WeChat main cover;
-- 1080×1080 WeChat square cover;
-- 1944×620 paired preview;
-- 1080×1440 Xiaohongshu cover;
-- 360px thumbnail readability.
+Set `COVER_RENDERER=playwright` or `COVER_RENDERER=chrome` to verify one rendering backend explicitly. The default `auto` mode prefers Playwright and falls back to local Chrome.
 
 ## License, independent implementation, and visual inspiration
 
@@ -220,6 +234,7 @@ Code, documentation, and templates are released under [GNU AGPL-3.0](LICENSE). P
 - This is a Skill plus an HTML/CSS rendering core, not a hosted editor.
 - Fact verification, brand usage, and final publication remain human gates.
 - There is no unified `cover.json` visual form yet.
+- Video preprocessing uses temporal sampling followed by Agent review; local sharpness, scene-change, and duplicate-frame scoring are not implemented yet.
 - macOS is fully tested; other systems should prefer the Playwright path.
 
 ## Contributing

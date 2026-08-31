@@ -1,22 +1,23 @@
-# 小伟 AI 封面 Skill
+# Claim2Cover｜小伟 AI 封面证据链 Skill
 
 > 一句话选题，变成一份可复用的封面提示词，以及一套真正能讲清内容的小红书与公众号封面。
 
-[English](README.en.md) · [高清成品画廊](docs/gallery.md) · [可复制示例](docs/usage-examples.md) · [系统架构](docs/architecture.md)
+[English](README.en.md) · [Claim-to-Pixel 契约](references/claim-to-pixel-contract.md) · [VibeLab 投稿包](contest/README.md) · [高清成品画廊](docs/gallery.md) · [系统架构](docs/architecture.md)
 
 [![Validate Skill](https://github.com/siuserxiaowei/generate-xiaowei-covers/actions/workflows/validate.yml/badge.svg)](https://github.com/siuserxiaowei/generate-xiaowei-covers/actions/workflows/validate.yml)
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
 
 [![公众号横版与独立方版高清配对封面](docs/images/showcase/wechat/hero-field-recap-pair-1944x620.png)](docs/images/showcase/wechat/hero-field-recap-pair-1944x620.png)
 
-这是一个面向中文 AI 内容创作者的 Codex Skill。你可以只给它一句选题、一个官方链接、一篇文稿、一张截图或一张现场照片，它会：
+这是一个面向中文 AI 内容创作者的 Codex Skill。Claim2Cover 先问“标题里的话凭什么成立”，再处理“封面怎么画”。你可以只给它一句选题、一个官方链接、一篇文稿、一张截图、一段视频或一张现场照片，它会：
 
 1. 理解这篇内容真正要讲什么；
 2. 查找并核对官方资料；
 3. 在六种内容结构中选择合适的一种；
-4. 生成项目专属的 `COVER_PROMPT.md` 封面提示词；
-5. 为小红书 3:4、公众号 21:9 和公众号 1:1 分别排版；
-6. 导出高清 PNG、可编辑 HTML、事实台账和素材来源。
+4. 如果输入是视频，无 API 抽取候选帧、联系图和时间戳，由 Agent 按内容选择；
+5. 生成项目专属的 `COVER_PROMPT.md` 封面提示词；
+6. 为小红书 3:4、公众号 21:9 和公众号 1:1 分别排版；
+7. 导出高清 PNG、可编辑 HTML、事实台账和素材来源。
 
 它不是让图片模型“随便画一张好看的海报”。它要解决的是：
 
@@ -53,6 +54,8 @@ Qwen 新版开源了，帮我做公众号和小红书封面。
 ```mermaid
 flowchart LR
     A[一句选题或一个链接] --> B[研究官方资料]
+    V[本地视频] --> VF[候选帧 + 联系图]
+    VF --> C
     B --> C[选择内容路由]
     C --> D[生成 COVER_PROMPT.md]
     D --> E[分别设计 3:4 / 21:9 / 1:1]
@@ -71,6 +74,32 @@ flowchart LR
 | `output/*.png` | 小红书、公众号横版、公众号方版等高清成品 |
 | `FACTS.md` | 记录封面中每条版本、日期、参数、价格和结论的依据 |
 | `assets/SOURCES.md` | 记录人物、Logo、截图和外部素材的来源与使用边界 |
+| `assets/evidence/video-frames/` | 视频任务的候选帧、联系图、时间戳和选择记录 |
+
+## Claim-to-Pixel：从主张到像素的发布门
+
+公开多平台任务可启用 `Claim-to-Pixel` v1：Agent 负责把输入分类为 `fact / judgment / unknown` 并分别撰写 3:4、21:9、1:1 brief；本地 CLI 只做确定性校验、产物生成和状态记录，不把固定 fixture 冒充实时模型调用。
+
+```bash
+# 负例：unknown 的“效率提升 10 倍”进入标题，必须非零失败
+node scripts/claim-to-pixel.mjs validate \
+  contest/demo/claim-to-pixel.invalid.json
+
+# 修复后：8/8 gates PASS，渲染三张 PNG，但仍等待人工签核
+node scripts/claim-to-pixel.mjs build \
+  contest/demo/claim-to-pixel.json \
+  /tmp/claim2cover-build
+```
+
+它同时检查：主张类型、来源、标题里的数字与绝对词、三平台 brief 是否独立、素材权利、静态字符上限、真实 DOM 安全区、Git commit/worktree 状态。渲染成功不等于允许发布；默认终态是 `PENDING HUMAN SIGN-OFF`，人工核对并提交签核后，clean worktree 才能通过 `release-check`。
+
+一条命令可生成录屏可用的真实 FAIL/PASS 日志、三张 PNG、状态 JSON、可编辑 HTML、1920×1080 对比看板和 72 秒镜头清单：
+
+```bash
+npm run demo:claim2cover -- /tmp/claim2cover-demo
+```
+
+固定演示明确声明 `liveAiClaimed:false`；其原始提示与 Agent / deterministic validator 分工见 [`contest/demo/PROMPT.md`](contest/demo/PROMPT.md)。
 
 ## 先理解四个概念
 
@@ -229,7 +258,7 @@ gh repo clone siuserxiaowei/generate-xiaowei-covers \
 $generate-xiaowei-covers
 ```
 
-这是一个 Codex Skill，不是独立在线网站。两个 Node.js 脚本也可以单独运行，但自动研究、内容判断和提示词填写仍需要 Codex 执行 Skill。
+这是一个 Codex Skill，不是独立在线网站。三个核心 Node.js 脚本也可以单独运行，但自动研究、内容判断、视频候选帧选择和提示词填写仍需要 Codex 执行 Skill。
 
 ## 可直接复制的请求模板
 
@@ -263,6 +292,7 @@ $generate-xiaowei-covers
 
 - Node.js 20 或更高版本；
 - Google Chrome，或者当前项目中可用的 Playwright；
+- 视频输入还需要 `ffmpeg` 与 `ffprobe`；
 - macOS 已完整验证，其他系统建议使用 Playwright。
 
 ### 1. 创建项目
@@ -288,13 +318,26 @@ my-cover/
 ├── assets/
 │   ├── portrait/
 │   ├── brand/
+│   ├── evidence/
 │   └── SOURCES.md
 └── output/
 ```
 
 目标目录已经存在时，创建脚本会拒绝覆盖。
 
-### 2. 只导出需要的 route
+需要审计型公开包时，优先从 [`contest/demo/claim-to-pixel.json`](contest/demo/claim-to-pixel.json) 复制字段结构，并按 [`Claim-to-Pixel 契约`](references/claim-to-pixel-contract.md) 填写真实主张、来源、素材和三个独立 brief；不要直接复用演示事实。
+
+### 2. 视频输入：抽取候选帧
+
+```bash
+node "$SKILL_DIR/scripts/extract-video-frames.mjs" \
+  ./demo.mp4 \
+  ./my-cover/assets/evidence/video-frames
+```
+
+默认输出 9 张带时间戳候选帧、`contact-sheet.jpg`、`manifest.json` 和 `REVIEW.md`。先看联系图，再打开最强的 2–3 张原图；选择标准是内容代表性、清晰度、动作或 UI 完整性和标题留白，不只是“人脸最好看”。这一步不调用任何 API。
+
+### 3. 只导出需要的 route
 
 ```bash
 node "$SKILL_DIR/scripts/render-covers.mjs" \
@@ -378,7 +421,9 @@ generate-xiaowei-covers/
 │   └── brand-system.md
 ├── scripts/
 │   ├── new-cover-project.mjs
+│   ├── extract-video-frames.mjs
 │   ├── render-covers.mjs
+│   ├── test-e2e.mjs
 │   └── validate-repo.mjs
 ├── docs/
 └── LICENSE
@@ -392,28 +437,29 @@ generate-xiaowei-covers/
 npm test
 ```
 
-仓库校验会检查：
+默认测试会检查：
 
 - Skill frontmatter 和必要文件；
 - 模板引用的本地素材；
 - 竖版 6 个与公众号 18 个导出节点；
-- JavaScript 语法。
+- JavaScript 语法；
+- 真实创建竖版与公众号项目；
+- 真实导出 `1080×1440`、`2100×900`、`1080×1080` 和 `1944×620`；
+- 标题安全区溢出会被渲染器拒绝，而不是静默裁切。
 
-发布前还会真实渲染并核对：
+自动测试覆盖尺寸、资源和溢出；发布前仍需人工检查 360px 宽手机缩略图中的标题、人物和证据可读性。
 
-- `2100×900` 公众号主封面；
-- `1080×1080` 公众号方封面；
-- `1944×620` 配对预览；
-- `1080×1440` 小红书封面；
-- 360px 宽手机缩略图的标题、人物和证据可读性。
+需要单独验证渲染后端时，可设置 `COVER_RENDERER=playwright` 或 `COVER_RENDERER=chrome`；默认值 `auto` 会优先使用 Playwright，再回退到本机 Chrome。
 
 ## 当前限制
 
 - 当前是 Skill + HTML/CSS 渲染内核，不是在线编辑器；
 - 没有 Canva 式任意拖拽，版式约束用于保证一致性；
 - `FACTS.md`、品牌使用和最终发布仍需要人工确认；
+- Claim-to-Pixel 能验证记录是否自洽，不能替代外部事实核查或法律判断；
 - 模板文字可编辑，但还没有统一的 `cover.json` 可视化表单；
 - 复杂的新 route 仍可能需要调整 HTML，而不是只改一个字段。
+- 视频候选帧当前采用时间分布采样，再由 Agent 做语义选择；尚未加入本地清晰度与场景变化评分。
 
 ## License、原创实现与视觉灵感
 
@@ -426,7 +472,8 @@ npm test
 ## Roadmap
 
 - 使用统一 `cover.json` 驱动提示词、模板和在线编辑器；
-- 增加标题安全区、360px 缩略图和越界自动检测；
+- 增加 360px 缩略图的自动视觉回归；
+- 为视频候选帧增加清晰度、场景变化与重复画面评分；
 - 增加官方素材 registry、校验和与品牌更新提示；
 - 增加更多人物照片与安全裁切预设；
 - 支持批量选题、批量提示词和批量导出；
