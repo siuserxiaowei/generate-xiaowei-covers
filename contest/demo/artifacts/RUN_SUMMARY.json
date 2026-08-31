@@ -71,9 +71,9 @@
   ],
   "sourceRevision": {
     "available": true,
-    "root": "/Users/siuserxiaowei/.codex/skills/generate-xiaowei-covers",
-    "commit": "dacb974f7fb26278563d9824fc1eec4bb2576e2f",
-    "shortCommit": "dacb974f7fb2",
+    "root": ".",
+    "commit": "5d44bf2669eed9519f33bfae0f3eb96f418b59e3",
+    "shortCommit": "5d44bf2669ee",
     "dirty": false,
     "changeCount": 0
   }

@@ -10,10 +10,10 @@ GATES: FAIL (6/8)
 - PASS human-signoff
 ERROR CTP_TITLE_LENGTH platforms.wechatWide.title: 21:9 title uses 15 characters; static safe limit is 14.
 ERROR CTP_TITLE_UNVERIFIED platforms.wechatWide.headlineClaimIds: Title is backed by blocked or unknown claim unknown_ten_x.
-ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute title token lacks a verified fact token: 全网唯一
-ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute title token lacks a verified fact token: 唯一
-ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute title token lacks a verified fact token: 保证
-ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute title token lacks a verified fact token: 10倍
+ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute public-copy token lacks a verified fact token: 全网唯一
+ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute public-copy token lacks a verified fact token: 唯一
+ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute public-copy token lacks a verified fact token: 保证
+ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute public-copy token lacks a verified fact token: 10倍
 STATUS: BLOCKED
 PUBLISH READY: NO
-REPOSITORY: dacb974f7fb2 CLEAN
+REPOSITORY: 5d44bf2669ee CLEAN

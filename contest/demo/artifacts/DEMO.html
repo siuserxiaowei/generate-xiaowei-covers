@@ -22,18 +22,18 @@
 </head>
 <body>
   <main class="board" data-export data-file="claim2cover-demo-board.png" data-width="1920" data-height="1080">
-    <header class="head" data-text-safe="board-heading"><h1>Claim2Cover｜从危险标题到可审计封面</h1><div class="sub">Recorded fixture · liveAiClaimed:false<br>dacb974f7fb2 · CLEAN BUILD INPUT</div></header>
+    <header class="head" data-text-safe="board-heading"><h1>Claim2Cover｜从危险标题到可审计封面</h1><div class="sub">Recorded fixture · liveAiClaimed:false<br>5d44bf2669ee · CLEAN BUILD INPUT</div></header>
     <section class="main">
       <div class="states">
         <article class="state fail"><h2><span>01 / FAIL</span><span>危险承诺</span></h2><pre>GATES: FAIL (6/8)
 ERROR CTP_TITLE_LENGTH platforms.wechatWide.title: 21:9 title uses 15 characters; static safe limit is 14.
 ERROR CTP_TITLE_UNVERIFIED platforms.wechatWide.headlineClaimIds: Title is backed by blocked or unknown claim unknown_ten_x.
-ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute title token lacks a verified fact token: 全网唯一
-ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute title token lacks a verified fact token: 唯一
-ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute title token lacks a verified fact token: 保证</pre></article>
+ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute public-copy token lacks a verified fact token: 全网唯一
+ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute public-copy token lacks a verified fact token: 唯一
+ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute public-copy token lacks a verified fact token: 保证</pre></article>
         <article class="state pass"><h2><span>02 / PASS</span><span>修复后</span></h2><pre>GATES: PASS (8/8)
 STATUS: PENDING HUMAN SIGN-OFF
-BUILD: PASS /tmp/claim2cover-regenerated-dacb974/build
+BUILD: PASS &lt;output-dir&gt;/build
 STATUS: PENDING HUMAN SIGN-OFF
 NEXT: Human must review facts, rights, HTML, and all PNGs before signoff.</pre></article>
       </div>

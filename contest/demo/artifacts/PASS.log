@@ -10,7 +10,7 @@ GATES: PASS (8/8)
 - PASS human-signoff
 STATUS: PENDING HUMAN SIGN-OFF
 PUBLISH READY: NO
-REPOSITORY: dacb974f7fb2 CLEAN
-BUILD: PASS /tmp/claim2cover-regenerated-dacb974/build
+REPOSITORY: 5d44bf2669ee CLEAN
+BUILD: PASS <output-dir>/build
 STATUS: PENDING HUMAN SIGN-OFF
 NEXT: Human must review facts, rights, HTML, and all PNGs before signoff.
