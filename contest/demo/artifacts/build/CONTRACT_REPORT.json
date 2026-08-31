@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "contract": "Claim-to-Pixel",
+  "manifest": {
+    "path": "/Users/siuserxiaowei/.codex/skills/generate-xiaowei-covers/contest/demo/claim-to-pixel.json",
+    "sha256": "0db066b0369f282bf068976fe208552ee5592330b3f03b25558f14beeb6af86e"
+  },
+  "aiDraft": {
+    "liveAiClaimed": false,
+    "mode": "recorded-agent-draft-fixture",
+    "semanticRole": "An Agent classifies claims and authors three platform-specific title and layout briefs.",
+    "deterministicRole": "The local CLI validates sources, title promises, rights, safe areas, repository state, and renders HTML to PNG without a model call.",
+    "promptSource": "contest/demo/PROMPT.md"
+  },
+  "gates": [
+    {
+      "name": "schema",
+      "pass": true
+    },
+    {
+      "name": "claim-ledger",
+      "pass": true
+    },
+    {
+      "name": "sources",
+      "pass": true
+    },
+    {
+      "name": "title-truth",
+      "pass": true
+    },
+    {
+      "name": "independent-briefs",
+      "pass": true
+    },
+    {
+      "name": "asset-rights",
+      "pass": true
+    },
+    {
+      "name": "safe-areas",
+      "pass": true
+    },
+    {
+      "name": "human-signoff",
+      "pass": true
+    }
+  ],
+  "status": "PENDING HUMAN SIGN-OFF",
+  "publishReady": false,
+  "repository": {
+    "available": true,
+    "root": "/Users/siuserxiaowei/.codex/skills/generate-xiaowei-covers",
+    "commit": "26f0eed8448b8693fc9f031c9b1506f5093c6493",
+    "shortCommit": "26f0eed8448b",
+    "dirty": false,
+    "changeCount": 0
+  },
+  "render": {
+    "status": "passed",
+    "outputs": [
+      {
+        "platform": "xiaohongshu",
+        "file": "png/claim2cover-xiaohongshu-3x4.png",
+        "width": 1080,
+        "height": 1440
+      },
+      {
+        "platform": "wechatWide",
+        "file": "png/claim2cover-wechat-21x9.png",
+        "width": 2100,
+        "height": 900
+      },
+      {
+        "platform": "wechatSquare",
+        "file": "png/claim2cover-wechat-1x1.png",
+        "width": 1080,
+        "height": 1080
+      }
+    ]
+  }
+}

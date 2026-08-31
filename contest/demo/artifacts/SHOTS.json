@@ -1,0 +1,57 @@
+[
+  {
+    "order": 1,
+    "file": "FAIL.log",
+    "purpose": "Intentional negative gate output"
+  },
+  {
+    "order": 2,
+    "file": "PASS.log",
+    "purpose": "Fixed fixture and build output"
+  },
+  {
+    "order": 3,
+    "file": "build/claim-ledger.json",
+    "purpose": "fact/judgment/unknown ledger"
+  },
+  {
+    "order": 4,
+    "file": "build/briefs/xiaohongshu.json",
+    "purpose": "AI-draft 3:4 brief"
+  },
+  {
+    "order": 5,
+    "file": "build/briefs/wechatWide.json",
+    "purpose": "AI-draft 21:9 brief"
+  },
+  {
+    "order": 6,
+    "file": "build/briefs/wechatSquare.json",
+    "purpose": "AI-draft 1:1 brief"
+  },
+  {
+    "order": 7,
+    "file": "build/png/claim2cover-xiaohongshu-3x4.png",
+    "purpose": "1080x1440 output"
+  },
+  {
+    "order": 8,
+    "file": "build/png/claim2cover-wechat-21x9.png",
+    "purpose": "2100x900 output"
+  },
+  {
+    "order": 9,
+    "file": "build/png/claim2cover-wechat-1x1.png",
+    "purpose": "1080x1080 output"
+  },
+  {
+    "order": 10,
+    "file": "board/claim2cover-demo-board.png",
+    "purpose": "1920x1080 recording board"
+  },
+  {
+    "order": 11,
+    "file": "STATUS_BEFORE_SIGNOFF.json",
+    "purpose": "Human boundary and next commands"
+  }
+]

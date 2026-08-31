@@ -39,6 +39,11 @@ const requiredFiles = [
   "contest/demo/PROMPT.md",
   "contest/demo/claim-to-pixel.json",
   "contest/demo/claim-to-pixel.invalid.json",
+  "contest/demo/artifacts/RUN_SUMMARY.json",
+  "contest/demo/artifacts/board/claim2cover-demo-board.png",
+  "contest/demo/artifacts/build/png/claim2cover-xiaohongshu-3x4.png",
+  "contest/demo/artifacts/build/png/claim2cover-wechat-21x9.png",
+  "contest/demo/artifacts/build/png/claim2cover-wechat-1x1.png",
 ];
 
 function fail(message) {
@@ -90,6 +95,20 @@ async function validateClaim2CoverFixture() {
   const types = new Set((fixture.claims || []).map((claim) => claim.type));
   for (const required of ["fact", "judgment", "unknown"]) {
     if (!types.has(required)) fail(`Claim2Cover fixture is missing ${required}.`);
+  }
+
+  const summary = JSON.parse(
+    await readFile(path.join(root, "contest/demo/artifacts/RUN_SUMMARY.json"), "utf8"),
+  );
+  if (summary.liveAiClaimed !== false) fail("Frozen demo must declare liveAiClaimed: false.");
+  if (summary.fixedBuild?.status !== "PENDING HUMAN SIGN-OFF") {
+    fail("Frozen demo must remain pending human sign-off.");
+  }
+  if (summary.fixedBuild?.gatesPassed !== true || summary.fixedBuild?.publishReady !== false) {
+    fail("Frozen demo must show passing gates without claiming publish readiness.");
+  }
+  if (summary.sourceRevision?.dirty !== false || !summary.sourceRevision?.commit) {
+    fail("Frozen demo must record a clean source commit.");
   }
 }
 

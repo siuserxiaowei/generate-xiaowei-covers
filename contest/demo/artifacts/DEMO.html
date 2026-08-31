@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>Claim2Cover demo board</title>
+  <style>
+    *{box-sizing:border-box} html,body{margin:0;background:#d9d6cf;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;color:#111}
+    .board{width:1920px;height:1080px;overflow:hidden;padding:46px 56px 38px;background:#f2efe6;position:relative}
+    .head{height:92px;border-bottom:5px solid #111;display:flex;justify-content:space-between;align-items:flex-start}
+    h1{margin:0;font-size:52px;letter-spacing:-.045em}.sub{font-weight:800;color:#655f56;font-size:21px;text-align:right;line-height:1.35}
+    .main{display:grid;grid-template-columns:620px 1fr;gap:40px;margin-top:30px;height:810px}
+    .states{display:grid;grid-template-rows:1fr 1fr;gap:24px}
+    .state{border:4px solid #111;background:#fff;padding:24px 28px;box-shadow:10px 10px 0 #111;overflow:hidden}
+    .state h2{margin:0 0 14px;font-size:36px;display:flex;justify-content:space-between}.state.fail h2{color:#b91c1c}.state.pass h2{color:#166534}
+    pre{margin:0;font:700 17px/1.48 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap}
+    .covers{display:grid;grid-template-columns:420px 1fr;grid-template-rows:390px 390px;gap:26px}
+    figure{margin:0;border:4px solid #111;background:#fff;position:relative;overflow:hidden;box-shadow:9px 9px 0 #111}
+    figure img{width:100%;height:100%;object-fit:contain;background:#ddd9d0}figcaption{position:absolute;left:0;bottom:0;background:#111;color:#fff;padding:8px 13px;font-size:18px;font-weight:900}
+    .xhs{grid-row:1 / span 2}.wide{grid-column:2;grid-row:1}.square{grid-column:2;grid-row:2}.square img{object-position:left center}
+    .foot{position:absolute;left:56px;right:56px;bottom:24px;display:flex;justify-content:space-between;font-weight:900;font-size:20px}.pending{color:#9a3412}
+  </style>
+</head>
+<body>
+  <main class="board" data-export data-file="claim2cover-demo-board.png" data-width="1920" data-height="1080">
+    <header class="head" data-text-safe="board-heading"><h1>Claim2Cover｜从危险标题到可审计封面</h1><div class="sub">Recorded fixture · liveAiClaimed:false<br>26f0eed8448b · CLEAN BUILD INPUT</div></header>
+    <section class="main">
+      <div class="states">
+        <article class="state fail"><h2><span>01 / FAIL</span><span>危险承诺</span></h2><pre>GATES: FAIL (6/8)
+ERROR CTP_TITLE_LENGTH platforms.wechatWide.title: 21:9 title uses 15 characters; static safe limit is 14.
+ERROR CTP_TITLE_UNVERIFIED platforms.wechatWide.headlineClaimIds: Title is backed by blocked or unknown claim unknown_ten_x.
+ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute title token lacks a verified fact token: 全网唯一
+ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute title token lacks a verified fact token: 唯一
+ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute title token lacks a verified fact token: 保证</pre></article>
+        <article class="state pass"><h2><span>02 / PASS</span><span>修复后</span></h2><pre>GATES: PASS (8/8)
+STATUS: PENDING HUMAN SIGN-OFF
+BUILD: PASS /tmp/claim2cover-artifacts-26f0eed/build
+STATUS: PENDING HUMAN SIGN-OFF
+NEXT: Human must review facts, rights, HTML, and all PNGs before signoff.</pre></article>
+      </div>
+      <div class="covers">
+        <figure class="xhs"><img src="build/png/claim2cover-xiaohongshu-3x4.png" alt="小红书 3:4"><figcaption>3:4 独立 brief</figcaption></figure>
+        <figure class="wide"><img src="build/png/claim2cover-wechat-21x9.png" alt="公众号 21:9"><figcaption>21:9 独立 brief</figcaption></figure>
+        <figure class="square"><img src="build/png/claim2cover-wechat-1x1.png" alt="公众号 1:1"><figcaption>1:1 独立 brief</figcaption></figure>
+      </div>
+    </section>
+    <footer class="foot"><span>FACT / JUDGMENT / UNKNOWN → deterministic gates → PNG</span><span class="pending">PENDING HUMAN SIGN-OFF</span></footer>
+  </main>
+</body>
+</html>

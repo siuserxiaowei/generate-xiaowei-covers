@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "platform": "wechatWide",
+  "surface": "21:9",
+  "dimensions": {
+    "width": 2100,
+    "height": 900
+  },
+  "safeLimits": {
+    "maxTitleChars": 14,
+    "maxTitleLines": 2,
+    "maxPromiseChars": 28,
+    "runtimeOverflowCheck": "data-text-safe"
+  },
+  "authorship": "ai-draft",
+  "title": "主张先过证据门",
+  "titleLines": [
+    "主张先过证据门"
+  ],
+  "promise": "未验证承诺不能进入标题",
+  "layoutIntent": "wide-contract-split",
+  "evidence": "左侧结论，右侧并列证据卡",
+  "headlineClaimIds": [
+    "judgment_evidence_first"
+  ],
+  "accent": "#F4C430"
+}

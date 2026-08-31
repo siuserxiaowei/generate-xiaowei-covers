@@ -1,0 +1,8 @@
+{
+  "status": "PENDING HUMAN SIGN-OFF",
+  "publishReady": false,
+  "liveAiClaimed": false,
+  "humanAction": "Review facts, sources, asset rights, editable HTML, and all three PNGs before running signoff.",
+  "signoffCommand": "node scripts/claim-to-pixel.mjs signoff <manifest> --reviewer <name> --note <review-note> --confirm reviewed-facts-rights-previews",
+  "releaseCommand": "node scripts/claim-to-pixel.mjs release-check <manifest>"
+}

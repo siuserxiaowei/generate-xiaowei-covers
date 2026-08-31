@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "platform": "wechatSquare",
+  "surface": "1:1",
+  "dimensions": {
+    "width": 1080,
+    "height": 1080
+  },
+  "safeLimits": {
+    "maxTitleChars": 10,
+    "maxTitleLines": 2,
+    "maxPromiseChars": 18,
+    "runtimeOverflowCheck": "data-text-safe"
+  },
+  "authorship": "ai-draft",
+  "title": "证据链",
+  "titleLines": [
+    "证据链"
+  ],
+  "promise": "人工签核后再发布",
+  "layoutIntent": "square-status-seal",
+  "evidence": "三类主张计数与签核状态",
+  "headlineClaimIds": [
+    "judgment_evidence_first"
+  ],
+  "accent": "#F4C430"
+}

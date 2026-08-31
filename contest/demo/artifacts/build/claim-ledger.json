@@ -1,0 +1,34 @@
+[
+  {
+    "id": "fact_three_surfaces",
+    "type": "fact",
+    "status": "verified",
+    "text": "本仓库的 Claim-to-Pixel CLI 会为 3 种画幅生成独立 brief、可编辑 HTML 与 PNG。",
+    "coverAllowed": true,
+    "sourceIds": [
+      "src_contract",
+      "src_reference"
+    ],
+    "titleTokens": [
+      "3种画幅"
+    ]
+  },
+  {
+    "id": "judgment_evidence_first",
+    "type": "judgment",
+    "status": "editorial",
+    "text": "封面不只是视觉包装，标题承诺应先通过证据门。",
+    "coverAllowed": true,
+    "sourceIds": [],
+    "titleTokens": []
+  },
+  {
+    "id": "unknown_ten_x",
+    "type": "unknown",
+    "status": "unverified",
+    "text": "这套流程能让封面效率提升 10 倍。",
+    "coverAllowed": false,
+    "sourceIds": [],
+    "titleTokens": []
+  }
+]

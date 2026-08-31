@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "platform": "xiaohongshu",
+  "surface": "3:4",
+  "dimensions": {
+    "width": 1080,
+    "height": 1440
+  },
+  "safeLimits": {
+    "maxTitleChars": 18,
+    "maxTitleLines": 2,
+    "maxPromiseChars": 34,
+    "runtimeOverflowCheck": "data-text-safe"
+  },
+  "authorship": "ai-draft",
+  "title": "先查主张再画封面",
+  "titleLines": [
+    "先查主张",
+    "再画封面"
+  ],
+  "promise": "FACT / JUDGMENT / UNKNOWN 分开入账",
+  "layoutIntent": "vertical-ledger-stack",
+  "evidence": "三类主张台账与发布状态",
+  "headlineClaimIds": [
+    "judgment_evidence_first"
+  ],
+  "accent": "#F4C430"
+}
