@@ -56,6 +56,17 @@ async function main() {
   const tempRoot = await mkdtemp(path.join(os.tmpdir(), "claim2cover-test-"));
   const inRepoTemp = await mkdtemp(path.join(root, ".claim2cover-signoff-test-"));
   try {
+    const pendingManifest = JSON.parse(await readFile(fixture, "utf8"));
+    pendingManifest.humanSignoff = {
+      status: "pending",
+      reviewer: "",
+      reviewedAt: "",
+      note: "",
+      confirmation: "",
+    };
+    const pendingFixture = path.join(inRepoTemp, "pending.json");
+    await writeFile(pendingFixture, `${JSON.stringify(pendingManifest, null, 2)}\n`);
+
     const demoDir = path.join(tempRoot, "demo");
     const demo = run("demo-claim-to-pixel.mjs", [demoDir]);
     assert.equal(demo.status, 0, demo.transcript);
@@ -102,7 +113,7 @@ async function main() {
     assert.equal(summary.fixedBuild.gatesPassed, true);
 
     const signedFixture = path.join(inRepoTemp, "signed.json");
-    await cp(fixture, signedFixture);
+    await cp(pendingFixture, signedFixture);
     const signoff = run("claim-to-pixel.mjs", [
       "signoff",
       signedFixture,
@@ -127,7 +138,7 @@ async function main() {
     assert.notEqual(tampered.status, 0);
     assert.match(tampered.transcript, /CTP_SIGNOFF_PAYLOAD_CHANGED/u);
 
-    const substringFixture = JSON.parse(await readFile(fixture, "utf8"));
+    const substringFixture = JSON.parse(await readFile(pendingFixture, "utf8"));
     substringFixture.claims[0].text = "本流程经测试记录为 110 倍。";
     substringFixture.claims[0].titleTokens = ["110倍"];
     substringFixture.platforms.xiaohongshu.title = "效率提升10倍";
@@ -139,7 +150,7 @@ async function main() {
     assert.notEqual(substringValidation.status, 0);
     assert.match(substringValidation.transcript, /CTP_TITLE_PROMISE_UNVERIFIED/u);
 
-    const falseLedgerTokenFixture = JSON.parse(await readFile(fixture, "utf8"));
+    const falseLedgerTokenFixture = JSON.parse(await readFile(pendingFixture, "utf8"));
     falseLedgerTokenFixture.claims[0].text = "本流程经测试记录为 110 倍。";
     falseLedgerTokenFixture.claims[0].titleTokens = ["10倍"];
     const falseLedgerTokenPath = path.join(inRepoTemp, "false-ledger-token.json");
@@ -148,7 +159,7 @@ async function main() {
     assert.notEqual(falseLedgerTokenValidation.status, 0);
     assert.match(falseLedgerTokenValidation.transcript, /CTP_TOKEN_NOT_IN_CLAIM/u);
 
-    const certifiedPrefixFixture = JSON.parse(await readFile(fixture, "utf8"));
+    const certifiedPrefixFixture = JSON.parse(await readFile(pendingFixture, "utf8"));
     certifiedPrefixFixture.platforms.xiaohongshu.title = "独立输出3种画幅";
     certifiedPrefixFixture.platforms.xiaohongshu.titleLines = ["独立输出3种画幅"];
     certifiedPrefixFixture.platforms.xiaohongshu.headlineClaimIds = [certifiedPrefixFixture.claims[0].id];
@@ -157,7 +168,7 @@ async function main() {
     const certifiedPrefixValidation = run("claim-to-pixel.mjs", ["validate", certifiedPrefixPath]);
     assert.equal(certifiedPrefixValidation.status, 0, certifiedPrefixValidation.transcript);
 
-    const riskyPromiseFixture = JSON.parse(await readFile(fixture, "utf8"));
+    const riskyPromiseFixture = JSON.parse(await readFile(pendingFixture, "utf8"));
     riskyPromiseFixture.platforms.wechatWide.promise = "全网唯一效率提升10倍";
     const riskyPromisePath = path.join(inRepoTemp, "risky-promise.json");
     await writeFile(riskyPromisePath, `${JSON.stringify(riskyPromiseFixture, null, 2)}\n`);
@@ -176,13 +187,13 @@ async function main() {
     assert.equal(linkedInvocation.status, 0, linkedInvocation.stderr);
     assert.match(linkedInvocation.stdout, /Claim2Cover Claim-to-Pixel contract/u);
 
-    const releasePending = run("claim-to-pixel.mjs", ["release-check", fixture]);
+    const releasePending = run("claim-to-pixel.mjs", ["release-check", pendingFixture]);
     assert.notEqual(releasePending.status, 0);
     assert.match(releasePending.transcript, /CTP_RELEASE_SIGNOFF/u);
 
     const secondBuild = run("claim-to-pixel.mjs", [
       "build",
-      fixture,
+      pendingFixture,
       path.join(demoDir, "build"),
       "--no-render",
     ]);

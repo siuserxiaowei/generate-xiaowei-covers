@@ -91,7 +91,7 @@ node scripts/claim-to-pixel.mjs build \
   /tmp/claim2cover-build
 ```
 
-它同时检查：主张类型、来源、标题里的数字与绝对词、三平台 brief 是否独立、素材权利、静态字符上限、真实 DOM 安全区、Git commit/worktree 状态。渲染成功不等于允许发布；默认终态是 `PENDING HUMAN SIGN-OFF`。人工签核会绑定完整非签核 payload 的 SHA-256，签后改动会被阻断；提交签核后，clean worktree 才能通过 `release-check`。
+它同时检查：主张类型、来源、标题里的数字与绝对词、三平台 brief 是否独立、素材权利、静态字符上限、真实 DOM 安全区、Git commit/worktree 状态。渲染成功不等于允许发布；固定比赛 Demo 会始终重建一个隔离的 `PENDING HUMAN SIGN-OFF` 副本，公开 release manifest 则保留真实签核记录。人工签核会绑定完整非签核 payload 的 SHA-256，签后改动会被阻断；提交签核后，clean worktree 才能通过 `release-check`。
 
 一条命令可生成录屏可用的真实 FAIL/PASS 日志、三张 PNG、状态 JSON、可编辑 HTML、1920×1080 对比看板和 72 秒镜头清单：
 

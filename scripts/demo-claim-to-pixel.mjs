@@ -7,6 +7,7 @@ import {
   mkdir,
   mkdtemp,
   readFile,
+  rm,
   writeFile,
 } from "node:fs/promises";
 import os from "node:os";
@@ -173,6 +174,20 @@ async function main() {
     repositoryRoot: root,
   });
 
+  const pendingDemoManifest = JSON.parse(await readFile(validFixture, "utf8"));
+  pendingDemoManifest.humanSignoff = {
+    status: "pending",
+    reviewer: "",
+    reviewedAt: "",
+    note: "",
+    confirmation: "",
+  };
+  const pendingDemoFixture = path.join(
+    path.dirname(validFixture),
+    `.claim-to-pixel.demo-pending-${process.pid}.tmp`,
+  );
+  await writeFile(pendingDemoFixture, `${JSON.stringify(pendingDemoManifest, null, 2)}\n`, { flag: "wx" });
+
   const failed = run("claim-to-pixel.mjs", ["validate", invalidFixture]);
   assert.notEqual(failed.status, 0, "Intentional negative fixture must fail.");
   for (const code of ["CTP_TITLE_UNVERIFIED", "CTP_TITLE_PROMISE_UNVERIFIED", "CTP_TITLE_LENGTH"]) {
@@ -182,7 +197,12 @@ async function main() {
   await writeFile(path.join(outputDir, "FAIL.log"), publicFailedTranscript);
 
   const buildDir = path.join(outputDir, "build");
-  const passed = run("claim-to-pixel.mjs", ["build", validFixture, buildDir]);
+  let passed;
+  try {
+    passed = run("claim-to-pixel.mjs", ["build", pendingDemoFixture, buildDir]);
+  } finally {
+    await rm(pendingDemoFixture, { force: true });
+  }
   if (passed.status !== 0) fail(`Fixed fixture failed:\n${passed.transcript}`);
   const publicPassedTranscript = publicTranscript(passed.transcript);
   await writeFile(path.join(outputDir, "PASS.log"), publicPassedTranscript);
