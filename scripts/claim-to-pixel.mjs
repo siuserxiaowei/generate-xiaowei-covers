@@ -2,6 +2,7 @@
 
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
+import { realpathSync } from "node:fs";
 import {
   access,
   mkdir,
@@ -199,6 +200,26 @@ function extractRiskTokens(title) {
     if (match[0].trim()) tokens.add(match[0].trim());
   }
   return [...tokens];
+}
+
+function riskTokenCertified(certifiedToken, riskToken) {
+  const normalizedCertified = normalizedText(certifiedToken);
+  const normalizedRisk = normalizedText(riskToken);
+  if (!normalizedCertified || normalizedCertified === normalizedRisk) {
+    return normalizedCertified === normalizedRisk;
+  }
+
+  const certifiedAbsolute = ABSOLUTE_PHRASES.find(
+    (phrase) => normalizedText(phrase) === normalizedCertified,
+  );
+  const riskAbsolute = ABSOLUTE_PHRASES.find(
+    (phrase) => normalizedText(phrase) === normalizedRisk,
+  );
+  return Boolean(
+    certifiedAbsolute
+      && riskAbsolute
+      && normalizedText(certifiedAbsolute).includes(normalizedText(riskAbsolute)),
+  );
 }
 
 function runGit(startDirectory, args) {
@@ -742,11 +763,7 @@ async function validateContract(manifest, manifestPath) {
         .filter((claim) => claim.type === "fact" && claim.status === "verified" && claim.coverAllowed === true)
         .flatMap((claim) => (Array.isArray(claim.titleTokens) ? claim.titleTokens : []));
       for (const riskToken of riskTokens) {
-        const normalizedRisk = normalizedText(riskToken);
-        const certified = certifiedTokens.some((token) => {
-          const normalizedCertified = normalizedText(token);
-          return normalizedCertified === normalizedRisk || normalizedCertified.includes(normalizedRisk);
-        });
+        const certified = certifiedTokens.some((token) => riskTokenCertified(token, riskToken));
         if (!certified) {
           issue(
             issues,
@@ -1420,8 +1437,17 @@ async function main() {
   fail("CTP_COMMAND", `Unknown command: ${command}\n${usage()}`);
 }
 
-const invokedPath = process.argv[1] ? path.resolve(process.argv[1]) : "";
-const modulePath = path.resolve(fileURLToPath(import.meta.url));
+function comparableRealPath(filePath) {
+  if (!filePath) return "";
+  try {
+    return realpathSync(filePath);
+  } catch {
+    return path.resolve(filePath);
+  }
+}
+
+const invokedPath = comparableRealPath(process.argv[1]);
+const modulePath = comparableRealPath(fileURLToPath(import.meta.url));
 if (invokedPath === modulePath) {
   main().catch((error) => {
     console.error(`claim-to-pixel: ${error.code || "CTP_UNEXPECTED"}: ${error.message}`);
@@ -1436,5 +1462,6 @@ export {
   SURFACES,
   approvalPayloadSha256,
   extractRiskTokens,
+  riskTokenCertified,
   validateContract,
 };

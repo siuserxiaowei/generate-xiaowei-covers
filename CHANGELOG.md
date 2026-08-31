@@ -9,6 +9,7 @@ All notable changes to this project are documented here.
 - Added three independently authored platform briefs and deterministic 3:4, 21:9, and 1:1 HTML-to-PNG builds.
 - Added the explicit `PENDING HUMAN SIGN-OFF` → recorded sign-off → clean-commit `release-check` state transition.
 - Bound each approved sign-off to the SHA-256 of every non-signoff manifest field so post-review edits fail closed.
+- Made numeric title-token certification exact (`110倍` no longer certifies `10倍`) and normalized macOS path aliases before CLI entrypoint detection.
 - Added a reproducible negative-to-positive contest demo with real logs, three PNGs, a 1920×1080 recording board, and a 72-second shot list.
 - Marked the recorded fixture `liveAiClaimed: false` and preserved its semantic drafting prompt and Agent/validator responsibility split.
 

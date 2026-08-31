@@ -8,13 +8,18 @@ import {
   readFile,
   rm,
   stat,
+  symlink,
   writeFile,
 } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
-import { SIGNOFF_CONFIRMATION, extractRiskTokens } from "./claim-to-pixel.mjs";
+import {
+  SIGNOFF_CONFIRMATION,
+  extractRiskTokens,
+  riskTokenCertified,
+} from "./claim-to-pixel.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.dirname(scriptDir);
@@ -41,6 +46,8 @@ async function assertPng(filePath, width, height) {
 
 async function main() {
   assert.deepEqual(extractRiskTokens("全网唯一效率提升10倍"), ["全网唯一", "唯一", "10倍"]);
+  assert.equal(riskTokenCertified("110倍", "10倍"), false);
+  assert.equal(riskTokenCertified("全网唯一", "唯一"), true);
 
   const tempRoot = await mkdtemp(path.join(os.tmpdir(), "claim2cover-test-"));
   const inRepoTemp = await mkdtemp(path.join(root, ".claim2cover-signoff-test-"));
@@ -99,6 +106,28 @@ async function main() {
     const tampered = run("claim-to-pixel.mjs", ["validate", signedFixture]);
     assert.notEqual(tampered.status, 0);
     assert.match(tampered.transcript, /CTP_SIGNOFF_PAYLOAD_CHANGED/u);
+
+    const substringFixture = JSON.parse(await readFile(fixture, "utf8"));
+    substringFixture.claims[0].text = "本流程经测试记录为 110 倍。";
+    substringFixture.claims[0].titleTokens = ["110倍"];
+    substringFixture.platforms.xiaohongshu.title = "效率提升10倍";
+    substringFixture.platforms.xiaohongshu.titleLines = ["效率提升10倍"];
+    substringFixture.platforms.xiaohongshu.headlineClaimIds = [substringFixture.claims[0].id];
+    const substringFixturePath = path.join(inRepoTemp, "numeric-substring.json");
+    await writeFile(substringFixturePath, `${JSON.stringify(substringFixture, null, 2)}\n`);
+    const substringValidation = run("claim-to-pixel.mjs", ["validate", substringFixturePath]);
+    assert.notEqual(substringValidation.status, 0);
+    assert.match(substringValidation.transcript, /CTP_TITLE_PROMISE_UNVERIFIED/u);
+
+    const linkedCli = path.join(tempRoot, "claim-to-pixel-link.mjs");
+    await symlink(path.join(scriptDir, "claim-to-pixel.mjs"), linkedCli);
+    const linkedInvocation = spawnSync(process.execPath, [linkedCli, "--help"], {
+      cwd: root,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    assert.equal(linkedInvocation.status, 0, linkedInvocation.stderr);
+    assert.match(linkedInvocation.stdout, /Claim2Cover Claim-to-Pixel contract/u);
 
     const releasePending = run("claim-to-pixel.mjs", ["release-check", fixture]);
     assert.notEqual(releasePending.status, 0);
