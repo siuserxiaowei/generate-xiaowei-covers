@@ -47,6 +47,17 @@ const requiredFiles = [
   "contest/demo/artifacts/build/png/claim2cover-wechat-1x1.png",
 ];
 
+const publicTextArtifacts = [
+  "contest/demo/artifacts/FAIL.log",
+  "contest/demo/artifacts/PASS.log",
+  "contest/demo/artifacts/DEMO.html",
+  "contest/demo/artifacts/SHOT_LIST.md",
+  "contest/demo/artifacts/RUN_SUMMARY.json",
+  "contest/demo/artifacts/BOARD_RENDER.log",
+  "contest/demo/artifacts/build/CONTRACT_REPORT.json",
+  "contest/demo/artifacts/build/RENDER.log",
+];
+
 function fail(message) {
   throw new Error(message);
 }
@@ -128,6 +139,15 @@ async function validateProvenanceFoundation() {
   }
 }
 
+async function validatePublicArtifactPrivacy() {
+  for (const relativePath of publicTextArtifacts) {
+    const content = await readFile(path.join(root, relativePath), "utf8");
+    if (/\/Users\/|\/home\/|\/private\/tmp\/|\/tmp\/claim2cover-|[A-Za-z]:\\Users\\/u.test(content)) {
+      fail(`Frozen public artifact exposes a machine-local path: ${relativePath}`);
+    }
+  }
+}
+
 async function validateTemplateAssets(relativeTemplatePath) {
   const templatePath = path.join(root, relativeTemplatePath);
   const html = await readFile(templatePath, "utf8");
@@ -159,6 +179,7 @@ async function main() {
   await validateSkillFrontmatter();
   await validateProvenanceFoundation();
   await validateClaim2CoverFixture();
+  await validatePublicArtifactPrivacy();
   const verticalTextSafeAreas = await validateVerticalTextSafeAreas();
 
   const verticalExports = await validateTemplateAssets("assets/templates/vertical.html");
