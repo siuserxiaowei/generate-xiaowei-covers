@@ -8,6 +8,7 @@ import {
   readFile,
   rm,
   stat,
+  writeFile,
 } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -90,6 +91,14 @@ async function main() {
     assert.equal(signoff.status, 0, signoff.transcript);
     assert.match(signoff.transcript, /STATUS: HUMAN SIGNED OFF/u);
     assert.match(signoff.transcript, /PUBLISH READY: YES/u);
+
+    const signedManifest = JSON.parse(await readFile(signedFixture, "utf8"));
+    assert.match(signedManifest.humanSignoff.approvedPayloadSha256, /^[a-f0-9]{64}$/u);
+    signedManifest.aiDraft.semanticRole = "Changed after review without a new sign-off.";
+    await writeFile(signedFixture, `${JSON.stringify(signedManifest, null, 2)}\n`);
+    const tampered = run("claim-to-pixel.mjs", ["validate", signedFixture]);
+    assert.notEqual(tampered.status, 0);
+    assert.match(tampered.transcript, /CTP_SIGNOFF_PAYLOAD_CHANGED/u);
 
     const releasePending = run("claim-to-pixel.mjs", ["release-check", fixture]);
     assert.notEqual(releasePending.status, 0);

@@ -181,7 +181,7 @@ Before delivery:
 
 Show the rendered images before running any optional heavy validator. Ask: `先你自己看，还是我先自动核查一遍？`
 
-For a Claim-to-Pixel build, leave the status at `PENDING HUMAN SIGN-OFF`. A real reviewer—not the Agent—must inspect the facts, source locators, asset-rights CSV, editable HTML, and all three PNGs before invoking `signoff`. Commit that reviewer record, then use `release-check` from a clean worktree. Do not sign on the user's behalf or describe a pending build as publish-ready.
+For a Claim-to-Pixel build, leave the status at `PENDING HUMAN SIGN-OFF`. A real reviewer—not the Agent—must inspect the facts, source locators, asset-rights CSV, editable HTML, and all three PNGs before invoking `signoff`. The sign-off binds the full non-signoff payload digest; any later content change requires a fresh review. Commit that reviewer record, then use `release-check` from a clean worktree. Do not sign on the user's behalf or describe a pending build as publish-ready.
 
 ## Non-Negotiables
 

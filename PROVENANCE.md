@@ -11,7 +11,7 @@ The originality claim for this repository is limited to concrete implementation,
 - three separately authored platform briefs;
 - deterministic HTML/CSS rendering plus measured safe-area rejection;
 - source, asset-rights, and Git-revision records;
-- an explicit `PENDING HUMAN SIGN-OFF` → human review → clean-commit release transition.
+- an explicit, payload-bound `PENDING HUMAN SIGN-OFF` → human review → clean-commit release transition.
 
 These mechanisms are implemented in `scripts/claim-to-pixel.mjs`, tested by `scripts/test-claim-to-pixel.mjs`, and replayed by `scripts/demo-claim-to-pixel.mjs`.
 

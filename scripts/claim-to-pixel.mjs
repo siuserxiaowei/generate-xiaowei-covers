@@ -155,6 +155,21 @@ function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
 }
 
+function stableJsonValue(value) {
+  if (Array.isArray(value)) return value.map(stableJsonValue);
+  if (!isRecord(value)) return value;
+  return Object.fromEntries(
+    Object.keys(value)
+      .sort()
+      .map((key) => [key, stableJsonValue(value[key])]),
+  );
+}
+
+function approvalPayloadSha256(manifest) {
+  const { humanSignoff: _humanSignoff, ...approvalPayload } = manifest;
+  return sha256(JSON.stringify(stableJsonValue(approvalPayload)));
+}
+
 function issue(issues, gate, code, location, message) {
   issues.push({ gate, code, location, message });
 }
@@ -885,6 +900,24 @@ async function validateContract(manifest, manifestPath) {
         `Confirmation must be ${SIGNOFF_CONFIRMATION}.`,
       );
     }
+    const expectedPayloadSha256 = approvalPayloadSha256(manifest);
+    if (!/^[a-f0-9]{64}$/u.test(String(signoff.approvedPayloadSha256 || ""))) {
+      issue(
+        issues,
+        "human-signoff",
+        "CTP_SIGNOFF_PAYLOAD_MISSING",
+        "humanSignoff.approvedPayloadSha256",
+        "Approved sign-off must record the reviewed payload SHA-256.",
+      );
+    } else if (signoff.approvedPayloadSha256 !== expectedPayloadSha256) {
+      issue(
+        issues,
+        "human-signoff",
+        "CTP_SIGNOFF_PAYLOAD_CHANGED",
+        "humanSignoff.approvedPayloadSha256",
+        "The manifest changed after human review; return it to pending and review again.",
+      );
+    }
   }
 
   const gates = gateNames.map((name) => ({
@@ -957,8 +990,8 @@ function sourcesMarkdown(manifest) {
   const lines = ["# Sources", ""];
   for (const source of manifest.sources) {
     lines.push(
-      `- **${markdownCell(source.id)} — ${markdownCell(source.title)}**  `,
-      `  ${formatSourceLocator(source)}  `,
+      `- **${markdownCell(source.id)} — ${markdownCell(source.title)}**`,
+      `  ${formatSourceLocator(source)}`,
       `  Checked: ${source.checkedAt}${source.note ? ` · ${source.note}` : ""}`,
     );
   }
@@ -1359,6 +1392,7 @@ async function signoffCommand(args) {
     reviewedAt,
     note: options["--note"].trim(),
     confirmation: SIGNOFF_CONFIRMATION,
+    approvedPayloadSha256: approvalPayloadSha256(manifest),
   };
   const tempPath = path.join(
     path.dirname(manifestPath),
@@ -1400,6 +1434,7 @@ export {
   CONTRACT_VERSION,
   SIGNOFF_CONFIRMATION,
   SURFACES,
+  approvalPayloadSha256,
   extractRiskTokens,
   validateContract,
 };

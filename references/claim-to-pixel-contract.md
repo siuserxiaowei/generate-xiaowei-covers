@@ -54,7 +54,7 @@ node scripts/claim-to-pixel.mjs build \
 | `independent-briefs` | 3:4、21:9、1:1 标题与布局意图不能机械复用 |
 | `asset-rights` | 公开成品不得包含 `unverified` 素材；许可或商标素材必须有来源 |
 | `safe-areas` | 静态字符上限先检查；渲染器再用 `data-text-safe` 检查真实 DOM 溢出 |
-| `human-signoff` | 签核前保持 pending；签核后必须记录审阅者、时间、说明和确认短语 |
+| `human-signoff` | 签核前保持 pending；签核后必须记录审阅者、时间、说明、确认短语，以及覆盖全部非签核字段的 payload SHA-256 |
 
 ## 主张台账
 
@@ -115,7 +115,7 @@ node scripts/claim-to-pixel.mjs signoff ./claim-to-pixel.json \
   --confirm reviewed-facts-rights-previews
 ```
 
-脚本只更新 `humanSignoff`，不会代替审阅者做决定，也拒绝覆盖已有签核。随后提交签核，并在 clean worktree 运行：
+脚本只更新 `humanSignoff`，不会代替审阅者做决定，也拒绝覆盖已有签核。它同时写入 `approvedPayloadSha256`：该摘要覆盖项目、AI 草案来源、主张、来源、三平台 brief 与素材权利等全部非签核字段。签核后任一相关字段被改动，`validate` 和 `release-check` 都会以 `CTP_SIGNOFF_PAYLOAD_CHANGED` 阻断，必须恢复 pending 并重新人工复核。随后提交签核，并在 clean worktree 运行：
 
 ```bash
 node scripts/claim-to-pixel.mjs release-check ./claim-to-pixel.json

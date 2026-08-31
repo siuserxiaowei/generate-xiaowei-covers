@@ -33,7 +33,7 @@ node scripts/claim-to-pixel.mjs build contest/demo/claim-to-pixel.json /tmp/clai
 npm run demo:claim2cover -- /tmp/claim2cover-demo
 ```
 
-The intentional “10×” fixture fails. The corrected fixture passes 8/8 content gates but stays `PENDING HUMAN SIGN-OFF`; only a named reviewer may sign it, and release additionally requires a clean commit. The stable fixture is explicitly `liveAiClaimed:false` with its prompt provenance retained; it is not presented as a live model call.
+The intentional “10×” fixture fails. The corrected fixture passes 8/8 content gates but stays `PENDING HUMAN SIGN-OFF`; only a named reviewer may sign it. Each approval is bound to the SHA-256 of the full non-signoff payload, so post-review edits fail closed, and release additionally requires a clean commit. The stable fixture is explicitly `liveAiClaimed:false` with its prompt provenance retained; it is not presented as a live model call.
 
 ## One sentence is enough
 
