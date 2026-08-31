@@ -16,4 +16,4 @@ ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolu
 ERROR CTP_TITLE_PROMISE_UNVERIFIED platforms.wechatWide.title: Numeric or absolute title token lacks a verified fact token: 10倍
 STATUS: BLOCKED
 PUBLISH READY: NO
-REPOSITORY: 26f0eed8448b CLEAN
+REPOSITORY: ee2bdb291a61 CLEAN

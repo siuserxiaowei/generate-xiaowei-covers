@@ -15,7 +15,7 @@
 
 ## 建议录制顺序
 
-1. 先打开 `/tmp/claim2cover-artifacts-26f0eed/DEMO.html` 全屏，完成开头与结尾镜头。
+1. 先打开 `/tmp/claim2cover-regenerated-ee2bdb2/DEMO.html` 全屏，完成开头与结尾镜头。
 2. 中间切终端展示 `FAIL.log` 与 `PASS.log`，不要滚动无关日志。
 3. 三张 PNG 各停 2–3 秒；最后回到 1920×1080 看板。
 4. 不要展示或口播“实时 AI 调用”；这个固定 fixture 的职责是可复现回归。真实 Agent 前向测试另录。
