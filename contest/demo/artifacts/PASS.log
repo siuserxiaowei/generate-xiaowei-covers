@@ -1,0 +1,16 @@
+CONTRACT: Claim-to-Pixel v1
+GATES: PASS (8/8)
+- PASS schema
+- PASS claim-ledger
+- PASS sources
+- PASS title-truth
+- PASS independent-briefs
+- PASS asset-rights
+- PASS safe-areas
+- PASS human-signoff
+STATUS: PENDING HUMAN SIGN-OFF
+PUBLISH READY: NO
+REPOSITORY: 26f0eed8448b CLEAN
+BUILD: PASS /tmp/claim2cover-artifacts-26f0eed/build
+STATUS: PENDING HUMAN SIGN-OFF
+NEXT: Human must review facts, rights, HTML, and all PNGs before signoff.
