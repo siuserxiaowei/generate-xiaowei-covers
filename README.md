@@ -2,6 +2,28 @@
 
 > 一句话选题，随机选一种风格，生成同套的小红书、抖音、横版或公众号封面。
 
+## 小伟内容：文案与封面总入口
+
+本仓库新增 [`xiaowei-content`](skills/xiaowei-content/SKILL.md)，衔接真实案例检索、两平台写作、个人反馈与现有封面Skill。
+
+```text
+小伟内容：<贴原稿>       # 默认小红书文案＋抖音口播和发布描述
+出整套                  # 接当前内容，文案＋3:4和9:16封面
+改口吻，像我平时说话     # 只改当前稿
+```
+
+也可明确调用 `$xiaowei-content`。只要一个平台时加“只要小红书/抖音/X”；“横竖都要”增加16:9。无需重复填写长提示词。
+
+Skill是由Agent执行的工作协议，不是后台自动发布程序。需当前环境提供搜索工具；整套图片需安装本仓库封面Skill并具备其生图或渲染能力。未认可稿件不作为正面样稿；个人稿件与偏好留在本机。
+
+已将本仓库安装到 `~/.codex/skills/generate-xiaowei-covers` 的用户，可在确认目标不存在后执行：
+
+```bash
+ln -s "$HOME/.codex/skills/generate-xiaowei-covers/skills/xiaowei-content" "$HOME/.codex/skills/xiaowei-content"
+```
+
+这样两个入口共用一个仓库，更新仓库会同步更新内容入口；命令不会覆盖已有目标。其他安装位置可将 `skills/xiaowei-content` 目录单独安装，并同时保留 `generate-xiaowei-covers`。刷新Skill列表或新开对话后调用。
+
 ## 六种风格随机生成
 
 默认从 **原仓库、归藏启发、阿囤囤启发、狗哥启发、oil启发、宝玉启发** 六个预设中随机选一种。每套横竖版共用同一次选择，人物身份与事实文案保持一致；指定风格时按指定执行。

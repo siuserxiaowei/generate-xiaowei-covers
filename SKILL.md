@@ -7,6 +7,8 @@ description: Generate Xiaowei personal-IP covers from a topic, script, link, pho
 
 Turn a topic, link, article, screenshot, video, or photo into a credible cover package. Keep one entry point: six visual presets share the same identity, evidence rules, and cross-format workflow. Randomize the visual preset for each new set, not the person's identity or the content.
 
+For “小伟内容”, multi-platform copywriting, or “出整套” including copy, use the installed `xiaowei-content` entry (bundled at `skills/xiaowei-content/SKILL.md`) to prepare the text first, then return here for images. Cover-only requests stay here. When called from that entry, use its selected copy and content revision; do not route back to it or invent a second topic.
+
 ## Read The Relevant References
 
 - Read `references/input-schema.md` when normalizing a loose request or deciding whether user input is sufficient.

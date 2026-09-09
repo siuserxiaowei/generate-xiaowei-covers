@@ -1,0 +1,6 @@
+interface:
+  display_name: "小伟内容"
+  short_description: "贴原稿写两平台文案，说出整套就接封面，沿用已认可口吻和样稿"
+  default_prompt: "用 $xiaowei-content 处理这份素材。"
+policy:
+  allow_implicit_invocation: true

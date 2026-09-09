@@ -2,6 +2,10 @@
 
 > Turn one topic into a reusable cover prompt and a consistent cover set for Xiaohongshu, Douyin, landscape, or WeChat.
 
+## Copy-to-cover entry
+
+The bundled [`xiaowei-content`](skills/xiaowei-content/SKILL.md) skill handles reference research, separate platform drafts, local feedback and handoff to this cover skill. Invoke `$xiaowei-content` with a draft; say `出整套` to include 3:4 and 9:16 covers, or `改口吻` to revise the current copy. Copy-only is the default. See the [Chinese quick start](README.md#小伟内容文案与封面总入口) for local installation. Private drafts and unapproved examples are not bundled or published.
+
 ## Six visual presets
 
 Each new set randomly selects one of six presets: original, editorial, atutun, gbro, oil, or baoyu. Explicit style requests override randomness. The set keeps its identity, palette and typography while composing each requested ratio independently. Defaults are 3:4 + 9:16; requesting portrait and landscape adds 16:9; WeChat uses 21:9 + independent 1:1.

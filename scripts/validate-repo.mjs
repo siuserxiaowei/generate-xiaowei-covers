@@ -12,6 +12,10 @@ const root = path.dirname(scriptDir);
 const requiredFiles = [
   "SKILL.md",
   "agents/openai.yaml",
+  "skills/xiaowei-content/SKILL.md",
+  "skills/xiaowei-content/agents/openai.yaml",
+  "skills/xiaowei-content/references/project-state.md",
+  "skills/xiaowei-content/references/sources.md",
   "LICENSE",
   "NOTICE.md",
   "PROVENANCE.md",
@@ -72,8 +76,8 @@ async function assertFile(relativePath) {
   if (!info?.isFile()) fail(`Required file is missing: ${relativePath}`);
 }
 
-async function validateSkillFrontmatter() {
-  const markdown = await readFile(path.join(root, "SKILL.md"), "utf8");
+async function validateSkillFrontmatter(relativePath = "SKILL.md", expectedName = "generate-xiaowei-covers") {
+  const markdown = await readFile(path.join(root, relativePath), "utf8");
   const frontmatter = markdown.match(/^---\n([\s\S]*?)\n---/u)?.[1];
   if (!frontmatter) fail("SKILL.md has no valid YAML frontmatter block.");
 
@@ -81,7 +85,7 @@ async function validateSkillFrontmatter() {
   const description = frontmatter.match(/^description:\s*(.+)$/mu)?.[1]?.trim();
   const keys = [...frontmatter.matchAll(/^([a-z][a-z0-9_-]*):/gmu)].map((match) => match[1]);
 
-  if (name !== "generate-xiaowei-covers") fail(`Unexpected skill name: ${name || "missing"}`);
+  if (name !== expectedName) fail(`Unexpected skill name in ${relativePath}: ${name || "missing"}`);
   if (!description || description.length > 1024) fail("Skill description is missing or too long.");
   const unexpectedKeys = keys.filter((key) => !["name", "description"].includes(key));
   if (unexpectedKeys.length) fail(`Unexpected SKILL.md frontmatter keys: ${unexpectedKeys.join(", ")}`);
@@ -181,6 +185,7 @@ async function validateTemplateAssets(relativeTemplatePath) {
 async function main() {
   for (const file of requiredFiles) await assertFile(file);
   await validateSkillFrontmatter();
+  await validateSkillFrontmatter("skills/xiaowei-content/SKILL.md", "xiaowei-content");
   await validateProvenanceFoundation();
   await validateClaim2CoverFixture();
   await validatePublicArtifactPrivacy();
