@@ -47,6 +47,8 @@
   ],
   "stance": "string or null",
   "content_route": "auto",
+  "visual_style": "random",
+  "style_seed": null,
   "required_assets": [
     {
       "type": "portrait",
@@ -127,6 +129,14 @@
   - `field_recap`
 - 默认 `auto`。执行端按 `content-routing.md` 选择，并记录选择理由。
 - 用户指定结构与材料不匹配时，应说明风险并建议更合适的结构，而不是硬套模板。
+
+### `visual_style` 与 `style_seed`
+
+- `visual_style` 默认 `random`；可指定 `original`、`editorial`、`atutun`、`gbro`、`oil`、`baoyu` 或中文别名。
+- `style_seed` 可选，用于复现风格选择，不保证生图像素一致。
+- 每套仅选择一次，写入 `STYLE_SELECTION.json`；同一套的横竖版共用。
+- 未指定平台时默认3:4 + 9:16；明确说横竖都要时加入16:9；公众号仍使用21:9 + 1:1。
+- 内容结构与视觉风格独立，完整规则见 [style-presets.md](style-presets.md)。
 
 ### `required_assets` 与 `optional_assets`
 

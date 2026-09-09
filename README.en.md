@@ -1,6 +1,14 @@
 # Claim2Cover | Xiaowei AI Cover Evidence Chain
 
-> Turn one topic into a reusable cover prompt and a production-ready cover package for Xiaohongshu and WeChat.
+> Turn one topic into a reusable cover prompt and a consistent cover set for Xiaohongshu, Douyin, landscape, or WeChat.
+
+## Six visual presets
+
+Each new set randomly selects one of six presets: original, editorial, atutun, gbro, oil, or baoyu. Explicit style requests override randomness. The set keeps its identity, palette and typography while composing each requested ratio independently. Defaults are 3:4 + 9:16; requesting portrait and landscape adds 16:9; WeChat uses 21:9 + independent 1:1.
+
+Run `node scripts/select-cover-style.mjs <project-dir>` to save the selection and visual brief. The selector does not generate images: original/editorial use editable HTML; the other four use native image generation with inspected portrait references. Reusing the project preserves the selection. A seed reproduces the preset choice, not identical generated pixels.
+
+Save full prompts, reference assets, actual pixel dimensions and output paths in the project. Deliver clickable files and verify the viewer when asked to open them. See [preset and delivery rules](references/style-presets.md) for sources and adaptation boundaries. The existing Claim-to-Pixel v1 contract covers its three HTML surfaces only, not these additional ratios or generated raster covers.
 
 [中文说明](README.md) · [Claim-to-Pixel contract](references/claim-to-pixel-contract.md) · [VibeLab pack](contest/README.md) · [Full-resolution gallery](docs/gallery.md) · [Architecture](docs/architecture.md)
 
@@ -16,8 +24,8 @@
 3. select one of six evidence structures;
 4. extract timestamped video candidates and a contact sheet without API calls when needed;
 5. write a task-specific `COVER_PROMPT.md`;
-6. compose Xiaohongshu 3:4, WeChat 21:9, and WeChat 1:1 independently;
-7. export full-resolution PNG, editable HTML, and provenance ledgers.
+6. select a visual preset and independently compose the requested ratios;
+7. export PNG, editable HTML or generation prompts/records, and provenance ledgers.
 
 This is not a “make a pretty AI poster” prompt. It is an evidence-aware cover workflow:
 

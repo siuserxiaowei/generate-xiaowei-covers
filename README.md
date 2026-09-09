@@ -1,6 +1,32 @@
 # Claim2Cover｜小伟 AI 封面证据链 Skill
 
-> 一句话选题，变成一份可复用的封面提示词，以及一套真正能讲清内容的小红书与公众号封面。
+> 一句话选题，随机选一种风格，生成同套的小红书、抖音、横版或公众号封面。
+
+## 六种风格随机生成
+
+默认从 **原仓库、归藏启发、阿囤囤启发、狗哥启发、oil启发、宝玉启发** 六个预设中随机选一种。每套横竖版共用同一次选择，人物身份与事实文案保持一致；指定风格时按指定执行。
+
+```text
+$generate-xiaowei-covers
+今天讲 Codex，随机一种风格，出小红书和抖音封面。
+
+$generate-xiaowei-covers
+今天讲豆包，用阿囤囤风格，横竖都要，人物放左边。
+
+$generate-xiaowei-covers
+今天讲千问，用上一套的风格，标题换成这篇文稿的主题。
+```
+
+未约定平台时默认 **3:4 + 9:16**；“横竖都要”增加 **16:9**；公众号仍输出 **21:9 + 1:1**。原仓库与杂志风格使用可编辑HTML，其余四种使用内置生图并保留完整提示词。图片实际尺寸会核验记录，不把目标尺寸或放大结果当成原生高清。
+
+选择器不会自行调用生图模型：
+
+```bash
+node scripts/select-cover-style.mjs /path/to/new-cover-project --ratios 3:4,9:16
+node scripts/select-cover-style.mjs /path/to/another-project --style 阿囤囤 --ratios 3:4,9:16,16:9
+```
+
+它生成 `STYLE_SELECTION.json` 和 `STYLE_BRIEF.md`，由执行Agent结合本次素材完成构图、生图和检查。复跑同一项目不会重新抽签；seed只复现风格选择，不保证图片逐像素相同。各预设的来源、制作方式和适配边界见 [六风格规则](references/style-presets.md)。
 
 [English](README.en.md) · [Claim-to-Pixel 契约](references/claim-to-pixel-contract.md) · [VibeLab 投稿包](contest/README.md) · [高清成品画廊](docs/gallery.md) · [系统架构](docs/architecture.md)
 
@@ -16,8 +42,8 @@
 3. 在六种内容结构中选择合适的一种；
 4. 如果输入是视频，无 API 抽取候选帧、联系图和时间戳，由 Agent 按内容选择；
 5. 生成项目专属的 `COVER_PROMPT.md` 封面提示词；
-6. 为小红书 3:4、公众号 21:9 和公众号 1:1 分别排版；
-7. 导出高清 PNG、可编辑 HTML、事实台账和素材来源。
+6. 选择一个视觉预设，为请求的3:4、9:16、16:9或公众号21:9/1:1分别排版；
+7. 导出PNG、相应的HTML或生图提示词、事实台账和素材来源。
 
 它不是让图片模型“随便画一张好看的海报”。它要解决的是：
 
@@ -70,7 +96,9 @@ flowchart LR
 | 文件 | 它解决什么问题 |
 |---|---|
 | `COVER_PROMPT.md` | 把选题、标题、证据、人物、光线、镜头和排版写成可复用的封面提示词 |
-| `cover.html` | 可继续编辑的 HTML/CSS 封面源文件 |
+| `STYLE_SELECTION.json` / `STYLE_BRIEF.md` | 同批锁定的随机或指定风格、seed、引擎和画幅 |
+| `generation.json` | 生图的实际像素、完整提示词/参考图位置、原始与交付文件路径、检查结果 |
+| `cover.html` / `prompts/*.md` | HTML预设的可编辑源文件，或生图预设的完整提示词 |
 | `output/*.png` | 小红书、公众号横版、公众号方版等高清成品 |
 | `FACTS.md` | 记录封面中每条版本、日期、参数、价格和结论的依据 |
 | `assets/SOURCES.md` | 记录人物、Logo、截图和外部素材的来源与使用边界 |
@@ -128,7 +156,7 @@ Skill 负责“判断与执行流程”，不是一张固定海报。
 
 ### 3. HTML/CSS 模板
 
-标题和数据使用 HTML/CSS 排版，而不是交给图片模型生成。这样可以避免中文错字、数字变形、Logo 乱码以及不同画幅之间的失控裁切。
+原仓库与杂志预设使用 HTML/CSS 排版标题和数据；阿囤囤、狗哥、oil、宝玉启发预设使用内置图片生成。两条路径都需要逐画幅核对文字与人物；生图预设的成品不是可拖动图层文件。
 
 ### 4. PNG 渲染器
 

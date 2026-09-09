@@ -1,4 +1,4 @@
 interface:
-  display_name: "Claim2Cover｜封面证据链"
-  short_description: "先核验标题主张，再生成三平台独立封面"
-  default_prompt: "使用 $generate-xiaowei-covers 把我的选题编译成 fact、judgment、unknown 台账与三平台独立封面，并保留人工签核门。"
+  display_name: "小伟封面｜六风格随机"
+  short_description: "六种风格随机选一套，锁定本人形象与事实依据，分别生成横竖版封面"
+  default_prompt: "使用 $generate-xiaowei-covers 为我的主题随机选一种风格，人物用我的原照片，生成小红书3:4和抖音9:16；同批保持风格一致并核对文案。"
