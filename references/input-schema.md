@@ -47,7 +47,7 @@
   ],
   "stance": "string or null",
   "content_route": "auto",
-  "visual_style": "random",
+  "visual_style": "auto",
   "style_seed": null,
   "required_assets": [
     {
@@ -132,11 +132,20 @@
 
 ### `visual_style` 与 `style_seed`
 
-- `visual_style` 默认 `random`；可指定 `original`、`editorial`、`atutun`、`gbro`、`oil`、`baoyu` 或中文别名。
+- `visual_style`：小伟视频系列默认解析为 `series`；其它用途的 `auto` 由 Agent 按用途和内容选预设。保留 `original`、`editorial`、`atutun`、`gbro`、`oil`、`baoyu`、`impact` 用于历史回放与风格实验。“随机生成系列封面”保持series的视觉语言，变化配色/布局/场景/动作/对象；明确跨风格探索才用 `random`。
+- 视频系列增加 `portrait_mode: generated_identity`、`series_profile`、`style_references`（visual_language_only）、`variation_brief`。照片是身份参考，不是可见插图；从已有SERIES.json复用视觉快照和原始身份参考。
+- `channel` 为 `article` 或 `video_social`。两者都要时建立独立 brief 和任务目录；见 [channel-routing.md](channel-routing.md)。
 - `style_seed` 可选，用于复现风格选择，不保证生图像素一致。
 - 每套仅选择一次，写入 `STYLE_SELECTION.json`；同一套的横竖版共用。
 - 未指定平台时默认3:4 + 9:16；明确说横竖都要时加入16:9；公众号仍使用21:9 + 1:1。
 - 内容结构与视觉风格独立，完整规则见 [style-presets.md](style-presets.md)。
+
+### 人物身份与姿势
+
+- `identity_primary`：一张主身份参考；`identity_support`：辅助单图及各自用途。
+- `pose_mode`：默认`content_driven`，根据内容生成自然新姿势；纪实或明确保留原动作时为`source_locked`。
+- `pose_brief`：动作、视线、双手位置与内容的关系；不自动继承话筒和旧手势。
+- 已核对照片与选择规则见 [identity-and-pose.md](identity-and-pose.md)。
 
 ### `required_assets` 与 `optional_assets`
 

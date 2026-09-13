@@ -2,7 +2,7 @@
   "name": "generate-xiaowei-covers",
   "version": "0.5.0",
   "private": true,
-  "description": "Generate consistent personal-IP covers across portrait and landscape formats using six random or specified visual presets.",
+  "description": "Generate personal-IP covers with separate article and video briefs and a unified generated-person video series plus seven legacy visual presets.",
   "type": "module",
   "scripts": {
     "test": "npm run test:static && npm run test:style && npm run test:render",

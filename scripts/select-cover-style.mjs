@@ -10,7 +10,7 @@ const digest = value => createHash("sha256").update(value).digest("hex");
 
 function parse(args) {
   if (args.length === 1 && ["--list", "--help"].includes(args[0])) return { action: args[0] };
-  const result = { style: "random" };
+  const result = {};
   const seen = new Set();
   for (let i = 0; i < args.length; i++) {
     const key = args[i];
@@ -28,7 +28,7 @@ function parse(args) {
 }
 
 function resolveStyle(catalog, value) {
-  if (value === "random") return null;
+  if (value === undefined || value === "random") return null;
   const style = catalog.styles.find(s => s.id === value || s.name === value || s.aliases.includes(value));
   if (!style) throw new Error("Unknown style: " + value + ". Use --list.");
   return style;
@@ -57,8 +57,9 @@ function brief(record) {
     "",
     "同一批次所有画幅共用本次风格、人物身份、主题和强调色；复跑读取现有选择，不重新抽签。",
     "先填写 COVER_PROMPT.md 的本次精确文案与 FACTS.md；这里的风格规则不提供事实或替你决定观点。",
-    "默认检查真实照片并作为人物参考。可以按构图左右移动人物，不能随机换脸、换眼镜、换发型、改造手势。",
+    "先读本Skill references/identity-and-pose.md。身份固定，默认按内容变化姿势，不默认拿话筒；纪实或明确保留原动作时才锁定姿态。旧风格快照中的动作保留词句不能覆盖本次人物要求。",
     "",
+    ...(s.id === "series" ? ["先读 references/series-cover.md 并复用本系列 SERIES.json。照片只参考身份；人物必须重新生成，不贴原照片。按主题变化配色、构图、场景、动作和对象，保持身份与大字拼贴语言；不继承被否定的v1固定模板。", ""] : []),
     "## 视觉",
     "",
     s.visual,
@@ -110,6 +111,7 @@ async function main() {
     console.log(JSON.stringify({ reused: true, selectionPath, ...existing }, null, 2));
     return;
   }
+  if (args.style === undefined) throw new Error("Choose a style from the content brief and pass --style ID. Random selection requires explicit --style random.");
   const seed = args.seed ?? randomBytes(16).toString("hex");
   const index = Number(BigInt("0x" + digest("xiaowei-style-v1:" + seed)) % BigInt(catalog.styles.length));
   const style = requestedStyle ?? catalog.styles[index];

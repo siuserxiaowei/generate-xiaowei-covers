@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "2026-09-09",
+  "version": "2026-09-13-series-v2",
   "defaultRatios": [
     "3:4",
     "9:16"
@@ -101,7 +101,7 @@
       "engine": "imagegen",
       "source": "https://github.com/panggungunvibe/atutun-xhs-cover-v2",
       "visual": "奶油白背景，极浅奶油黄#FDFFA7，超粗黑描边中文大字占上方约35%–45%；下半部真人抠图带细白轮廓。可用一个承载短副标题的浅黄贴纸，不加入无关装饰。",
-      "portrait": "照片人物占约40%–50%，下半部偏左或偏右；脸、眼镜、发型和手部动作保真；人物不能盖住主标题关键笔画。",
+      "portrait": "照片人物占约40%–50%，下半部偏左或偏右；脸、眼镜、发型保真；姿势按identity-and-pose.md随内容变化，手部结构自然；人物不能盖住主标题关键笔画。",
       "typography": "非常粗的中文黑体、黑描边+浅黄填充；两行大标题，副标题高对比；准确拼写产品名，不把全部文案做同样字号。",
       "avoid": [
         "荧光酸黄色",
@@ -122,11 +122,11 @@
       "engine": "imagegen",
       "source": "https://github.com/pyang5166/gbro-cover-design",
       "visual": "深墨蓝到暗紫的柔和渐变；白色超粗标题，一处黄色矩形底黑字关键词；人物半身与背景有细微轮廓光，强对比但没有复杂科技装饰。",
-      "portrait": "真人半身居中偏左或偏右；保持原表情和动作，不强迫震惊表情，不擅自增加手势、道具、机器人。",
+      "portrait": "真人半身居中偏左或偏右；按identity-and-pose.md固定身份，表情与动作服务主题，可生成指向、摊手或自然讲解等新姿态，不默认拿话筒，不强迫震惊表情。",
       "typography": "超粗紧凑中文黑体，白字主体+黄色关键词底块；避免文字渐变和花哨立体字；重要元素距边约10%。",
       "avoid": [
         "满屏悬浮3D物件",
-        "原图没有的夸张动作",
+        "不服务主题的夸张动作",
         "发光电路",
         "照抄上游样例人物或标题"
       ],
@@ -144,7 +144,7 @@
       "engine": "imagegen",
       "source": "https://github.com/oil-oil/oil-cover",
       "visual": "干净浅底、细网格、1–3个邻近色相的柔和奶油/灰粉氛围，来源于本次照片或产品颜色；标题深石墨色，克制下划线或关键词浅色标注，Apple-like清晰排版。",
-      "portrait": "真人自然抠图放下半部偏右；原照身份与手部保真，无卡通描边；人物和真实证据不能互相挤成小图。",
+      "portrait": "真人自然抠图放下半部偏右；原照身份保真，姿态按identity-and-pose.md随内容变化，手部结构自然，无卡通描边；人物和真实证据不能互相挤成小图。",
       "typography": "中文PingFang类无衬线，英文产品名或AI可用Roman衬线形成对比；每段文字颜色与字体预先确定，大标题明确优先。",
       "avoid": [
         "没有材料却制造软件截图",
@@ -174,6 +174,60 @@
         "把Huizhou自述说成照片拍摄地点"
       ],
       "adaptation": "提炼五维选型原则，并按用户IP要求适配真实人物，非上游默认人物规则；跨画幅重新构图。"
+    },
+    {
+      "id": "impact",
+      "name": "冲击型真人 · 黄白大字拼贴",
+      "aliases": [
+        "冲击型真人",
+        "视频冲击",
+        "黄白大字",
+        "苍何参考"
+      ],
+      "engine": "imagegen",
+      "source": "User-provided reference, 2026-09-13; independently authored visual rules in references/impact-cover.md",
+      "visual": "深色环境背景、奶油黄与白色超粗标题、黑色内描边加细白外描边、真人贴纸轮廓；一个与选题相关的主对象，最多三处有方向作用的箭头/标记。标题和人物形成前后层次，不遮关键笔画。",
+      "portrait": "真人半身作为叙事主体，占竖版约45%–60%；先选符合内容的原照/视频帧，保持身份，默认按内容改变姿态，不固定拿话筒；纪实才保留原动作。按identity-and-pose.md选主参考与辅助图，不生成虚假现场关系。",
+      "typography": "主标题上方约35%–45%，两至三行按语义断开，最大词4–8字；奶油黄#FDFFA7与白色分层、粗黑描边、细白外描边和短硬阴影。副标题最多一句，缩到240px宽仍能读清主标题。",
+      "avoid": [
+        "复制参考作者的脸、原文案或具体封面",
+        "背景吞没主标题或发丝遮字",
+        "没有真实材料却编造界面、排名或活动合影",
+        "无依据震惊表情、密集贴纸和装饰性小字"
+      ],
+      "adaptation": "基于用户参考图独立提炼。先读 references/impact-cover.md，按教程/现场/观点/成果选择骨架；使用内置生图，保留真实生成记录，不承诺像素级保真或点击率。"
+    },
+    {
+      "id": "series",
+      "name": "小伟系列 · 主题驱动真人大字",
+      "aliases": [
+        "小伟系列",
+        "统一系列",
+        "系列封面"
+      ],
+      "engine": "imagegen",
+      "source": "User direction 2026-09-13; independently authored integration in references/series-cover.md",
+      "visual": "保持同一作者的真人身份、醒目粗体标题、描边/短阴影与人物拼贴的视觉语言；背景、主色、场景、标题分行和人物位置由当期主题决定。黄白可作为常用标题色，不锁深蓝底、黄矩形或任何固定色板。允许不同场景和构图，避免换字套模板。",
+      "portrait": "原始照片只供身份参考，重新生成小伟本人写实形象、自然新动作和表情；黑框眼镜、中分发型、素黑T恤。禁止把照片、原场景、截图式人像卡或旧抠图贴回封面；不默认拿话筒。",
+      "typography": "粗黑体、高对比、大字号与有层次的描边/短阴影，按语义形成主次。标题可倾斜、错位或上下分布，但不遮关键字；不锁两行、固定黄底矩形、同一坐标或栏目头。",
+      "avoid": [
+        "固定深蓝棚景、展台、左右分栏或相同标题模板",
+        "直接贴入上传的人物照片",
+        "背景对象与主题无关",
+        "只换标题颜色或仅换道具造成重复",
+        "生成假UI、假测试成绩或假现场证据"
+      ],
+      "adaptation": "原版保留内容与证据管理，吸收参考案例的粗体层级、描边、真人与主题场景拼贴；每期独立构图。原照只锁身份，参考图只提供视觉语言，不复制参考作者的脸与具体封面。",
+      "seriesRules": {
+        "profileId": "xiaowei-video-series-v2",
+        "portraitMode": "generated_identity",
+        "randomScope": "content_variation_only",
+        "styleAnchorRole": "visual_language_only",
+        "identitySource": "original_reference",
+        "layoutMode": "topic_driven",
+        "paletteMode": "topic_driven",
+        "seriesLabelRequired": false
+      }
     }
   ]
 }

@@ -1,15 +1,22 @@
 ---
 name: generate-xiaowei-covers
-description: Generate Xiaowei personal-IP covers from a topic, script, link, photo, screenshot, or video. Randomly select one of six visual presets per set unless the user specifies a style; keep the same identity and style across independently composed Xiaohongshu 3:4, Douyin 9:16, landscape 16:9, or WeChat 21:9/1:1 covers. Use editable HTML or native image generation as the preset requires, preserving factual evidence and source records. Use for 小伟封面、随机风格封面、抖音封面、小红书封面、公众号封面、横竖版封面、封面提示词 or Claim2Cover.
+description: Generate Xiaowei personal-IP covers from topics, scripts, links, photos, screenshots or video. Separate WeChat article briefs from video/social covers, choose visual style from content and references, and generate independently composed ratios with recognizable identity and factual sources. Use for 小伟封面、视频封面、公众号封面、真人大字封面、封面提示词 or Claim2Cover.
 ---
 
 # Claim2Cover | Generate Xiaowei Covers
 
-Turn a topic, link, article, screenshot, video, or photo into a credible cover package. Keep one entry point: six visual presets share the same identity, evidence rules, and cross-format workflow. Randomize the visual preset for each new set, not the person's identity or the content.
+Turn a topic, link, article, screenshot, video, or photo into a credible cover package. Keep one entry point with separate article and video/social briefs. For Xiaowei video series, use one unified `series` profile across episodes: generated likeness and recognizable bold-type/collage language, with topic-driven palette, layout, scenes and poses. Do not reuse the rejected fixed blue studio template. Other channels and explicit style experiments retain the seven legacy presets.
 
 For “小伟内容”, multi-platform copywriting, or “出整套” including copy, use the installed `xiaowei-content` entry (bundled at `skills/xiaowei-content/SKILL.md`) to prepare the text first, then return here for images. Cover-only requests stay here. When called from that entry, use its selected copy and content revision; do not route back to it or invent a second topic.
 
 ## Read The Relevant References
+
+- For Xiaowei video/social series, read `references/series-cover.md` first. It overrides legacy per-topic style switching and original-photo collage defaults. “随机生成” means variation within this series, not random preset selection.
+
+- For any Xiaowei real-person cover, read `references/identity-and-pose.md`: it maps the inspected local photos and the user’s default of fixed identity with content-driven pose changes.
+
+- Read `references/channel-routing.md` before selecting a style or portrait: article and video/social covers serve different viewing contexts.
+- Read `references/impact-cover.md` for bold outlined type, presenter cutouts and contextual collage like the user’s video-cover reference.
 
 - Read `references/input-schema.md` when normalizing a loose request or deciding whether user input is sufficient.
 - Read `references/content-routing.md` before choosing one of the six content structures.
@@ -33,12 +40,13 @@ Use these defaults unless the user overrides them:
 
 - audience: Chinese readers interested in AI tools;
 - tone: clear, credible, and opinionated only where evidence permits;
-- portrait: inspect `assets/portrait/xiaowei-context.jpg`; use `assets/portrait/xiaowei-original.jpg` as the identity reference when generating a new raster cover;
-- visual style: randomly select one preset for a new set; an explicit style or user-supplied reference overrides randomness;
+- portrait: use the inspected local reference set in `references/identity-and-pose.md`. Default to `pose_mode: content_driven`: lock identity, choose a topic-relevant pose, and allow removal of the microphone. Use `source_locked` for documentary evidence or explicit pose preservation;
+- visual style: video series defaults to `series`; keep identity and recognizable bold-type/collage language across episodes. Choose palette, layout, scenes, poses and objects from each topic; no fixed studio, placement or series masthead. For other channels or explicit cross-style experiments, choose the appropriate preset and record the reason;
+- portrait mode for video series: `generated_identity`; photos are identity-only references, never pasted source images. Regenerate the person and topic scene; read `references/series-cover.md`;
 - portrait placement: follow the selected preset and explicit user placement; keep the same person across all surfaces;
 - targets: follow the user's platforms; without platform context use 3:4 + 9:16; “横竖都要” adds 16:9; WeChat requests retain 21:9 + independent 1:1;
 - output: PNG plus editable HTML for HTML presets, or full prompts/reference assets/generation records for imagegen presets;
-- variants: one set by default; when alternatives are requested, use distinct presets in individually named folders.
+- variants: one set by default; for series alternatives keep identity/visual language and vary topic-relevant palette, composition, scenes and poses; distinct presets require an explicit cross-style request.
 
 Ask only when a missing answer changes the author's position, asset rights, privacy, or factual conclusion. Never invent the user's personal experience or recommendation.
 
@@ -90,7 +98,7 @@ Choose exactly one primary route from `references/content-routing.md`:
 
 Choose the route by the reader's promised value, not by which logo happens to appear. Downgrade claims when evidence is missing.
 
-The content route and visual preset are separate choices. A Codex, Doubao, Qwen, WorkBuddy, or personal-story topic can use any preset while keeping its own evidence and exact copy.
+Select the channel and content-driven composition from `references/channel-routing.md` before the visual preset. The content route and visual preset are separate choices. A Codex, Doubao, Qwen, WorkBuddy, or personal-story topic can use any preset while keeping its own evidence and exact copy.
 
 ### 5. Create A Project
 
@@ -103,15 +111,15 @@ node "$SKILL_DIR/scripts/new-cover-project.mjs" <target-dir> wechat
 
 The script copies the editable template, default portrait, cached prototype brand assets, `COVER_PROMPT.md`, `assets/SOURCES.md`, `FACTS.md`, the applicable license, and creates `output/`.
 
-Then select a style **once per set**. Pass the actual requested ratios; the default is 3:4 + 9:16:
+First separate article and video/social tasks into sibling folders with independent copy and visual plans. Then select a style **once per set** based on the brief. Pass the actual requested ratios; the default is 3:4 + 9:16:
 
 ```bash
-node "$SKILL_DIR/scripts/select-cover-style.mjs" <target-dir> --ratios 3:4,9:16
+node "$SKILL_DIR/scripts/select-cover-style.mjs" <target-dir> --style series --ratios 3:4,9:16
 # Explicit style / horizontal and vertical example:
 node "$SKILL_DIR/scripts/select-cover-style.mjs" <new-target-dir> --style 阿囤囤 --ratios 3:4,9:16,16:9
 ```
 
-Read the generated `STYLE_BRIEF.md`; `STYLE_SELECTION.json` locks the preset, seed, source attribution, engine and surface plans. Reuse this record for retries and sibling ratios. Use a new project for a new random choice. The project generator's legacy HTML is a starting skeleton, not the completed output of the selected preset.
+Read the generated `STYLE_BRIEF.md`; `STYLE_SELECTION.json` locks the preset, seed, source attribution, engine and surface plans. Reuse this record for retries and sibling ratios. Use a new project for a new selection. New projects require an explicit `--style ID`; `--style random` remains available only on user request. Existing records still replay without a style argument. The project generator's legacy HTML is a starting skeleton, not the completed output of the selected preset.
 
 When the user supplies a video, extract review candidates into the new project before composing:
 
@@ -139,6 +147,8 @@ Complete these sections with task-specific content:
 - original request, audience, targets, and author stance;
 - selected route, routing reason, click promise, and one-sentence conclusion;
 - selected preset, seed, generation engine, and identity/placement constraints from `STYLE_SELECTION.json`;
+- identity_primary, identity_support and their roles; pose_mode and the specific topic-driven pose_brief;
+- for video series: portrait_mode=generated_identity, series profile/references (visual_language_only), variation_brief, and previous episodes used to avoid repetition;
 - exact title, highlight phrase, kicker, and subtitle per surface;
 - evidence module and source boundary;
 - six visible dimensions: subject, environment, visual character, light, camera/composition, and typography;
@@ -157,7 +167,9 @@ State facts as facts, inferences as judgments, and personal practice in first pe
 
 ### 7. Compose The Evidence Module
 
-Match evidence to the chosen route:
+For `series`, the main visual is a topic-relevant object, scene or generated work/concept display, not an original-person photo card. Evidence still constrains claims; do not present invented UI, tests or scenes as real. Original documentary photos are not inserted into the series unless explicitly requested.
+
+For evidence-oriented legacy modes, match evidence to the chosen route:
 
 - release → official model card or release summary;
 - tutorial → real UI/screenshot or clearly marked interface diagram;
@@ -166,14 +178,14 @@ Match evidence to the chosen route:
 - official evidence → original document excerpt and three consequences;
 - field recap → complete contextual photo and up to three first-person takeaways.
 
-For `original`, keep the portrait lower-left on 3:4 and 21:9. Other presets may place it left or right as described in `STYLE_BRIEF.md`; user placement takes priority. The 1:1 companion defaults to pure typography unless a portrait is requested. Preserve identity, face, hand, microphone and action-relevant objects. Prefer a contextual rectangle over a poor cutout. Set `object-position` explicitly in HTML.
+For `original`, keep the portrait lower-left on 3:4 and 21:9. Other presets may place it left or right as described in `STYLE_BRIEF.md`; user placement takes priority. The 1:1 companion defaults to pure typography unless a portrait is requested. Preserve identity; in source_locked mode also retain the original pose and action-relevant objects. In content_driven mode specify the new pose and only its required objects; do not automatically preserve the microphone. Prefer a contextual rectangle over a poor cutout. Set `object-position` explicitly in HTML.
 
 ### 8. Render
 
 Choose the engine recorded in `STYLE_SELECTION.json`:
 
 - `original` / `editorial`: adapt the project HTML and use the existing renderer below. Add independently authored 9:16/16:9 nodes when requested.
-- `atutun` / `gbro` / `oil` / `baoyu`: use the available native imagegen tool with inspected portrait references. Save each complete prompt before the call. Generate/check the first surface, then use that cover plus the original portrait for sibling ratios. Keep the original outputs and record actual dimensions. Do not replace these raster presets with HTML imitations or label PNGs as editable layered templates.
+- `series` / `atutun` / `gbro` / `oil` / `baoyu` / `impact`: use the available native imagegen tool with inspected portrait references. Save each complete prompt before the call. Generate/check the first surface, then use that cover plus the original portrait for sibling ratios. Keep the original outputs and record actual dimensions. Do not replace these raster presets with HTML imitations or label PNGs as editable layered templates.
 
 The remaining renderer commands apply to the HTML path.
 
@@ -202,6 +214,7 @@ Before delivery:
 - verify all PNG dimensions;
 - inspect each requested ratio independently, including 9:16 and 16:9 when present;
 - downsample to 360px width and check title, portrait, and evidence recognition;
+- for a video series, compare across episodes: recognizable identity and bold-type/collage language, distinct topic-driven palette/layout/scene, meaningful gestures/objects, and no pasted source-person photo or repeated fixed template;
 - confirm no face, hand, UI label, or footer collision;
 - confirm every number, version, date, ranking, and absolute claim has evidence;
 - confirm WeChat 1:1 is a separately authored cover;

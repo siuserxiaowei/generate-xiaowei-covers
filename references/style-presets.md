@@ -1,31 +1,33 @@
-# 六种风格，一次选择
+# 按内容选风格，一次锁定
 
-这是一套小伟个人 IP 封面入口。默认从六个预设中随机选一种，不把六种风格的字体和颜色同时塞进一张图。内容路由决定“讲什么、用什么证据”，风格决定“怎样呈现”；两者独立。
+这是一套小伟个人 IP 封面入口。先区分用途：小伟视频系列默认统一 `series`，保持人物与大字拼贴语言，按主题独立变化配色、布局、场景和动作。读 [series-cover.md](series-cover.md)。其它用途和明确的跨风格实验保留七个历史预设。内容路由决定“讲什么、用什么证据”，风格决定“怎样呈现”；两者独立。
 
 ## 选择与复用
 
 ```bash
-node "$SKILL_DIR/scripts/select-cover-style.mjs" <project-dir>
+node "$SKILL_DIR/scripts/select-cover-style.mjs" <project-dir> --style impact
 node "$SKILL_DIR/scripts/select-cover-style.mjs" <project-dir> --style 阿囤囤 --ratios 3:4,9:16,16:9
-node "$SKILL_DIR/scripts/select-cover-style.mjs" <project-dir> --seed my-replay --ratios 3:4,9:16
+node "$SKILL_DIR/scripts/select-cover-style.mjs" <project-dir> --style random --seed my-replay --ratios 3:4,9:16
 node "$SKILL_DIR/scripts/select-cover-style.mjs" --list
 ```
 
-- 未指定风格时：为**新的一套**产生随机 seed，从六种风格中抽取一种；允许偶然连续抽中同一种，不声称轮换去重。
+- 未指定风格时：视频系列传 `--style series`；其它用途按内容判断。新项目省略风格会报错。视频系列的“随机生成”在相关配色/构图/场景/动作/对象内变化；仅明确跨风格随机探索才传 `--style random`。
 - 用户指定风格时：按指定执行，不抽签。明确要求“多套不同风格”时选不同预设，每套独立文件夹。
 - 同一项目再次执行：复用 `STYLE_SELECTION.json` 中的完整风格快照和 seed，避免9:16和横版变成另一种风格。
 - 同一 seed 与同一版本预设顺序能复现风格选择；它**不保证**图片模型逐像素复现。
-- `STYLE_BRIEF.md` 给出本次选中的视觉、字体、人物、禁用项与各画幅构图。读取它后执行，只选中一个风格即可，无须载入六份外部 Skill。
+- `STYLE_BRIEF.md` 给出本次选中的视觉、字体、人物、禁用项与各画幅构图。读取它后执行，只选中一个风格即可，无须载入外部 Skill。
 - 改主题、重新随机或改变已确定画幅时，创建新的任务目录；不覆盖上一套成品。
 
 | ID | 名称 | 引擎 | 主要优点 |
 |---|---|---|---|
+| series | 小伟统一视频系列 | 内置生图 | 保持视觉语言与身份，配色/布局/场景按主题变化 |
 | original | 原仓库·真实记录 | HTML/CSS | 原人物像素不重绘、固定模块、清楚的证据 |
 | editorial | 归藏启发·杂志宋体 | HTML/CSS | 宋体、纸感、细线和大照片 |
 | atutun | 阿囤囤启发·大字压顶 | 内置生图 | 浅黄描边大字、人物识别强 |
 | gbro | 狗哥启发·深色大字 | 内置生图 | 深底白字、黄色重点、层次鲜明 |
 | oil | oil启发·清爽粉彩 | 内置生图 | 粉彩、细网格、字体层次清楚 |
 | baoyu | 宝玉启发·暖色拼贴 | 内置生图 | 暖纸、赤陶色与人物剪贴 |
+| impact | 冲击型真人·黄白大字拼贴 | 内置生图 | 粗描边标题、真人主角、内容场景层次；见 impact-cover.md |
 
 完整参数和来源在 `assets/style-presets.json`；选择脚本将选中的条目原样记录到项目。
 
@@ -35,9 +37,9 @@ node "$SKILL_DIR/scripts/select-cover-style.mjs" --list
 - “横竖都要”：3:4 + 9:16 + 通用16:9。
 - 只指定一个平台/比例：按指定输出；公众号21:9配独立1:1，脚本自动补齐。
 - 同批共用人物来源、配色、字体与内容主张，各画幅单独构图。
-- 可按主题把人物移左或移右；用户明确指定位置时优先满足，不随机换脸、换标题、增加收入数字。
+- series及其它预设可按主题改变人物位置与占比；用户明确指定位置时优先满足，不随机换脸、换标题、增加收入数字。
 - 原照中的背景不等于本次文稿地点。没有视频/截图时，不能为了套工具风格伪造软件界面。
-- 原仓库的浅色纸张、黄色强调与固定左下人物是 `original` 的基准，不强加给其它五种预设。
+- 原仓库的浅色纸张、黄色强调与固定左下人物是 `original` 的基准，不强加给其它预设。
 - 9:16安全区是保守排版约定，不是声称已验证的永久平台规则。发布前用实际上传预览核对。
 
 ## 两条生成路径
@@ -48,7 +50,7 @@ node "$SKILL_DIR/scripts/select-cover-style.mjs" --list
 
 9:16、16:9需单独增加固定尺寸 `data-export` 画板；渲染器已有任意节点尺寸支持。可以使用2倍CSS布局栅格化导出，不能把低分辨率PNG放大后声称原生高清。保留 `data-text-safe`，修复真实溢出。
 
-### atutun / gbro / oil / baoyu
+### series / atutun / gbro / oil / baoyu / impact
 
 遵循当前环境内置 imagegen 的调用契约；读取原照片后，将它作为身份参考，先保存完整的 `prompts/<ratio>.md` 再生图。优先生成3:4母图，检查文字、脸和手，再用母图 + 原照片重新生成其它画幅。
 

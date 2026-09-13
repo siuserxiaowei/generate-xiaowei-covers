@@ -1,5 +1,8 @@
 # Claim2Cover | Xiaowei AI Cover Evidence Chain
 
+> Video-series update: preserve the creator’s identity and recognizable bold-type/collage language, while choosing colors, backgrounds, layouts and poses per topic. Source portraits guide likeness; they are not pasted into covers. See the [friend testing guide](README.md#给朋友快速测试). A Codex environment with image generation and reference-image support is required. Users may supply their own identity photo; author-local paths are not required. Historical gallery images do not certify the revised visual workflow.
+
+
 > Turn one topic into a reusable cover prompt and a consistent cover set for Xiaohongshu, Douyin, landscape, or WeChat.
 
 ## Copy-to-cover entry
