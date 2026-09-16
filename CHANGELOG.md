@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## Unreleased — 2026-09-16
+
+- Documented the reusable Agent workflow, executable validation boundaries, maintenance tasks, and a proposed six-month OSS maintenance plan.
+- Added a detailed Codex for Open Source application dossier and English/Chinese form text with executable 500-character and copy-consistency checks; no application has been submitted by these files.
+- Curated two historical maintainer tasks with six unchanged PNGs, scoped editable HTML, sanitized records, provenance notes and a SHA-256 manifest.
+- Added case-integrity checks, five negative checks and real re-rendering of both cases to `npm test` and the existing CI workflow.
+- Kept historical personal tasks, template showcases, deterministic fixtures and future API evaluations explicitly separate.
+
 ## 0.4.0 — 2026-08-31
 
 - Added the executable Claim-to-Pixel v1 contract for Claim2Cover.

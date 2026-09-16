@@ -38,6 +38,12 @@ This is not a “make a pretty AI poster” prompt. It is an evidence-aware cove
 
 > editorial judgment + source verification + cover brief + structured layout + deterministic export
 
+## Maintainer evidence and reusable workflow
+
+See [two historical maintainer tasks](docs/cases/README.md), the [workflow and maintenance plan](docs/maintainer-workflow.md), and the [Codex OSS application dossier](docs/oss/README.md). The cases include six unchanged historical PNGs, curated editable HTML, source records, and a checksum manifest. They demonstrate reuse by the maintainer, not third-party adoption. The fixed contract demo remains explicitly distinct from these tasks. [Copy-ready application text](docs/oss/application.md) is available in English and Chinese.
+
+`npm run verify:cases` checks the curated package; `npm run test:cases` also re-renders both cases and exercises five failure checks. These run within `npm test`, alongside form text length validation.
+
 ## Claim-to-Pixel release contract
 
 For auditable public work, the Agent classifies `fact / judgment / unknown` and authors separate 3:4, 21:9, and 1:1 briefs. The local CLI then deterministically validates sources, risky title tokens, asset rights, copy limits, measured DOM safe areas, and Git state before it renders exact-size PNGs.

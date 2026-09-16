@@ -1,0 +1,8 @@
+
+> generate-xiaowei-covers@0.5.0 test:cases
+> node scripts/test-case-studies.mjs
+
+Case evidence negative tests passed: hash, path, dimensions, missing record, private draft URL.
+Historical case re-rendered: workbuddy-ai-daily, 3 PNG dimensions verified.
+Historical case re-rendered: email-routing, 3 PNG dimensions verified.
+Case studies passed: 5 negative checks and 6 freshly rendered PNGs. No model API calls.

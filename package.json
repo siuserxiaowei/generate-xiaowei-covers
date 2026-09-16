@@ -5,7 +5,10 @@
   "description": "Generate personal-IP covers with separate article and video briefs and a unified generated-person video series plus seven legacy visual presets.",
   "type": "module",
   "scripts": {
-    "test": "npm run test:static && npm run test:style && npm run test:render",
+    "test": "npm run test:static && npm run test:style && npm run test:render && npm run test:cases && npm run verify:application",
+    "verify:cases": "node scripts/verify-case-studies.mjs",
+    "test:cases": "node scripts/test-case-studies.mjs",
+    "verify:application": "node scripts/verify-oss-application.mjs",
     "test:style": "node --check scripts/select-cover-style.mjs && node --check scripts/test-style-selection.mjs && node scripts/test-style-selection.mjs",
     "test:static": "node --check scripts/new-cover-project.mjs && node --check scripts/extract-video-frames.mjs && node --check scripts/render-covers.mjs && node --check scripts/claim-to-pixel.mjs && node --check scripts/demo-claim-to-pixel.mjs && node --check scripts/test-e2e.mjs && node --check scripts/test-claim-to-pixel.mjs && node --check scripts/validate-repo.mjs && node scripts/validate-repo.mjs",
     "test:render": "node scripts/test-e2e.mjs && node scripts/test-claim-to-pixel.mjs",

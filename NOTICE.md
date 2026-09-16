@@ -24,6 +24,12 @@ That display authorization is not a general identity or stock-photo license. Do 
 
 Files under `docs/images/showcase/` are rendered PNG examples produced from the repository templates and the assets documented here. Their composition and template code follow the repository license; embedded portraits and third-party marks retain the separate rights boundaries described above.
 
+## Historical maintainer case studies
+
+`docs/cases/` contains two maintainer-owned tasks recorded on 2026-08-27 and curated for publication on 2026-09-16 with the repository owner's authorization. The six PNGs are unchanged historical outputs. HTML copies retain only the relevant route and use repository-local asset paths; text records remove local paths and private draft links. Each case's `SOURCE.md` records all curation differences, including one corrected historical logo checklist inconsistency.
+
+These cases are evidence of personal workflow reuse, not external adoption, live API traces, or publication outcomes. The WorkBuddy mark identifies a tutorial subject; its official historical source is recorded separately and it is not relicensed under AGPL. Portrait restrictions above continue to apply. The manifest's hashes provide file-integrity comparisons, not independent attestations.
+
 ## Model facts used in samples
 
 The Qwen3-8B sample is based on:

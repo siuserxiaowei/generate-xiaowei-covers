@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用 WorkBuddy 做 AI 日报 · 小伟封面系统</title>
+  <script>
+    if (/\/assets\/templates\/wechat\.html$/u.test(location.pathname)) {
+      document.write('<base href="../../">');
+    }
+  </script>
+  <style>
+    :root {
+      --xwc-page: #20201f;
+      --xwc-sheet: #f8f5ed;
+      --xwc-sheet-deep: #f0ebdf;
+      --xwc-ink: #11110f;
+      --xwc-muted: #69655d;
+      --xwc-line: rgba(17, 17, 15, .18);
+      --xwc-strong-line: rgba(17, 17, 15, .82);
+      --xwc-white: #fffefb;
+      --xwc-font: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      --xwc-code: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      padding: 48px 32px 80px;
+      background: var(--xwc-page);
+      color: var(--xwc-ink);
+      font-family: var(--xwc-font);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+    img { display: block; }
+    figure, h1, h2, h3, p { margin: 0; }
+
+    .xwc-gallery {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 48px;
+    }
+    .xwc-board {
+      --xwc-focus: #ffd75a;
+      --xwc-wash: #fff0b8;
+      position: relative;
+      flex: none;
+      overflow: hidden;
+      isolation: isolate;
+      background: var(--xwc-sheet);
+      color: var(--xwc-ink);
+    }
+    .xwc-wide { width: 2100px; height: 900px; }
+    .xwc-square { width: 1080px; height: 1080px; }
+    .xwc-tone-blue { --xwc-focus: #4169e1; --xwc-wash: #dfe6ff; }
+    .xwc-tone-amber { --xwc-focus: #f1b827; --xwc-wash: #ffedb7; }
+    .xwc-tone-coral { --xwc-focus: #ef704d; --xwc-wash: #ffe0d6; }
+    .xwc-tone-violet { --xwc-focus: #8267db; --xwc-wash: #e8e0ff; }
+    .xwc-tone-green { --xwc-focus: #54a86b; --xwc-wash: #dcefdc; }
+    .xwc-tone-workbuddy { --xwc-focus: #27d6a5; --xwc-wash: #d8f8ee; }
+
+    .xwc-paper {
+      position: absolute;
+      inset: 0;
+      z-index: -3;
+      background:
+        radial-gradient(760px 680px at 100% 0%, var(--xwc-wash), transparent 72%),
+        linear-gradient(rgba(17, 17, 15, .038) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(17, 17, 15, .038) 1px, transparent 1px),
+        var(--xwc-sheet);
+      background-size: auto, 30px 30px, 30px 30px, auto;
+    }
+    .xwc-paper::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .17;
+      background-image: radial-gradient(rgba(17, 17, 15, .16) .7px, transparent .8px);
+      background-size: 7px 7px;
+      mask-image: linear-gradient(110deg, #000, transparent 58%);
+    }
+
+    .xwc-masthead {
+      position: absolute;
+      z-index: 6;
+      top: 38px;
+      left: 64px;
+      right: 64px;
+      height: 66px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--xwc-strong-line);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+    .xwc-source {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .xwc-source img,
+    .xwc-brand-icon {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border: 1px solid rgba(17, 17, 15, .1);
+      border-radius: 9px;
+      background: var(--xwc-white);
+    }
+    .xwc-route-label {
+      padding-top: 9px;
+      color: var(--xwc-muted);
+      font-size: 16px;
+      letter-spacing: .1em;
+    }
+    .xwc-route-mark {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 9px;
+      background: var(--xwc-focus);
+      color: #111;
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: .04em;
+    }
+
+    .xwc-wide-copy {
+      position: absolute;
+      z-index: 5;
+      top: 146px;
+      left: 64px;
+      width: 840px;
+    }
+    .xwc-kicker {
+      margin-bottom: 14px;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: .13em;
+    }
+    .xwc-wide-title {
+      max-width: 850px;
+      font-size: 86px;
+      font-weight: 900;
+      line-height: 1.02;
+      letter-spacing: -.055em;
+    }
+    .xwc-wide-title.xwc-tight { font-size: 77px; line-height: 1.07; }
+    .xwc-wide-title.xwc-hook-title { font-size: 82px; line-height: 1.05; }
+    .xwc-emphasis {
+      display: inline;
+      padding: 0 10px 7px;
+      border-radius: 10px;
+      background: var(--xwc-wash);
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+    .xwc-deck {
+      max-width: 810px;
+      margin-top: 19px;
+      color: var(--xwc-muted);
+      font-size: 25px;
+      font-weight: 550;
+      line-height: 1.42;
+    }
+
+    .xwc-person {
+      position: absolute;
+      z-index: 5;
+      left: 64px;
+      bottom: 42px;
+      width: 310px;
+      height: 286px;
+      overflow: hidden;
+      border: 7px solid rgba(255, 254, 251, .97);
+      border-radius: 15px;
+      background: #d6d2ca;
+      box-shadow: 0 18px 42px rgba(33, 27, 19, .17);
+    }
+    .xwc-person img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 49%;
+    }
+    .xwc-person figcaption,
+    .xwc-photo-stage figcaption {
+      position: absolute;
+      left: 11px;
+      bottom: 11px;
+      padding: 8px 11px;
+      background: var(--xwc-ink);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 850;
+      letter-spacing: .03em;
+    }
+    .xwc-promise {
+      position: absolute;
+      z-index: 5;
+      left: 408px;
+      bottom: 58px;
+      width: 470px;
+      padding-top: 15px;
+      border-top: 2px solid var(--xwc-strong-line);
+    }
+    .xwc-promise small {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--xwc-muted);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .11em;
+    }
+    .xwc-promise b {
+      font-size: 22px;
+      line-height: 1.38;
+    }
+
+    .xwc-proof {
+      position: absolute;
+      z-index: 4;
+      top: 144px;
+      right: 64px;
+      bottom: 42px;
+      left: 950px;
+      overflow: hidden;
+      border: 1px solid var(--xwc-line);
+      background: rgba(255, 254, 251, .94);
+      box-shadow: 0 20px 50px rgba(36, 30, 20, .09);
+    }
+    .xwc-panel-bar {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--xwc-line);
+      color: var(--xwc-muted);
+      font-family: var(--xwc-code);
+      font-size: 14px;
+      font-weight: 650;
+    }
+    .xwc-panel-bar i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #bdb7ad;
+    }
+    .xwc-official-lockup img {
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+    }
+    .xwc-official-lockup strong { font-size: 19px; letter-spacing: -.01em; }
+    .xwc-official-lockup em { color: var(--xwc-muted); font-style: normal; }
+
+    /* Release: fact ledger */
+    .xwc-release-ledger { height: calc(100% - 50px); padding: 26px 30px; }
+    .xwc-ledger-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 60px;
+      padding-bottom: 18px;
+      border-bottom: 3px solid var(--xwc-ink);
+    }
+    .xwc-ledger-head div { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 900; }
+    .xwc-ledger-head span { color: var(--xwc-muted); font-size: 13px; letter-spacing: .1em; }
+    .xwc-fact-row {
+      min-height: 112px;
+      display: grid;
+      grid-template-columns: 54px 1fr 170px;
+      align-items: center;
+      gap: 15px;
+      border-bottom: 1px solid var(--xwc-line);
+    }
+    .xwc-fact-row em { color: var(--xwc-focus); font-style: normal; font-size: 16px; font-weight: 950; }
+    .xwc-fact-row b { font-size: 25px; }
+    .xwc-fact-row span { justify-self: end; color: var(--xwc-muted); font-size: 15px; font-weight: 700; }
+    .xwc-tag { padding: 8px 11px; border-radius: 999px; background: var(--xwc-wash); color: var(--xwc-ink) !important; }
+
+    /* Tutorial: product workspace */
+    .xwc-tutorial-ui { display: grid; grid-template-columns: 178px 1fr; height: calc(100% - 50px); }
+    .xwc-tutorial-nav { padding: 25px 17px; border-right: 1px solid var(--xwc-line); background: #eff0f3; }
+    .xwc-nav-brand { display: flex; align-items: center; gap: 9px; font-size: 17px; font-weight: 900; }
+    .xwc-nav-brand img { width: 34px; height: 34px; object-fit: contain; border-radius: 8px; background: #fff; }
+    .xwc-nav-items { margin-top: 28px; }
+    .xwc-nav-items span { display: block; margin-bottom: 7px; padding: 12px 10px; color: #74757a; font-size: 14px; }
+    .xwc-nav-items span[aria-current="page"] { border-left: 4px solid var(--xwc-focus); background: #fff; color: #111; font-weight: 850; }
+    .xwc-tutorial-main { padding: 25px 29px; }
+    .xwc-step-strip { display: flex; gap: 8px; }
+    .xwc-step-strip span { padding: 8px 11px; border-radius: 999px; background: var(--xwc-wash); font-size: 13px; font-weight: 850; }
+    .xwc-tutorial-main h2 { margin-top: 24px; font-size: 31px; }
+    .xwc-tutorial-main > p { margin-top: 8px; color: #6c6970; font-size: 16px; }
+    .xwc-setting {
+      margin-top: 21px;
+      padding: 17px 19px;
+      border: 1px solid #d8d9df;
+      background: #fff;
+      font-size: 19px;
+      font-weight: 800;
+    }
+    .xwc-switch { float: right; width: 52px; height: 28px; border-radius: 999px; background: var(--xwc-focus); position: relative; }
+    .xwc-switch::after { content: ""; position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; border-radius: 50%; background: #fff; }
+    .xwc-prompt-box { margin-top: 18px; min-height: 158px; padding: 17px 19px; border: 1px solid #d8d9df; background: #fafafa; }
+    .xwc-prompt-box small { color: #777; font-family: var(--xwc-code); font-size: 12px; }
+    .xwc-prompt-box p { margin-top: 13px; font-size: 17px; line-height: 1.45; }
+
+    /* Comparison: decision matrix */
+    .xwc-compare-matrix { display: grid; grid-template-columns: 182px repeat(3, 1fr); height: 100%; }
+    .xwc-compare-matrix > div {
+      min-width: 0;
+      display: grid;
+      place-items: center;
+      padding: 11px;
+      border-right: 1px solid var(--xwc-line);
+      border-bottom: 1px solid var(--xwc-line);
+      text-align: center;
+    }
+    .xwc-compare-matrix > div:nth-child(4n) { border-right: 0; }
+    .xwc-matrix-axis { justify-items: start !important; color: #3c3934; font-size: 18px; font-weight: 850; text-align: left !important; }
+    .xwc-matrix-model { align-content: center; gap: 8px; font-size: 17px; font-weight: 900; }
+    .xwc-matrix-model img { width: 46px; height: 46px; object-fit: contain; border-radius: 10px; background: #fff; }
+    .xwc-matrix-cell { color: #777168; font-size: 15px; font-weight: 750; }
+    .xwc-matrix-cell.is-primary { background: var(--xwc-wash); color: #111; font-size: 18px; }
+
+    /* Workflow: connected lanes */
+    .xwc-workflow-map { height: calc(100% - 50px); padding: 30px 30px 28px; }
+    .xwc-brief-node {
+      width: 220px;
+      margin: 0 auto 27px;
+      padding: 13px 18px;
+      border: 2px solid var(--xwc-ink);
+      background: #fff;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 900;
+    }
+    .xwc-lanes { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .xwc-lanes::before { content: ""; position: absolute; top: -16px; left: 16.7%; right: 16.7%; height: 2px; background: var(--xwc-ink); }
+    .xwc-lane { position: relative; min-height: 410px; padding: 22px; border-top: 5px solid var(--xwc-focus); background: #f4f3ef; }
+    .xwc-lane::before { content: ""; position: absolute; top: -18px; left: 50%; width: 2px; height: 14px; background: var(--xwc-ink); }
+    .xwc-lane img { width: 54px; height: 54px; object-fit: contain; border-radius: 11px; background: #fff; }
+    .xwc-lane h3 { margin-top: 16px; font-size: 25px; }
+    .xwc-lane small { display: block; margin-top: 5px; color: var(--xwc-muted); font-size: 12px; font-weight: 800; letter-spacing: .09em; }
+    .xwc-lane p { margin-top: 23px; font-size: 16px; line-height: 1.48; }
+    .xwc-lane b { position: absolute; right: 18px; bottom: 14px; color: var(--xwc-focus); font-size: 48px; }
+
+    /* WorkBuddy AI brief: four information lanes converge into one report. */
+    .xwc-newsflow-map {
+      height: calc(100% - 50px);
+      display: grid;
+      grid-template-columns: 350px 76px 1fr;
+      gap: 14px;
+      padding: 26px 28px 24px;
+    }
+    .xwc-news-sources {
+      display: grid;
+      grid-template-rows: 42px repeat(4, 1fr);
+      gap: 9px;
+      min-width: 0;
+    }
+    .xwc-news-sources > strong {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 9px;
+      border-bottom: 2px solid var(--xwc-ink);
+      font-size: 17px;
+    }
+    .xwc-news-sources > strong small {
+      color: var(--xwc-muted);
+      font-family: var(--xwc-code);
+      font-size: 11px;
+      letter-spacing: .08em;
+    }
+    .xwc-news-source {
+      position: relative;
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      align-items: center;
+      gap: 13px;
+      min-height: 0;
+      padding: 12px 14px;
+      border: 1px solid var(--xwc-line);
+      border-left: 6px solid var(--xwc-focus);
+      background: #f5f3ed;
+    }
+    .xwc-news-source i {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--xwc-wash);
+      color: var(--xwc-ink);
+      font-style: normal;
+      font-family: var(--xwc-code);
+      font-size: 17px;
+      font-weight: 950;
+    }
+    .xwc-news-source b { display: block; font-size: 18px; line-height: 1.08; }
+    .xwc-news-source span {
+      display: block;
+      margin-top: 5px;
+      color: var(--xwc-muted);
+      font-size: 12px;
+      font-weight: 760;
+      letter-spacing: .03em;
+    }
+    .xwc-news-process {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--xwc-muted);
+      font-family: var(--xwc-code);
+      font-size: 11px;
+      font-weight: 800;
+      text-align: center;
+    }
+    .xwc-news-process span {
+      width: 64px;
+      padding: 6px 3px;
+      border: 1px solid var(--xwc-line);
+      background: #fff;
+    }
+    .xwc-news-process b {
+      color: var(--xwc-focus);
+      font-size: 48px;
+      line-height: .8;
+    }
+    .xwc-daily-sheet {
+      position: relative;
+      min-width: 0;
+      padding: 25px 25px 22px;
+      border: 3px solid var(--xwc-ink);
+      background: #fff;
+      box-shadow: 12px 12px 0 var(--xwc-wash);
+    }
+    .xwc-daily-sheet::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 11px;
+      background: var(--xwc-focus);
+    }
+    .xwc-daily-sheet header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 10px 0 18px;
+      border-bottom: 3px solid var(--xwc-ink);
+    }
+    .xwc-daily-sheet header small {
+      display: block;
+      color: var(--xwc-muted);
+      font-family: var(--xwc-code);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+    .xwc-daily-sheet header h2 { margin-top: 5px; font-size: 31px; line-height: 1.05; }
+    .xwc-daily-brand { display: flex; align-items: center; gap: 12px; }
+    .xwc-daily-brand > img { width: 42px; height: 42px; flex: none; }
+    .xwc-daily-sheet header em {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: var(--xwc-wash);
+      color: var(--xwc-ink);
+      font-style: normal;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .xwc-brief-section { padding: 17px 0 15px; border-bottom: 1px solid var(--xwc-line); }
+    .xwc-brief-section:last-of-type { border-bottom: 0; }
+    .xwc-brief-section small { color: var(--xwc-focus); font-family: var(--xwc-code); font-size: 11px; font-weight: 950; }
+    .xwc-brief-section b { display: block; margin-top: 7px; font-size: 18px; }
+    .xwc-brief-lines { display: grid; gap: 7px; margin-top: 10px; }
+    .xwc-brief-lines i { display: block; height: 7px; border-radius: 99px; background: #e4e1d8; }
+    .xwc-brief-lines i:nth-child(2) { width: 78%; }
+    .xwc-output-formats { position: absolute; right: 22px; bottom: 20px; left: 22px; display: flex; gap: 8px; }
+    .xwc-output-formats span {
+      flex: 1;
+      padding: 9px 4px;
+      border: 1px solid var(--xwc-line);
+      background: #f5f3ed;
+      font-family: var(--xwc-code);
+      font-size: 11px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    /* Evidence: annotated source excerpt */
+    .xwc-source-note { height: calc(100% - 50px); padding: 27px 31px; }
+    .xwc-note-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 18px; border-bottom: 3px solid var(--xwc-ink); }
+    .xwc-note-head div { display: flex; align-items: center; gap: 11px; font-size: 17px; font-weight: 900; }
+    .xwc-note-head span { color: var(--xwc-muted); font-size: 13px; letter-spacing: .09em; }
+    .xwc-source-note h2 { margin-top: 23px; font-size: 31px; }
+    .xwc-excerpt { margin-top: 13px; color: #504c45; font-size: 17px; line-height: 1.58; }
+    .xwc-excerpt mark { padding: 2px 5px; background: var(--xwc-wash); }
+    .xwc-citations { margin-top: 19px; border-top: 2px solid var(--xwc-ink); }
+    .xwc-citation { display: grid; grid-template-columns: 46px 1fr auto; gap: 13px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--xwc-line); }
+    .xwc-citation em { color: var(--xwc-focus); font-style: normal; font-weight: 950; }
+    .xwc-citation b { font-size: 18px; }
+    .xwc-citation span { color: var(--xwc-muted); font-size: 13px; }
+
+    /* Photo: documentary stage */
+    .xwc-wide.xwc-documentary .xwc-wide-copy { width: 900px; }
+    .xwc-wide.xwc-documentary .xwc-wide-title { font-size: 72px; line-height: 1.06; }
+    .xwc-photo-stage {
+      position: absolute;
+      z-index: 4;
+      left: 64px;
+      bottom: 42px;
+      width: 1020px;
+      height: 430px;
+      overflow: hidden;
+      border: 1px solid var(--xwc-line);
+      background: #ddd;
+    }
+    .xwc-photo-stage img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; }
+    .xwc-story-index {
+      position: absolute;
+      z-index: 4;
+      top: 157px;
+      right: 64px;
+      bottom: 42px;
+      left: 1160px;
+      border-top: 3px solid var(--xwc-ink);
+    }
+    .xwc-story-index > p { padding: 15px 0; border-bottom: 1px solid var(--xwc-line); color: var(--xwc-muted); font-size: 15px; font-weight: 850; letter-spacing: .08em; }
+    .xwc-story-point { padding: 20px 0; border-bottom: 1px solid var(--xwc-line); }
+    .xwc-story-point small { display: block; margin-bottom: 6px; color: var(--xwc-muted); font-size: 13px; letter-spacing: .08em; }
+    .xwc-story-point b { font-size: 25px; }
+    .xwc-story-quote { margin-top: 24px; padding: 18px 20px; border-left: 6px solid var(--xwc-focus); background: rgba(255,255,255,.52); font-size: 19px; font-weight: 750; line-height: 1.45; }
+
+    /* Independent square covers: typography first, no portrait. */
+    .xwc-square-shell { position: absolute; z-index: 2; inset: 0; padding: 68px; display: flex; flex-direction: column; }
+    .xwc-square-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 20px; border-bottom: 2px solid var(--xwc-strong-line); font-size: 16px; font-weight: 850; }
+    .xwc-square-head .xwc-source { gap: 10px; }
+    .xwc-square-head .xwc-source img,
+    .xwc-square-head .xwc-route-mark { width: 36px; height: 36px; }
+    .xwc-square-kicker { margin-top: 64px; font-size: 16px; font-weight: 900; letter-spacing: .14em; }
+    .xwc-square-title { margin: auto 0; font-size: 126px; font-weight: 920; line-height: 1.03; letter-spacing: -.06em; }
+    .xwc-square-title.xwc-square-tight { font-size: 112px; line-height: 1.06; }
+    .xwc-square-title.xwc-square-compact { margin: 0; font-size: 102px; line-height: 1.02; }
+    .xwc-square-title-safe { min-height: 250px; margin: auto 0; display: flex; align-items: center; }
+    .xwc-square-foot { display: flex; align-items: flex-end; justify-content: space-between; padding-top: 21px; border-top: 11px solid var(--xwc-focus); color: var(--xwc-muted); font-size: 15px; font-weight: 850; }
+
+    .xwc-pair {
+      width: 1944px;
+      height: 620px;
+      display: flex;
+      gap: 64px;
+      padding: 40px;
+      overflow: hidden;
+      background: #262625;
+    }
+    .xwc-pair-wide { position: relative; flex: none; width: 1260px; height: 540px; overflow: hidden; background: #fff; }
+    .xwc-pair-square { position: relative; flex: none; width: 540px; height: 540px; overflow: hidden; background: #fff; }
+    .xwc-pair-wide > .xwc-board { transform: scale(.6); transform-origin: 0 0; }
+    .xwc-pair-square > .xwc-board { transform: scale(.5); transform-origin: 0 0; }
+
+    body.xwc-export-mode { padding: 0; overflow: hidden; background: transparent; }
+    body.xwc-export-mode .xwc-gallery { align-items: flex-start; gap: 0; }
+  </style>
+</head>
+<body>
+  <main class="xwc-gallery">
+
+
+
+
+
+
+
+
+
+
+
+
+    <section class="xwc-board xwc-wide xwc-tone-workbuddy" id="wechat-workflow-wide" data-export data-file="workbuddy-ai-daily-cover-v2-21x9.png" data-route="workflow" data-pair="workflow">
+      <div class="xwc-paper"></div>
+      <header class="xwc-masthead"><div class="xwc-source xwc-official-lockup"><img src="workbuddy-official.svg" alt="WorkBuddy 官方 Logo"><strong>WorkBuddy</strong><em>/ AI DAILY BRIEF</em></div><span class="xwc-route-label">小伟 · 工作流实战</span></header>
+      <div class="xwc-wide-copy" data-text-safe><p class="xwc-kicker">每日 AI 资讯工作流 · WORKFLOW</p><h1 class="xwc-wide-title xwc-hook-title">AI 新闻太多？<br>让 WorkBuddy <span class="xwc-emphasis">帮你筛</span></h1><p class="xwc-deck">四路信息源汇总、去重、核验，最后生成一份 AI 日报</p></div>
+      <!-- Keep the speaker's face, hand and microphone visible in this contextual crop. -->
+      <figure class="xwc-person"><img src="../../../assets/portrait/xiaowei-context.jpg" alt="小伟活动现场发言" style="object-position:50% 49%"><figcaption>小伟 · 实操教程</figcaption></figure>
+      <div class="xwc-promise" data-text-safe><small>这篇能学会</small><b>认识界面 → 安装 Skill → 跑通第一份日报</b></div>
+      <article class="xwc-proof">
+        <div class="xwc-panel-bar"><i></i><i></i><i></i><span>workflow map / 流程示意</span></div>
+        <div class="xwc-newsflow-map">
+          <div class="xwc-news-sources">
+            <strong><span>4 路信息源</span><small>INPUT</small></strong>
+            <div class="xwc-news-source"><i>01</i><div><b>AIHot</b><span>热点与行业动态</span></div></div>
+            <div class="xwc-news-source"><i>02</i><div><b>RSS Monitor</b><span>官网与订阅源</span></div></div>
+            <div class="xwc-news-source"><i>03</i><div><b>GitHub Trending</b><span>热门开源项目</span></div></div>
+            <div class="xwc-news-source"><i>04</i><div><b>arXiv Papers</b><span>论文与研究进展</span></div></div>
+          </div>
+          <div class="xwc-news-process"><span>检索</span><span>去重</span><span>核验</span><b>→</b></div>
+          <section class="xwc-daily-sheet">
+            <header><div class="xwc-daily-brand"><img src="workbuddy-official.svg" alt="WorkBuddy 官方 Logo"><div><small>AI DAILY BRIEF</small><h2>一份 AI 日报</h2></div></div><em>OUTPUT</em></header>
+            <div class="xwc-brief-section"><small>01 / TODAY</small><b>今日重点与关键变化</b><div class="xwc-brief-lines"><i></i><i></i></div></div>
+            <div class="xwc-brief-section"><small>02 / EVIDENCE</small><b>原始链接与发布时间</b><div class="xwc-brief-lines"><i></i><i></i></div></div>
+            <div class="xwc-output-formats"><span>MARKDOWN</span><span>HTML</span><span>PNG</span></div>
+          </section>
+        </div>
+      </article>
+    </section>
+
+    <section class="xwc-board xwc-square xwc-tone-workbuddy" id="wechat-workflow-square" data-export data-file="workbuddy-ai-daily-cover-v2-1x1.png" data-route="workflow" data-pair="workflow">
+      <div class="xwc-paper"></div><div class="xwc-square-shell"><header class="xwc-square-head"><span class="xwc-source xwc-official-lockup"><img src="workbuddy-official.svg" alt="WorkBuddy 官方 Logo"><strong>WorkBuddy</strong></span><span>WORKFLOW</span></header><p class="xwc-square-kicker">AI DAILY BRIEF · 工作流实战</p><div class="xwc-square-title-safe" data-text-safe="方版主标题"><h1 class="xwc-square-title xwc-square-compact">AI 新闻太多？<br><span class="xwc-emphasis">WorkBuddy 帮你筛</span></h1></div><footer class="xwc-square-foot"><span>四路资讯 → 一份日报</span><span>XIAOWEI COVER SYSTEM</span></footer></div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+    <section class="xwc-pair" id="preview-workflow" data-export data-file="workbuddy-ai-daily-cover-v2-pair-preview.png" data-route="workflow" data-preview-pair="workflow"></section>
+
+
+  </main>
+
+  <script>
+    document.querySelectorAll("[data-preview-pair]").forEach((preview) => {
+      const route = preview.dataset.previewPair;
+      const wide = document.querySelector(`.xwc-wide[data-pair="${route}"]`);
+      const square = document.querySelector(`.xwc-square[data-pair="${route}"]`);
+      if (!wide || !square) return;
+
+      const wideFrame = document.createElement("div");
+      const squareFrame = document.createElement("div");
+      wideFrame.className = "xwc-pair-wide";
+      squareFrame.className = "xwc-pair-square";
+
+      const copies = [wide.cloneNode(true), square.cloneNode(true)];
+      copies.forEach((copy) => {
+        copy.removeAttribute("id");
+        copy.removeAttribute("data-export");
+        copy.removeAttribute("data-file");
+        copy.removeAttribute("data-route");
+        copy.removeAttribute("data-pair");
+      });
+      wideFrame.append(copies[0]);
+      squareFrame.append(copies[1]);
+      preview.append(wideFrame, squareFrame);
+    });
+
+    const requestedId = location.hash.slice(1);
+    if (requestedId) {
+      const requestedBoard = document.getElementById(requestedId);
+      if (requestedBoard) {
+        document.body.classList.add("xwc-export-mode");
+        document.querySelectorAll(".xwc-gallery > *").forEach((node) => {
+          if (node !== requestedBoard) node.remove();
+        });
+      }
+    }
+  </script>
+</body>
+</html>

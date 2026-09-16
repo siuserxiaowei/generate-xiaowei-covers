@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "preparedAt": "2026-09-16",
+  "submitted": false,
+  "repository": "https://github.com/siuserxiaowei/generate-xiaowei-covers",
+  "githubUsername": "siuserxiaowei",
+  "role": "Lead maintainer",
+  "characterLimit": 500,
+  "fields": {
+    "eligibility": {
+      "en": "I maintain Claim2Cover, an AGPL-3.0 Codex Skill with a Node.js validation and rendering core. It turns articles into source-documented briefs and separate platform covers. The repo includes executable negative tests, CI, and two historical maintainer use cases with editable HTML and unchanged PNGs. It is early-stage, with no verified broad adoption. Its ecosystem value is a reusable pattern for auditable Agent outputs, separating semantic judgment, deterministic checks, and human review.",
+      "zh": "我是 Claim2Cover 的主要维护者。项目采用 AGPL-3.0，将 Codex Skill 与 Node.js 校验、渲染工具结合，把文章转为有来源记录、按平台分别设计的封面。仓库提供可执行负例测试、CI，以及两组作者实际任务的可编辑 HTML 和原始 PNG。项目尚处早期，没有可验证的广泛采用数据；申请理由是为 Agent 生态提供可复用、可审查的交付流程，明确区分语义判断、程序校验与人工审阅。"
+    },
+    "api_usage": {
+      "en": "I would use API credits for OSS maintenance: reproducing bugs, drafting patches and regression tests, reviewing changes, and evaluating Agent drafts on authorized, de-identified fixtures. Planned evaluations cover unsupported headline claims, source references and independent platform briefs. Runs would record model/prompt versions, usage and failures under a spending cap, with human review. Existing deterministic tests need no API; credits would not subsidize commercial cover production.",
+      "zh": "我计划将 API 额度用于开源维护：复现问题、起草修复和回归测试、审查变更，并用获准使用且去身份化的输入评估 Agent 草稿。评估重点是无依据的标题承诺、来源引用和各平台 brief 的独立性；记录模型、提示版本、用量及失败样例，设置费用上限并保留人工审阅。现有确定性测试无需 API；额度不用于补贴商业封面制作。"
+    },
+    "additional": {
+      "en": "I own the repository and maintain its workflow, validators, renderer, tests and documentation with AI assistance disclosed in PROVENANCE.md. Two historical personal tasks are documented in docs/cases; the recorded contract demo is labeled liveAiClaimed:false. Neither is presented as customer adoption or a productivity benchmark. The application dossier, maintenance plan and verification record are under docs/oss. Portrait and trademark rights are documented separately from the code license.",
+      "zh": "我是仓库所有者，负责工作流、校验器、渲染器、测试与文档维护；AI 辅助开发分工记录在 PROVENANCE.md。docs/cases 保留两组历史自用任务；固定契约演示明确标注 liveAiClaimed:false，二者均不冒充客户采用或效率基准。docs/oss 提供详细申请说明、维护计划和验证记录。人物与商标素材的权利边界独立于代码许可证。"
+    }
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "assembledAt": "2026-09-16",
+  "scope": "Two historical maintainer-owned cover tasks; no external adoption or live model trace is claimed.",
+  "cases": [
+    {
+      "id": "workbuddy-ai-daily",
+      "title": "WorkBuddy AI 日报封面",
+      "kind": "historical-maintainer-task",
+      "recordedDate": "2026-08-27",
+      "liveModelTraceAvailable": false,
+      "publicationMetricsAvailable": false,
+      "originals": [
+        {
+          "name": "COVER_PROMPT.md",
+          "sha256": "15f3f5a577c4120da630896fa26e57dde95ea367692dada72c57c1fd7620f3b3",
+          "publicCopyModified": true
+        },
+        {
+          "name": "FACTS.md",
+          "sha256": "52607a0a6db46fc0a895f800026a84e5ad5d268f0af5297a0cf8eac35c3798f7",
+          "publicCopyModified": true
+        },
+        {
+          "name": "cover.html",
+          "sha256": "37907df6bc751e29245c16202d24570c1e0b94c06b74d2da6754ecd269674613",
+          "publicCopyModified": true
+        },
+        {
+          "name": "output-v2/workbuddy-ai-daily-cover-v2-21x9.png",
+          "sha256": "e123d348bc07b825689ea9b09038c3b31c331300a81514035d231b8fd5c13038",
+          "publicCopyModified": false
+        },
+        {
+          "name": "output-v2/workbuddy-ai-daily-cover-v2-1x1.png",
+          "sha256": "0de49b0cd2daab6f91449a7e9249dc808353e9a50628a4b15c35cf264a47682c",
+          "publicCopyModified": false
+        },
+        {
+          "name": "output-v2/workbuddy-ai-daily-cover-v2-pair-preview.png",
+          "sha256": "7f6c8a1e6419250f01e1f4d19d30f3357689d1f11bdcce6a76c68af84c89ef42",
+          "publicCopyModified": false
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "docs/cases/workbuddy-ai-daily/1x1.png",
+          "sha256": "0de49b0cd2daab6f91449a7e9249dc808353e9a50628a4b15c35cf264a47682c",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "path": "docs/cases/workbuddy-ai-daily/21x9.png",
+          "sha256": "e123d348bc07b825689ea9b09038c3b31c331300a81514035d231b8fd5c13038",
+          "width": 2100,
+          "height": 900
+        },
+        {
+          "path": "docs/cases/workbuddy-ai-daily/COVER_PROMPT.md",
+          "sha256": "dd7ba9fc4fc34b03bbdee25327c0b3487173b6994cea47cd09c3093ba45814fa"
+        },
+        {
+          "path": "docs/cases/workbuddy-ai-daily/FACTS.md",
+          "sha256": "0a40d45637ed67b7cf704488e42d0382366bbfda8db531cc5b29289950d35db0"
+        },
+        {
+          "path": "docs/cases/workbuddy-ai-daily/README.md",
+          "sha256": "aeb65331c500c5dbff93bd6cef6d64aecc4160e3c1081b9a67db1550a9bcd705"
+        },
+        {
+          "path": "docs/cases/workbuddy-ai-daily/SOURCE.md",
+          "sha256": "7feb9b95986b3d2cb1e66ff38ee484faaf4ee4743df011d67866cdd277d316f4"
+        },
+        {
+          "path": "docs/cases/workbuddy-ai-daily/cover.html",
+          "sha256": "1aff273bbcda9c05cf372c6ea4bc7f1c2b45aa60f7539edab43e449b01763bce"
+        },
+        {
+          "path": "docs/cases/workbuddy-ai-daily/pair-preview.png",
+          "sha256": "7f6c8a1e6419250f01e1f4d19d30f3357689d1f11bdcce6a76c68af84c89ef42",
+          "width": 1944,
+          "height": 620
+        },
+        {
+          "path": "docs/cases/workbuddy-ai-daily/workbuddy-official.svg",
+          "sha256": "149baa45b9f9370c15f20d599afe381aa138e4fc13acf503f435c571ac93ecf5"
+        }
+      ]
+    },
+    {
+      "id": "email-routing",
+      "title": "邮箱地址与发信能力",
+      "kind": "historical-maintainer-task",
+      "recordedDate": "2026-08-27",
+      "liveModelTraceAvailable": false,
+      "publicationMetricsAvailable": false,
+      "originals": [
+        {
+          "name": "COVER_PROMPT.md",
+          "sha256": "e4b3ef8612d7542d2ce6ad1d10a2bd348ed06a4fd3e3aaef5a2bf9a83c064c95",
+          "publicCopyModified": true
+        },
+        {
+          "name": "FACTS.md",
+          "sha256": "327ce5f96c1d7d7fb0176aceef4444e094505c208dbcedda0e3fa12651e249e6",
+          "publicCopyModified": true
+        },
+        {
+          "name": "cover.html",
+          "sha256": "11d0fb3f929b3b081975b4eb2a7a99b33361d6d2bfb67ef56c3c6af1ffd6092b",
+          "publicCopyModified": true
+        },
+        {
+          "name": "output/wechat-04-workflow-21x9.png",
+          "sha256": "d0b9abe4a3f65488a2b3aac85a0eacf93d0783b173b2c47a323d22c102f9ba57",
+          "publicCopyModified": false
+        },
+        {
+          "name": "output/wechat-04-workflow-1x1.png",
+          "sha256": "a22d6af88ba274be6a996bb2a0cfa53b99ccd1854811fa605ac958932cc4002a",
+          "publicCopyModified": false
+        },
+        {
+          "name": "output/wechat-04-workflow-pair-preview.png",
+          "sha256": "c62aada520ec73bdf1fcc3b93617f238a39e95a137864fcb566dbc1ce739d25e",
+          "publicCopyModified": false
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "docs/cases/email-routing/1x1.png",
+          "sha256": "a22d6af88ba274be6a996bb2a0cfa53b99ccd1854811fa605ac958932cc4002a",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "path": "docs/cases/email-routing/21x9.png",
+          "sha256": "d0b9abe4a3f65488a2b3aac85a0eacf93d0783b173b2c47a323d22c102f9ba57",
+          "width": 2100,
+          "height": 900
+        },
+        {
+          "path": "docs/cases/email-routing/COVER_PROMPT.md",
+          "sha256": "5d4aeb0b34b73fa10c85a2b3cb5d204536139061f8e4df2360317af071146006"
+        },
+        {
+          "path": "docs/cases/email-routing/FACTS.md",
+          "sha256": "b899205369b68301925f2cd17f11de53eefcf5f13bf050d0bdcebd94636ff6ba"
+        },
+        {
+          "path": "docs/cases/email-routing/README.md",
+          "sha256": "e1da1283c77c2d117b909fb9fabe1a2824f2521cc46ecffddc5ebc0b3dc45d16"
+        },
+        {
+          "path": "docs/cases/email-routing/SOURCE.md",
+          "sha256": "aacfdd7cf10c95ee25f258001bea7819278ae8e3c06e393b671f0e83ab17a4f7"
+        },
+        {
+          "path": "docs/cases/email-routing/cover.html",
+          "sha256": "c1d402ceeffe300415781f14148218aff1a762a55db55dfea532c600efacff1f"
+        },
+        {
+          "path": "docs/cases/email-routing/pair-preview.png",
+          "sha256": "c62aada520ec73bdf1fcc3b93617f238a39e95a137864fcb566dbc1ce739d25e",
+          "width": 1944,
+          "height": 620
+        }
+      ]
+    }
+  ]
+}
