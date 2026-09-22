@@ -30,7 +30,7 @@ For “小伟内容”, multi-platform copywriting, or “出整套” including
 
 ### Output Workspace Rule
 
-When the current workspace contains a `CRENSTUDIO/` directory, use it as the single artifact root. Create one dated project folder per request, such as `CRENSTUDIO/jev模型讲解-20260922/`, and keep the source copy, rendered video, subtitle files, covers, review screenshots and generation records inside that folder. Use this layout unless the user explicitly supplies another output directory:
+Use the Desktop `CRENSTUDIO/` directory as the single artifact root on Xiaowei's Mac: `/Users/siuserxiaowei/Desktop/CRENSTUDIO/`. Create one dated project folder per request, such as `/Users/siuserxiaowei/Desktop/CRENSTUDIO/jev模型讲解-20260922/`, and keep the source copy, rendered video, subtitle files, covers, review screenshots and generation records inside that folder. Do not use the Documents workspace or another directory unless the user explicitly supplies another output directory:
 
 ```text
 CRENSTUDIO/<project-slug>/

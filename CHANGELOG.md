@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.3
+
+- Pin the default artifact root to `/Users/siuserxiaowei/Desktop/CRENSTUDIO/`.
+- Explicitly prohibit placing generated deliverables in Documents or the workspace root unless the user overrides the path.
+
 ## 0.6.2
 
 - Add a single `CRENSTUDIO/<project-slug>/` artifact-root convention for video, subtitle, cover and review deliverables.
