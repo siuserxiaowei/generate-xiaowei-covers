@@ -28,6 +28,23 @@ For “小伟内容”, multi-platform copywriting, or “出整套” including
 
 ## Workflow
 
+### Output Workspace Rule
+
+When the current workspace contains a `CRENSTUDIO/` directory, use it as the single artifact root. Create one dated project folder per request, such as `CRENSTUDIO/jev模型讲解-20260922/`, and keep the source copy, rendered video, subtitle files, covers, review screenshots and generation records inside that folder. Use this layout unless the user explicitly supplies another output directory:
+
+```text
+CRENSTUDIO/<project-slug>/
+  source/       # user-provided originals or working copies
+  video/        # final rendered videos
+  subtitles/    # SRT/VTT/transcripts and subtitle intermediates
+  covers/       # final 9:16, 16:9 and other cover outputs
+  review/       # thumbnail and visual verification artifacts
+  prompts/      # generation prompts and briefs
+  generation.json
+```
+
+Do not leave generated video, subtitles or cover deliverables in the workspace root. Keep temporary model outputs and intermediate renders inside the same project folder or a clearly named temporary subfolder; move only final deliverables into `video/`, `subtitles/` and `covers/` before reporting completion.
+
 ### 1. Normalize The Brief
 
 Accept one sentence or one source link as sufficient intake when safe. Normalize it to the schema in `references/input-schema.md`.

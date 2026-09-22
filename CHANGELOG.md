@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.2
+
+- Add a single `CRENSTUDIO/<project-slug>/` artifact-root convention for video, subtitle, cover and review deliverables.
+- Keep generated outputs out of the workspace root and document the canonical project subdirectories.
+
 ## 0.6.1
 
 - Require a recognizable Xiaowei portrait on every requested cover surface.
