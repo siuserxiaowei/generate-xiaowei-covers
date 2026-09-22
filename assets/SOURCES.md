@@ -11,4 +11,15 @@
 - `portrait/xiaowei-context.jpg` ← contextual crop derived from `portrait/xiaowei-original.jpg`; it preserves face, hand, microphone, table, and water bottles.
 - `../docs/images/showcase/` ← full-resolution PNG examples rendered from the bundled templates and the assets listed above.
 
+Reference research for the inspiration playbook:
+
+- Awwwards — https://www.awwwards.com/ — design, usability, creativity and content review language; no site assets copied.
+- Recent Design — https://recent.design/ — category and curation model; no site assets copied.
+- Muzli — https://muz.li/ — curated feed, search and color-reference workflow; no site assets copied.
+- Designspiration — https://www.designspiration.com/ — moodboard workflow for images, colors, links, screenshots and notes; no site assets copied.
+- Design Spells — https://designspells.com/ — interaction-detail taxonomy used to define one static signature detail; no site assets copied.
+- Loadmo.re — https://loadmo.re/ — mobile-first experimental design categories and thumbnail discipline; no site assets copied.
+- weilanx Cover Skill — https://github.com/Azure12355/weilanx-cover-skill — MIT-licensed public reference for portrait identity, layered information collage and native multi-ratio composition; no code or sample assets copied.
+- xialingguo-ip — https://github.com/peggykangkang02/xialingguo-ip — public reference for compact intake, visual-focus selection and multi-style article covers; no code or sample assets copied.
+
 The marks remain trademarks of their respective owners. They are used for product identification in public examples, without implying affiliation or endorsement. The portrait display permission does not grant third parties a general right to reuse the subject's likeness.

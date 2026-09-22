@@ -48,6 +48,15 @@
   "stance": "string or null",
   "content_route": "auto",
   "visual_style": "auto",
+  "visual_focus": "title | person | product | process | result | story",
+  "signature_detail": "reveal | path | progress | layer | cursor | state_change | none",
+  "reference_sources": [
+    {
+      "url": "https://example.com/inspiration",
+      "role": "visual_language_only",
+      "notes": "palette, hierarchy, composition, material, density"
+    }
+  ],
   "style_seed": null,
   "required_assets": [
     {
@@ -139,6 +148,12 @@
 - 每套仅选择一次，写入 `STYLE_SELECTION.json`；同一套的横竖版共用。
 - 未指定平台时默认3:4 + 9:16；明确说横竖都要时加入16:9；公众号仍使用21:9 + 1:1。
 - 内容结构与视觉风格独立，完整规则见 [style-presets.md](style-presets.md)。
+
+### `visual_focus`、`signature_detail` 与 `reference_sources`
+
+- `visual_focus` 决定读者第一眼看到标题、真人、产品/界面、流程、结果还是故事场景；风格不能替它做决定。
+- `signature_detail` 最多选择一个，把网页交互灵感转译为静态线索；不要堆叠发光、箭头、粒子和卡片。
+- `reference_sources` 记录 Awwwards、Recent Design、Muzli、Designspiration、Design Spells、Loadmo.re 或用户截图的来源和 Design DNA。引用只用于视觉语言，不复制人物、文案、Logo、截图或具体版式。
 
 ### 人物身份与姿势
 

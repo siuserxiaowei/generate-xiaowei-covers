@@ -19,6 +19,12 @@ Early visual research was inspired by the Swiss social-card idea in [`op7418/gui
 - `pyang5166/gbro-cover-design`: dark gradient, bold type and a single yellow keyword block.
 - `oil-oil/oil-cover`: restrained pastel atmosphere, grid and clear title hierarchy; this preset does not run its video/portrait-compositing pipeline.
 - `JimLiu/baoyu-skills` (`baoyu-cover-image`): multidimensional cover selection, adapted here to a real-person warm paper collage.
+- `Azure12355/weilanx-cover-skill`: portrait identity constraints, layered information collage and native ratio guidance were studied from its public MIT-licensed reference; no upstream code or assets are included.
+- `peggykangkang02/xialingguo-ip`: compact intake form, visual-focus choices and style-library organization were studied from its public reference; no upstream code or assets are included.
+
+## Design inspiration sites
+
+The repository's `references/inspiration-playbook.md` records method-level research from Awwwards, Recent Design, Muzli, Designspiration, Design Spells, and Loadmo.re. These sites are references only; no site code, screenshots, logos, or artwork are bundled.
 
 Source URLs are retained on every selected preset in the task's `STYLE_SELECTION.json`. No upstream sample portraits, screenshots, generated covers or executable code are included by this integration. The existing repository license does not expand rights to any source assets.
 

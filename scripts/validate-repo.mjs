@@ -35,6 +35,7 @@ const requiredFiles = [
   "references/impact-cover.md",
   "references/identity-and-pose.md",
   "references/series-cover.md",
+  "references/inspiration-playbook.md",
   "assets/style-presets.json",
   "scripts/select-cover-style.mjs",
   "scripts/test-style-selection.mjs",

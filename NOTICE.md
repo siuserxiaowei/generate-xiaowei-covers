@@ -6,6 +6,8 @@ The content-routing model, cover-prompt workflow, portrait rules, current HTML/C
 
 Early visual research was inspired by the Swiss social-card idea in [`op7418/guizang-social-card-skill`](https://github.com/op7418/guizang-social-card-skill), authored by `op7418`. The current template does not use that project's code scaffold. This acknowledgment records design inspiration; it does not claim that this repository or its current template originates from that project.
 
+The 2026 inspiration playbook also studies public presentation and workflow patterns from [Awwwards](https://www.awwwards.com/), [Recent Design](https://recent.design/), [Muzli](https://muz.li/), [Designspiration](https://www.designspiration.com/), [Design Spells](https://designspells.com/), [Loadmo.re](https://loadmo.re/), [weilanx-cover-skill](https://github.com/Azure12355/weilanx-cover-skill), and [xialingguo-ip](https://github.com/peggykangkang02/xialingguo-ip). The implementation extracts general methods only—Design DNA, visual-focus selection, native ratio composition, thumbnail review, and identity/privacy boundaries. It does not copy their code, layouts, people, text, logos, or image assets.
+
 This repository independently chooses GNU AGPL-3.0 for its code, documentation, and templates. The license does not relicense the portraits, third-party trademarks, organization avatars, screenshots, or other externally supplied media described below.
 
 ## Brand assets

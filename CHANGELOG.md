@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.0
+
+- Add an inspiration-to-cover playbook based on Awwwards, Recent Design, Muzli, Designspiration, Design Spells, Loadmo.re, weilanx-cover-skill, and xialingguo-ip.
+- Add visual-focus, signature-detail, and reference-source fields to the normalized brief.
+- Add Design DNA extraction and a Design / Usability / Creativity / Content review gate without copying third-party layouts or private assets.
+
 All notable changes to this project are documented here.
 
 ## Unreleased — 2026-09-16

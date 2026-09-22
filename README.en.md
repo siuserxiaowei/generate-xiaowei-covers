@@ -9,9 +9,9 @@
 
 The bundled [`xiaowei-content`](skills/xiaowei-content/SKILL.md) skill handles reference research, separate platform drafts, local feedback and handoff to this cover skill. Invoke `$xiaowei-content` with a draft; say `出整套` to include 3:4 and 9:16 covers, or `改口吻` to revise the current copy. Copy-only is the default. See the [Chinese quick start](README.md#小伟内容文案与封面总入口) for local installation. Private drafts and unapproved examples are not bundled or published.
 
-## Six visual presets
+## Seven visual presets
 
-Each new set randomly selects one of six presets: original, editorial, atutun, gbro, oil, or baoyu. Explicit style requests override randomness. The set keeps its identity, palette and typography while composing each requested ratio independently. Defaults are 3:4 + 9:16; requesting portrait and landscape adds 16:9; WeChat uses 21:9 + independent 1:1.
+Each new set randomly selects one of seven presets: original, editorial, atutun, gbro, oil, baoyu, or impact. Explicit style requests override randomness. The set keeps its identity, palette and typography while composing each requested ratio independently. Defaults are 3:4 + 9:16; requesting portrait and landscape adds 16:9; WeChat uses 21:9 + independent 1:1. When references are supplied, the brief extracts Design DNA and one signature detail before selecting the composition.
 
 Run `node scripts/select-cover-style.mjs <project-dir>` to save the selection and visual brief. The selector does not generate images: original/editorial use editable HTML; the other four use native image generation with inspected portrait references. Reusing the project preserves the selection. A seed reproduces the preset choice, not identical generated pixels.
 

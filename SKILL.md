@@ -22,6 +22,7 @@ For “小伟内容”, multi-platform copywriting, or “出整套” including
 - Read `references/content-routing.md` before choosing one of the six content structures.
 - Read `references/brand-system.md` before composing, cropping the portrait, or adapting across ratios.
 - Read `references/style-presets.md` for preset selection, HTML/imagegen routing, and portrait/landscape defaults; it takes precedence over legacy original-style layout defaults.
+- Read `references/inspiration-playbook.md` when the user provides design sites, moodboards, screenshots, or asks for a more distinctive visual direction. Extract Design DNA before choosing a preset.
 - Read the delivery section of `references/style-presets.md` when saving generated files or responding to “打开给我看看”.
 - Read `references/claim-to-pixel-contract.md` for public multi-platform work, numeric or absolute title promises, or an auditable release package.
 
@@ -47,6 +48,8 @@ Use these defaults unless the user overrides them:
 - targets: follow the user's platforms; without platform context use 3:4 + 9:16; “横竖都要” adds 16:9; WeChat requests retain 21:9 + independent 1:1;
 - output: PNG plus editable HTML for HTML presets, or full prompts/reference assets/generation records for imagegen presets;
 - variants: one set by default; for series alternatives keep identity/visual language and vary topic-relevant palette, composition, scenes and poses; distinct presets require an explicit cross-style request.
+- visual focus: choose one first visual focus—title, person, product/interface, process, result, or story scene. Do not let style choice silently decide the subject hierarchy.
+- signature detail: choose at most one topic-relevant static cue derived from interaction or motion inspiration, such as a reveal, path, progress, layer, cursor, or state change.
 
 Ask only when a missing answer changes the author's position, asset rights, privacy, or factual conclusion. Never invent the user's personal experience or recommendation.
 
@@ -100,6 +103,10 @@ Choose the route by the reader's promised value, not by which logo happens to ap
 
 Select the channel and content-driven composition from `references/channel-routing.md` before the visual preset. The content route and visual preset are separate choices. A Codex, Doubao, Qwen, WorkBuddy, or personal-story topic can use any preset while keeping its own evidence and exact copy.
 
+### 4.1 Distill Visual DNA
+
+When references or design-inspiration sites are provided, read `references/inspiration-playbook.md` and record six decisions in `COVER_PROMPT.md`: hierarchy, composition, typography, palette/material, density/rhythm, and one signature detail. Treat the reference as `visual_language_only`; never copy its person, wording, logo, screenshot, or exact layout. Use the selected visual focus to decide what becomes the first, second, and third visual read.
+
 ### 5. Create A Project
 
 Resolve this installed Skill's absolute directory as `SKILL_DIR`, then run one of:
@@ -149,6 +156,7 @@ Complete these sections with task-specific content:
 - selected preset, seed, generation engine, and identity/placement constraints from `STYLE_SELECTION.json`;
 - identity_primary, identity_support and their roles; pose_mode and the specific topic-driven pose_brief;
 - for video series: portrait_mode=generated_identity, series profile/references (visual_language_only), variation_brief, and previous episodes used to avoid repetition;
+- visual focus, Design DNA, and the single signature detail (or an explicit `none`);
 - exact title, highlight phrase, kicker, and subtitle per surface;
 - evidence module and source boundary;
 - six visible dimensions: subject, environment, visual character, light, camera/composition, and typography;
