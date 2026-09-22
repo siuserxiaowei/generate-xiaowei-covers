@@ -62,7 +62,7 @@ Use these defaults unless the user overrides them:
 - visual style: video series defaults to `series`; keep identity and recognizable bold-type/collage language across episodes. Choose palette, layout, scenes, poses and objects from each topic; no fixed studio, placement or series masthead. For other channels or explicit cross-style experiments, choose the appropriate preset and record the reason;
 - portrait mode for video series: `generated_identity`; photos are identity-only references, never pasted source images. Regenerate the person and topic scene; read `references/series-cover.md`;
 - portrait placement: follow the visual focus, content route and explicit user placement; position is intentionally variable, and the same recognizable person must remain visible across all surfaces;
-- targets: follow the user's platforms; without platform context treat the work as public social content and use 3:4 + 9:16; “横竖都要” adds 16:9; only an explicit WeChat request adds 21:9 + independent 1:1;
+- targets: follow the user's platforms; without platform context treat the work as public social content and use 3:4 + 9:16; “横竖都要” adds the independent horizontal pair 16:9 + 4:3; only an explicit WeChat request adds 21:9 + independent 1:1;
 - output: PNG plus editable HTML for HTML presets, or full prompts/reference assets/generation records for imagegen presets;
 - variants: one set by default; for series alternatives keep identity/visual language and vary topic-relevant palette, composition, scenes and poses; distinct presets require an explicit cross-style request.
 - visual focus: choose one first visual focus—title, person, product/interface, process, result, or story scene. Do not let style choice silently decide the subject hierarchy.
@@ -186,7 +186,7 @@ Author each surface independently:
 
 - Xiaohongshu 3:4: 1–2 deliberate lines with one highlighted phrase.
 - Douyin 9:16: a separate vertical composition with title, face and primary evidence away from the right/bottom UI zones; never stretch 3:4.
-- General 16:9: a separate left/right composition that retains this set's typography, palette and identity.
+- General 16:9 and 4:3: separate horizontal compositions that retain this set's typography, palette and identity; never crop one horizontal master into the other.
 - WeChat 21:9: prefer one line of roughly 8–14 Chinese characters; allow two lines only at a semantic break.
 - WeChat 1:1: derive a separate 4–10-character title. Do not crop or squeeze the 21:9 title.
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.4
+
+- Add the paired public-social horizontal ratio `4:3` alongside `16:9` when users request both vertical and horizontal covers.
+- Document the four-cover public set: `9:16`, `3:4`, `16:9`, and `4:3`.
+
 ## 0.6.3
 
 - Pin the default artifact root to `/Users/siuserxiaowei/Desktop/CRENSTUDIO/`.
