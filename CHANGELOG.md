@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.1
+
+- Require a recognizable Xiaowei portrait on every requested cover surface.
+- Allow pose, action, position, scale, crop, scene, and composition to change with the topic instead of hard-coding a portrait location.
+- Route unspecified requests to public social defaults (3:4 + 9:16); reserve the 21:9 + 1:1 pair for explicit WeChat requests.
+
 ## 0.6.0
 
 - Add an inspiration-to-cover playbook based on Awwwards, Recent Design, Muzli, Designspiration, Design Spells, Loadmo.re, weilanx-cover-skill, and xialingguo-ip.

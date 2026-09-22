@@ -45,6 +45,8 @@
       "profile": "article_cover"
     }
   ],
+  "portrait_required": true,
+  "portrait_identity_goal": "recognizable_same_person",
   "stance": "string or null",
   "content_route": "auto",
   "visual_style": "auto",
@@ -119,6 +121,13 @@
   - `xiaohongshu / portrait_cover`：竖版封面，通常导出 `1080×1440`。
   - `wechat_official_account / article_cover`：公众号文章横版首图，使用项目当前平台规格，关键标题与人物进入裁切安全区。
 - 同一主题的横版和竖版是独立构图，不做机械裁切或拉伸。
+- 未指定平台时按公域社媒处理，默认 3:4 + 9:16；只有用户明确要求公众号时才输出 21:9 + 1:1。
+
+### `portrait_required` 与 `portrait_identity_goal`
+
+- 小伟真人封面默认 `portrait_required: true`。人物必须在每个请求画幅中可见，不能因为标题、产品或证据成为主视觉就删掉真人。
+- `portrait_identity_goal: recognizable_same_person` 表示优先保持脸型、五官比例、眼镜、发型和整体气质，让缩略图里能认出是同一个人；姿势、动作、景别、位置、衣服细节和背景可以按主题变化。
+- 只有用户明确说“不用真人”时，才把 `portrait_required` 改为 `false`；缺少授权的人像素材时，应请求用户提供，而不是用默认演示人物冒充用户身份。
 
 ### `stance`
 
@@ -158,7 +167,7 @@
 ### 人物身份与姿势
 
 - `identity_primary`：一张主身份参考；`identity_support`：辅助单图及各自用途。
-- `pose_mode`：默认`content_driven`，根据内容生成自然新姿势；纪实或明确保留原动作时为`source_locked`。
+- `pose_mode`：默认`content_driven`，根据内容生成自然新姿势、动作、景别和位置；纪实或明确保留原动作时为`source_locked`。
 - `pose_brief`：动作、视线、双手位置与内容的关系；不自动继承话筒和旧手势。
 - 已核对照片与选择规则见 [identity-and-pose.md](identity-and-pose.md)。
 

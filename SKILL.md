@@ -5,7 +5,7 @@ description: Generate Xiaowei personal-IP covers from topics, scripts, links, ph
 
 # Claim2Cover | Generate Xiaowei Covers
 
-Turn a topic, link, article, screenshot, video, or photo into a credible cover package. Keep one entry point with separate article and video/social briefs. For Xiaowei video series, use one unified `series` profile across episodes: generated likeness and recognizable bold-type/collage language, with topic-driven palette, layout, scenes and poses. Do not reuse the rejected fixed blue studio template. Other channels and explicit style experiments retain the seven legacy presets.
+Turn a topic, link, article, screenshot, video, or photo into a credible cover package. Keep one entry point with separate public-social and article briefs. Xiaowei personal-IP covers always show a recognizable version of Xiaowei; the identity stays consistent while pose, action, scale, position, scene, palette and composition change with the topic. Do not reuse the rejected fixed blue studio template. Other channels and explicit style experiments retain the seven legacy presets.
 
 For “小伟内容”, multi-platform copywriting, or “出整套” including copy, use the installed `xiaowei-content` entry (bundled at `skills/xiaowei-content/SKILL.md`) to prepare the text first, then return here for images. Cover-only requests stay here. When called from that entry, use its selected copy and content revision; do not route back to it or invent a second topic.
 
@@ -41,14 +41,15 @@ Use these defaults unless the user overrides them:
 
 - audience: Chinese readers interested in AI tools;
 - tone: clear, credible, and opinionated only where evidence permits;
-- portrait: use the inspected local reference set in `references/identity-and-pose.md`. Default to `pose_mode: content_driven`: lock identity, choose a topic-relevant pose, and allow removal of the microphone. Use `source_locked` for documentary evidence or explicit pose preservation;
+- portrait: `portrait_required: true` for Xiaowei personal-IP covers. Use the inspected local reference set in `references/identity-and-pose.md`. Default to `pose_mode: content_driven`: lock recognizability, choose a topic-relevant pose, and allow removal of the microphone. Use `source_locked` only for documentary evidence or explicit pose preservation;
 - visual style: video series defaults to `series`; keep identity and recognizable bold-type/collage language across episodes. Choose palette, layout, scenes, poses and objects from each topic; no fixed studio, placement or series masthead. For other channels or explicit cross-style experiments, choose the appropriate preset and record the reason;
 - portrait mode for video series: `generated_identity`; photos are identity-only references, never pasted source images. Regenerate the person and topic scene; read `references/series-cover.md`;
-- portrait placement: follow the selected preset and explicit user placement; keep the same person across all surfaces;
-- targets: follow the user's platforms; without platform context use 3:4 + 9:16; “横竖都要” adds 16:9; WeChat requests retain 21:9 + independent 1:1;
+- portrait placement: follow the visual focus, content route and explicit user placement; position is intentionally variable, and the same recognizable person must remain visible across all surfaces;
+- targets: follow the user's platforms; without platform context treat the work as public social content and use 3:4 + 9:16; “横竖都要” adds 16:9; only an explicit WeChat request adds 21:9 + independent 1:1;
 - output: PNG plus editable HTML for HTML presets, or full prompts/reference assets/generation records for imagegen presets;
 - variants: one set by default; for series alternatives keep identity/visual language and vary topic-relevant palette, composition, scenes and poses; distinct presets require an explicit cross-style request.
 - visual focus: choose one first visual focus—title, person, product/interface, process, result, or story scene. Do not let style choice silently decide the subject hierarchy.
+- person presence: the person remains visible even when title, product or process is the first visual focus; never reduce the creator to an optional tiny avatar.
 - signature detail: choose at most one topic-relevant static cue derived from interaction or motion inspiration, such as a reveal, path, progress, layer, cursor, or state change.
 
 Ask only when a missing answer changes the author's position, asset rights, privacy, or factual conclusion. Never invent the user's personal experience or recommendation.
@@ -156,6 +157,7 @@ Complete these sections with task-specific content:
 - selected preset, seed, generation engine, and identity/placement constraints from `STYLE_SELECTION.json`;
 - identity_primary, identity_support and their roles; pose_mode and the specific topic-driven pose_brief;
 - for video series: portrait_mode=generated_identity, series profile/references (visual_language_only), variation_brief, and previous episodes used to avoid repetition;
+- portrait_required=true, identity recognizability checks, and the reason for the chosen pose and position;
 - visual focus, Design DNA, and the single signature detail (or an explicit `none`);
 - exact title, highlight phrase, kicker, and subtitle per surface;
 - evidence module and source boundary;
@@ -175,7 +177,7 @@ State facts as facts, inferences as judgments, and personal practice in first pe
 
 ### 7. Compose The Evidence Module
 
-For `series`, the main visual is a topic-relevant object, scene or generated work/concept display, not an original-person photo card. Evidence still constrains claims; do not present invented UI, tests or scenes as real. Original documentary photos are not inserted into the series unless explicitly requested.
+For `series`, the main visual combines a visible, recognizable Xiaowei with a topic-relevant object, scene or generated work/concept display. The person may be the first or second visual read, but is never omitted or reduced to an incidental avatar. Evidence still constrains claims; do not present invented UI, tests or scenes as real. Original documentary photos are not inserted into the series unless explicitly requested.
 
 For evidence-oriented legacy modes, match evidence to the chosen route:
 
@@ -186,7 +188,7 @@ For evidence-oriented legacy modes, match evidence to the chosen route:
 - official evidence → original document excerpt and three consequences;
 - field recap → complete contextual photo and up to three first-person takeaways.
 
-For `original`, keep the portrait lower-left on 3:4 and 21:9. Other presets may place it left or right as described in `STYLE_BRIEF.md`; user placement takes priority. The 1:1 companion defaults to pure typography unless a portrait is requested. Preserve identity; in source_locked mode also retain the original pose and action-relevant objects. In content_driven mode specify the new pose and only its required objects; do not automatically preserve the microphone. Prefer a contextual rectangle over a poor cutout. Set `object-position` explicitly in HTML.
+For `original`, keep the portrait visible on every requested surface and place it according to the visual focus and topic; do not assume lower-left. Other presets may place it left, right, center or within a contextual scene as described in `STYLE_BRIEF.md`; user placement takes priority. The 1:1 companion also includes the person for Xiaowei personal-IP work and is independently recomposed. Preserve identity; in source_locked mode also retain the original pose and action-relevant objects. In content_driven mode specify the new pose and only its required objects; do not automatically preserve the microphone. Prefer a contextual rectangle over a poor cutout. Set `object-position` explicitly in HTML.
 
 ### 8. Render
 
@@ -224,6 +226,7 @@ Before delivery:
 - downsample to 360px width and check title, portrait, and evidence recognition;
 - for a video series, compare across episodes: recognizable identity and bold-type/collage language, distinct topic-driven palette/layout/scene, meaningful gestures/objects, and no pasted source-person photo or repeated fixed template;
 - confirm no face, hand, UI label, or footer collision;
+- confirm the person is visibly present in every requested surface and recognizable against the identity reference;
 - confirm every number, version, date, ranking, and absolute claim has evidence;
 - confirm WeChat 1:1 is a separately authored cover;
 - keep only final outputs, editable source, real assets, and provenance after the user approves cleanup.

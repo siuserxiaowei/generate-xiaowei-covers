@@ -1,4 +1,4 @@
 interface:
   display_name: "小伟封面｜统一系列"
   short_description: "保留本人形象与大字拼贴辨识度，按主题变化配色场景布局，生成多比例封面"
-  default_prompt: "使用 $generate-xiaowei-covers 制作统一系列封面，照片只参考长相，重新生成人物和主题作品，保留大字拼贴辨识度，按主题变化配色、场景、布局和姿势，不套固定模板。"
+  default_prompt: "使用 $generate-xiaowei-covers 制作统一系列封面，每个请求画幅都保留可辨认的真人，照片只参考长相，重新生成人物和主题作品；姿势、动作、景别、位置和配色按主题变化，保留大字拼贴辨识度，不套固定模板。"

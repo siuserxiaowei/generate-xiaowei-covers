@@ -1,6 +1,6 @@
 {
   "name": "generate-xiaowei-covers",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "private": true,
   "description": "Generate personal-IP covers with evidence-aware briefs, reference-derived Design DNA, separate article and video layouts, and a unified generated-person series.",
   "type": "module",

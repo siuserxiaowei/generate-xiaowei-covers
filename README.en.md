@@ -62,8 +62,8 @@ The intentional “10×” fixture fails. The corrected fixture passes 8/8 conte
 $generate-xiaowei-covers
 
 Turn this official release into WeChat and Xiaohongshu covers.
-Verify the facts first. Keep the portrait at lower-left on 3:4 and 21:9,
-and author the square cover separately.
+Verify the facts first. Keep the creator visibly present on every requested ratio,
+vary the pose and position by topic, and author each surface separately.
 ```
 
 ## What the Skill produces
@@ -107,13 +107,13 @@ Routes are content structures, not six color variants of one poster.
 
 | Surface | Production size | Rule |
 |---|---:|---|
-| Xiaohongshu portrait | `1080×1440` | title above, portrait at lower-left, evidence below or to the right |
-| WeChat main cover | `2100×900` | title and portrait on the left, primary evidence on the right |
-| WeChat square cover | `1080×1080` | separate 4–10-character title, pure typography by default, never a mechanical crop |
+| Xiaohongshu portrait | `1080×1440` | title above; creator remains visible; position follows the topic |
+| WeChat main cover | `2100×900` | creator, title and evidence are independently recomposed |
+| WeChat square cover | `1080×1080` | separate 4–10-character title plus visible creator; never a mechanical crop |
 
 WeChat jobs also export a `1944×620` paired review image.
 
-The portrait is not a decorative sticker. On 3:4 and 21:9, preserve the face, hands, microphone, table, and action context whenever present. The 1:1 default omits the portrait for thumbnail readability; a requested portrait is recomposed, not cropped from 21:9.
+The portrait is not a decorative sticker or optional module. Keep a recognizable creator on every requested ratio, while varying pose, action, position, scale, scene and crop by topic. Preserve hands, microphone, table and action context whenever they matter; recomposition is required instead of cropping one master image.
 
 ## Full-resolution examples
 
