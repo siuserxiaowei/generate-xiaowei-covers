@@ -40,3 +40,7 @@ The Qwen3-8B sample is based on:
 - https://github.com/QwenLM/Qwen3
 
 Sample facts were checked on 2026-08-16. They are examples, not a promise that the bundled sample remains current. Re-verify facts before publishing a new cover.
+
+## 2026-10-14 generated cover archive
+
+The repository owner authorized uploading the existing Xiaozhi hardware cover images. The case at docs/cases/xiaozhi-hardware-20261014 contains ten unchanged PNGs, including tool originals, rejected padded historical exports and a comparison sheet. They predate the v0.8 rewrite and do not certify the new art directions. Private draft content and generation records are excluded; the existing portrait-display restrictions continue to apply.

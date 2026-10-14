@@ -37,3 +37,7 @@ npm run test:cases     # 上述检查 + 在临时目录重渲染两组 HTML
 ## Rights and evidence boundary
 
 These are two historical tasks by the maintainer, not third-party adoption. The six PNGs are unchanged historical outputs; the editable HTML and text records are explicitly curated copies. No live model transcript, usage benchmark, customer endorsement, or publication metrics are claimed. Portrait display is limited to this repository's examples. Product names and the WorkBuddy logo identify the tutorial subject and imply no endorsement. See each case's `SOURCE.md` and the repository [NOTICE](../../NOTICE.md).
+
+## 2026-10-14 新增：小智硬件历史生成图片
+
+[查看10个PNG、原稿与失败边界](xiaozhi-hardware-20261014/README.md)。该案例独立保存manifest，不加入上方固定两组HTML重渲染契约。它包含比例不符原稿和补边历史导出，不能宣称新版生图验证通过。

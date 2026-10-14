@@ -1,18 +1,20 @@
 {
   "name": "generate-xiaowei-covers",
-  "version": "0.6.4",
+  "version": "0.8.0",
   "private": true,
-  "description": "Generate personal-IP covers with evidence-aware briefs, reference-derived Design DNA, separate article and video layouts, and a unified generated-person series.",
+  "description": "Content-derived personal-IP art direction, complete prompt compilation and actual-image ratio/inspection gates.",
   "type": "module",
   "scripts": {
-    "test": "npm run test:static && npm run test:style && npm run test:render && npm run test:cases && npm run verify:application",
+    "test": "npm run test:static && npm run test:style && npm run test:plan && npm run test:output && npm run test:render && npm run test:cases && npm run verify:application",
     "verify:cases": "node scripts/verify-case-studies.mjs",
     "test:cases": "node scripts/test-case-studies.mjs",
     "verify:application": "node scripts/verify-oss-application.mjs",
-    "test:style": "node --check scripts/select-cover-style.mjs && node --check scripts/test-style-selection.mjs && node scripts/test-style-selection.mjs",
+    "test:style": "node --check scripts/select-cover-style.mjs && node --check scripts/select-cover-style-pack.mjs && node --check scripts/test-style-selection.mjs && node scripts/test-style-selection.mjs",
     "test:static": "node --check scripts/new-cover-project.mjs && node --check scripts/extract-video-frames.mjs && node --check scripts/render-covers.mjs && node --check scripts/claim-to-pixel.mjs && node --check scripts/demo-claim-to-pixel.mjs && node --check scripts/test-e2e.mjs && node --check scripts/test-claim-to-pixel.mjs && node --check scripts/validate-repo.mjs && node scripts/validate-repo.mjs",
     "test:render": "node scripts/test-e2e.mjs && node scripts/test-claim-to-pixel.mjs",
-    "demo:claim2cover": "node scripts/demo-claim-to-pixel.mjs"
+    "demo:claim2cover": "node scripts/demo-claim-to-pixel.mjs",
+    "test:plan": "node --check scripts/build-cover-plan.mjs && node scripts/test-cover-plan.mjs",
+    "test:output": "node --check scripts/validate-cover-output.mjs && node scripts/test-cover-output.mjs"
   },
   "license": "AGPL-3.0-only",
   "engines": {

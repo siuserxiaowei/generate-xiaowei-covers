@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "2026-09-13-series-v2",
+  "version": "2026-10-14-art-direction-v2",
   "defaultRatios": [
     "3:4",
     "9:16"
@@ -8,43 +8,75 @@
   "surfaces": {
     "3:4": {
       "target": "小红书竖版",
-      "nativePixels": [
+      "composition": "按主视觉规划竖版阅读顺序，标题、真人和主题对象形成关系；不固定上标题下人物。",
+      "targetPixels": [
         2160,
         2880
       ],
-      "composition": "标题上部，人物和主证据分配下部；主标题1–2行；不要让脸遮挡标题笔画。"
+      "pixelsMeaning": "requested_canvas_not_verified_native_output"
     },
     "9:16": {
       "target": "抖音竖屏",
-      "nativePixels": [
+      "composition": "独立纵向构图：顶部约10%留白，标题约12%–36%，人物/证据约45%–85%；右侧约12%、底部约15%不放脸、主标题或唯一证据。安全区是保守设计约定，实际上传预览再检查。",
+      "targetPixels": [
         2160,
         3840
       ],
-      "composition": "独立纵向构图：顶部约10%留白，标题约12%–36%，人物/证据约45%–85%；右侧约12%、底部约15%不放脸、主标题或唯一证据。安全区是保守设计约定，实际上传预览再检查。"
+      "pixelsMeaning": "requested_canvas_not_verified_native_output"
     },
     "16:9": {
       "target": "通用横版",
-      "nativePixels": [
+      "composition": "横版独立构图：主视觉可以是产品、人物、标题、流程或完整场景。不要固定左右分栏，先按内容安排阅读顺序。",
+      "targetPixels": [
         3840,
         2160
       ],
-      "composition": "独立左右分栏：人物一侧约40%，标题与主证据另一侧约50%；上下留白约10%。保留该套配色、字体与人物身份，不拉伸竖版。"
+      "pixelsMeaning": "requested_canvas_not_verified_native_output"
     },
     "21:9": {
       "target": "公众号横版",
-      "nativePixels": [
+      "composition": "使用独立横版brief，精简标题，人物和证据左右分区；同时另做1:1短标题伴随图。",
+      "targetPixels": [
         2100,
         900
       ],
-      "composition": "使用独立横版brief，精简标题，人物和证据左右分区；同时另做1:1短标题伴随图。"
+      "pixelsMeaning": "requested_canvas_not_verified_native_output"
+    },
+    "3.35:1": {
+      "target": "小伟公众号专属横版",
+      "composition": "仅在用户采用小伟当前公众号偏好时使用。按超宽横幅重写标题与构图：控制短标题，人物或主题主体落在一侧，另一侧安排主题线索并保留呼吸空间；重要元素避开极端边缘。独立生成，不从21:9裁切；不自动补1:1。实际输出比例以图像工具结果为准。",
+      "targetPixels": [
+        3350,
+        1000
+      ],
+      "pixelsMeaning": "requested_canvas_not_verified_native_output"
     },
     "1:1": {
       "target": "公众号方版",
-      "nativePixels": [
+      "composition": "独立短标题4–10字，优先纯排版；明确要求人物时重新分配布局，不裁切横版。",
+      "targetPixels": [
         1080,
         1080
       ],
-      "composition": "独立短标题4–10字，优先纯排版；明确要求人物时重新分配布局，不裁切横版。"
+      "pixelsMeaning": "requested_canvas_not_verified_native_output"
+    },
+    "4:3": {
+      "target": "通用横版 4:3",
+      "composition": "接近方形的横幅：围绕主视觉重新排标题、人物与主题物，不从16:9裁切。",
+      "targetPixels": [
+        2400,
+        1800
+      ],
+      "pixelsMeaning": "requested_canvas_not_verified_native_output"
+    },
+    "3:1": {
+      "target": "超宽原生备选（仅能力核实后使用）",
+      "composition": "全幅场景与超短标题；当3.35:1无法原生生成时可明确报告3:1候选，不冒充目标尺寸。",
+      "targetPixels": [
+        3000,
+        1000
+      ],
+      "pixelsMeaning": "requested_canvas_not_verified_native_output"
     }
   },
   "styles": [
@@ -67,7 +99,17 @@
         "套用旧主题、旧数字",
         "所有内容都套同一证据模块"
       ],
-      "adaptation": "复用原仓库 HTML/CSS，按内容选择六种结构。"
+      "adaptation": "复用原仓库 HTML/CSS，按内容选择六种结构。",
+      "styleDna": {
+        "palette": "warm_white_ink_accent",
+        "typography": "heavy_sans_single_accent",
+        "layout": "evidence_module_grid",
+        "material": "paper_grid",
+        "portraitTreatment": "rectangular_documentary_photo",
+        "engine": "html",
+        "evidence": "structured_primary_module"
+      },
+      "planningOnly": true
     },
     {
       "id": "editorial",
@@ -88,18 +130,27 @@
         "满屏黑色蒙版救照片",
         "未填满竖屏的横向薄内容条"
       ],
-      "adaptation": "提炼其Editorial/M01原则，自行编写任务HTML；不依赖安装第三方Skill，不复制其整套代码。"
+      "adaptation": "提炼其Editorial/M01原则，自行编写任务HTML；不依赖安装第三方Skill，不复制其整套代码。",
+      "styleDna": {
+        "palette": "cream_olive_ink",
+        "typography": "serif_editorial",
+        "layout": "magazine_photo_with_marginalia",
+        "material": "paper_ink_wash",
+        "portraitTreatment": "large_rectangular_photo",
+        "engine": "html",
+        "evidence": "editorial_caption_or_concept"
+      },
+      "planningOnly": true
     },
     {
       "id": "atutun",
       "name": "阿囤囤启发 · 大字压顶",
       "aliases": [
         "阿囤囤",
-        "大字压顶",
-        "阿囤囤v2"
+        "大字压顶"
       ],
       "engine": "imagegen",
-      "source": "https://github.com/panggungunvibe/atutun-xhs-cover-v2",
+      "source": "https://github.com/panggungunvibe/atutun-xhs-cover",
       "visual": "奶油白背景，极浅奶油黄#FDFFA7，超粗黑描边中文大字占上方约35%–45%；下半部真人抠图带细白轮廓。可用一个承载短副标题的浅黄贴纸，不加入无关装饰。",
       "portrait": "照片人物占约40%–50%，下半部偏左或偏右；脸、眼镜、发型保真；姿势按identity-and-pose.md随内容变化，手部结构自然；人物不能盖住主标题关键笔画。",
       "typography": "非常粗的中文黑体、黑描边+浅黄填充；两行大标题，副标题高对比；准确拼写产品名，不把全部文案做同样字号。",
@@ -109,7 +160,17 @@
         "漂浮全息UI与科技粒子",
         "密集箭头贴纸"
       ],
-      "adaptation": "提炼v2大字压顶原则；所有画幅独立生成，9:16为本Skill扩展。"
+      "adaptation": "参考指定原仓库的短标题、字效与人像轮廓原则，独立编写本地提示词；其8模板是同一风格的版式变体，不计为8种风格。",
+      "styleDna": {
+        "palette": "cream_butter_black",
+        "typography": "outlined_bold_topstack",
+        "layout": "top_title_lower_cutout",
+        "material": "clean_poster",
+        "portraitTreatment": "outlined_cutout",
+        "engine": "imagegen",
+        "evidence": "single_topic_object"
+      },
+      "planningOnly": true
     },
     {
       "id": "gbro",
@@ -130,7 +191,17 @@
         "发光电路",
         "照抄上游样例人物或标题"
       ],
-      "adaptation": "提炼style-01深色渐变与大字原则，实际生图使用当前可用内置工具。"
+      "adaptation": "提炼style-01深色渐变与大字原则，实际生图使用当前可用内置工具。",
+      "styleDna": {
+        "palette": "midnight_blue_violet_yellow",
+        "typography": "white_bold_keyword_block",
+        "layout": "dark_halfbody_split",
+        "material": "soft_gradient",
+        "portraitTreatment": "rimlit_generated_halfbody",
+        "engine": "imagegen",
+        "evidence": "minimal_topic_cue"
+      },
+      "planningOnly": true
     },
     {
       "id": "oil",
@@ -144,7 +215,7 @@
       "engine": "imagegen",
       "source": "https://github.com/oil-oil/oil-cover",
       "visual": "干净浅底、细网格、1–3个邻近色相的柔和奶油/灰粉氛围，来源于本次照片或产品颜色；标题深石墨色，克制下划线或关键词浅色标注，Apple-like清晰排版。",
-      "portrait": "真人自然抠图放下半部偏右；原照身份保真，姿态按identity-and-pose.md随内容变化，手部结构自然，无卡通描边；人物和真实证据不能互相挤成小图。",
+      "portrait": "保持写实真人、自然边缘，不加粗描边。人物位置由主视觉与交互动作决定；不能固定下半部偏右。",
       "typography": "中文PingFang类无衬线，英文产品名或AI可用Roman衬线形成对比；每段文字颜色与字体预先确定，大标题明确优先。",
       "avoid": [
         "没有材料却制造软件截图",
@@ -152,7 +223,17 @@
         "高饱和彩虹",
         "额外手机壳或厚阴影"
       ],
-      "adaptation": "仅吸收清爽粉彩与标题层级，不声称执行oil-cover完整视频流水线。教程使用本次真实UI证据；个人故事使用本人照片，不能伪造屏幕。"
+      "adaptation": "仅吸收清爽粉彩与标题层级，不声称执行oil-cover完整视频流水线。教程使用本次真实UI证据；个人故事使用本人照片，不能伪造屏幕。",
+      "styleDna": {
+        "palette": "soft_pastel_nearby_hues",
+        "typography": "clean_sans_serif_pairing",
+        "layout": "airy_product_editorial",
+        "material": "fine_grid_pastel",
+        "portraitTreatment": "natural_cutout",
+        "engine": "imagegen",
+        "evidence": "real_ui_or_product_cue"
+      },
+      "planningOnly": true
     },
     {
       "id": "baoyu",
@@ -173,7 +254,17 @@
         "杂乱素材堆叠",
         "把Huizhou自述说成照片拍摄地点"
       ],
-      "adaptation": "提炼五维选型原则，并按用户IP要求适配真实人物，非上游默认人物规则；跨画幅重新构图。"
+      "adaptation": "提炼五维选型原则，并按用户IP要求适配真实人物，非上游默认人物规则；跨画幅重新构图。",
+      "styleDna": {
+        "palette": "cream_terracotta_brown",
+        "typography": "serif_collage_title",
+        "layout": "paper_collage_hero_anchor",
+        "material": "paper_cut_collage",
+        "portraitTreatment": "paper_collage_real_person",
+        "engine": "imagegen",
+        "evidence": "layered_topic_cards"
+      },
+      "planningOnly": true
     },
     {
       "id": "impact",
@@ -195,7 +286,17 @@
         "没有真实材料却编造界面、排名或活动合影",
         "无依据震惊表情、密集贴纸和装饰性小字"
       ],
-      "adaptation": "基于用户参考图独立提炼。先读 references/impact-cover.md，按教程/现场/观点/成果选择骨架；使用内置生图，保留真实生成记录，不承诺像素级保真或点击率。"
+      "adaptation": "基于用户参考图独立提炼。先读 references/impact-cover.md，按教程/现场/观点/成果选择骨架；使用内置生图，保留真实生成记录，不承诺像素级保真或点击率。",
+      "styleDna": {
+        "palette": "dark_cream_yellow_white",
+        "typography": "outlined_bold_sticker",
+        "layout": "headline_upper_presenter_lower",
+        "material": "sticker_collage",
+        "portraitTreatment": "outlined_presenter_cutout",
+        "engine": "imagegen",
+        "evidence": "one_primary_object_with_arrows"
+      },
+      "planningOnly": true
     },
     {
       "id": "series",
@@ -227,7 +328,200 @@
         "layoutMode": "topic_driven",
         "paletteMode": "topic_driven",
         "seriesLabelRequired": false
+      },
+      "styleDna": {
+        "palette": "topic_driven_personal_brand",
+        "typography": "bold_outline_short_shadow",
+        "layout": "topic_driven_person_collage",
+        "material": "generated_scene_collage",
+        "portraitTreatment": "generated_identity",
+        "engine": "imagegen",
+        "evidence": "topic_relevant_scene_or_object"
+      },
+      "planningOnly": true
+    },
+    {
+      "id": "workbench",
+      "name": "小伟原创 · 实物工作台",
+      "aliases": [
+        "实物工作台",
+        "工作台"
+      ],
+      "visual": "暖灰或浅木工作台，真实产品成为前景大主体，自然工作灯，背景有空间与浅景深。标题印刷式平直黑体，不加贴纸描边，不堆悬浮卡片。",
+      "portrait": "写实小伟处于同一工作场景，实际观察、摆放或操作对象；保留完整自然手部，避免每次指向标题。",
+      "typography": "短标题用厚实但不描边的黑体；少量细体说明标签与桌面边缘对齐。",
+      "avoid": [
+        "把概念接线画成已验证电路",
+        "大量漂浮零件",
+        "固定右侧指向手势"
+      ],
+      "adaptation": "独立原创，适合硬件选购、手作与操作教程；真产品外观依据提供素材，无法验证连接就只摆放不接线。",
+      "styleDna": {
+        "palette": "warm_neutral",
+        "typography": "plain_sans",
+        "layout": "foreground_product_scene",
+        "material": "photographic_workspace",
+        "portraitTreatment": "in_scene_real_person",
+        "engine": "imagegen",
+        "evidence": "physical_product"
+      },
+      "engine": "imagegen",
+      "source": "Independently authored Xiaowei art direction, 2026-10-14",
+      "planningOnly": true
+    },
+    {
+      "id": "blueprint",
+      "name": "小伟原创 · 工程讲义",
+      "aliases": [
+        "工程讲义",
+        "蓝图"
+      ],
+      "visual": "深海军蓝工程纸，浅青极细线路和克制白色标签。放大一个真实对象，外围组织组件索引；无赛博光束、粒子或发光大字。",
+      "portrait": "写实小伟作为讲解者在画面边缘或中央较小的辅助层，拿一个核心部件或观察对象；脸仍可辨认，人物不画成蓝图线稿。",
+      "typography": "窄黑体短标题与等宽英文参数，平直对齐，无卡通轮廓与大阴影。",
+      "avoid": [
+        "虚构电路/针脚标注",
+        "密集正文",
+        "把生成示意当测试证据"
+      ],
+      "adaptation": "独立原创，用于参数、系统拆解与组件教学；示意图不含未经证实连接，事实标签来自台账。",
+      "styleDna": {
+        "palette": "navy_cyan_white",
+        "typography": "condensed_monospace",
+        "layout": "object_index_map",
+        "material": "engineering_diagram",
+        "portraitTreatment": "real_person_margin",
+        "engine": "imagegen",
+        "evidence": "sourced_component_labels"
+      },
+      "engine": "imagegen",
+      "source": "Independently authored Xiaowei art direction, 2026-10-14",
+      "planningOnly": true
+    },
+    {
+      "id": "handbook",
+      "name": "小伟原创 · 手绘学习册",
+      "aliases": [
+        "手绘学习册",
+        "学习册"
+      ],
+      "visual": "暖白笔记纸、青绿与砖红两种笔色；铅笔质感小插图和松弛手写箭头组成学习路线。布局沿一条阅读路径展开，不做全屏剪贴贴纸。",
+      "portrait": "真人保持照片般面孔与眼镜，置于讲解路径一侧或端点，拿笔或摊开笔记；对象可简化成手绘但面孔不插画化。",
+      "typography": "醒目的手写标题结合清晰印刷副标题；少量字留足间距，不做每个字黑白多层描边。",
+      "avoid": [
+        "手绘面孔替代身份",
+        "乱涂鸦",
+        "长篇笔记文字"
+      ],
+      "adaptation": "独立原创，用于零基础教程与路径概念，不虚构手写实验数据。",
+      "styleDna": {
+        "palette": "warm_white_teal_rust",
+        "typography": "handwritten_print_pair",
+        "layout": "reading_path",
+        "material": "pencil_notebook",
+        "portraitTreatment": "real_person_notebook_context",
+        "engine": "imagegen",
+        "evidence": "conceptual_route"
+      },
+      "engine": "imagegen",
+      "source": "Independently authored Xiaowei art direction, 2026-10-14",
+      "planningOnly": true
+    },
+    {
+      "id": "type-led",
+      "name": "小伟原创 · 文字海报",
+      "aliases": [
+        "文字海报",
+        "极简海报"
+      ],
+      "visual": "暖白或亮红单色底，超大黑色几何字体作为第一主视觉，字块沿网格形成节奏，只有一个主题物和一个真人；无纸张拼贴、粗轮廓或假屏幕。",
+      "portrait": "小伟写实胸像或侧身穿过字块留出的区域，目光与题目有关系；不固定贴在右侧，不能遮关键笔画。",
+      "typography": "几何无衬线、黑白强对比、极少文字，字号差明显；中文完整清楚不拆字。",
+      "avoid": [
+        "密集副标题",
+        "套黄白描边",
+        "无关装饰对象"
+      ],
+      "adaptation": "独立原创，用于观点、问句和强主题；不是冲击型拼贴换底色。",
+      "styleDna": {
+        "palette": "single_flat_ink",
+        "typography": "geometric_unoutlined",
+        "layout": "type_as_main_form",
+        "material": "flat_print",
+        "portraitTreatment": "real_person_type_interlock",
+        "engine": "imagegen",
+        "evidence": "one_symbolic_object"
+      },
+      "engine": "imagegen",
+      "source": "Independently authored Xiaowei art direction, 2026-10-14",
+      "planningOnly": true
+    }
+  ],
+  "styleSystem": {
+    "version": "1",
+    "defaultMode": "single_content_selected",
+    "modes": {
+      "style_pack": {
+        "description": "Each item receives one distinct complete preset; shared identity and evidence rules.",
+        "uniqueStylePerItem": true,
+        "minDnaDistance": 3,
+        "sameStyleAcrossRatios": true,
+        "candidateOnly": true
+      },
+      "series": {
+        "description": "One preset shared by the whole project; topic and ratio variations stay within that visual language.",
+        "uniqueStylePerItem": false,
+        "minDnaDistance": 0,
+        "sameStyleAcrossRatios": true
       }
+    },
+    "dnaFields": [
+      "palette",
+      "typography",
+      "layout",
+      "material",
+      "portraitTreatment",
+      "engine"
+    ],
+    "stylePackSelection": "A style pack is an explicit allocation of complete presets; never mix fields across presets.",
+    "selectionNote": "Different string labels/DNA distances screen candidates only; neither prove pixel-level style or composition diversity. Use COVER_PLAN and actual output review."
+  },
+  "stylePacks": [
+    {
+      "id": "xiaowei-diverse-5",
+      "name": "小伟五风格整套",
+      "description": "明确要求五张不同风格时的历史候选池；不是所有整套请求的默认输出数。优先按内容写完整COVER_PLAN。",
+      "styleIds": [
+        "series",
+        "baoyu",
+        "impact",
+        "oil",
+        "editorial"
+      ],
+      "selectionRule": "unique_style_per_item",
+      "rationales": {
+        "series": "科技/模型/现场类主题，保留小伟个人识别与主题场景。",
+        "baoyu": "生活化、叙事型或需要纸张层次的主题。",
+        "impact": "观点、教程或强点击承诺，需要粗体冲击和单一主对象。",
+        "oil": "工具演示、产品界面或需要清爽可信感的主题。",
+        "editorial": "对比、复盘、研究或公众号文章，需要杂志阅读秩序。"
+      }
+    },
+    {
+      "id": "xiaowei-diverse-8",
+      "name": "小伟八风格全套",
+      "description": "覆盖全部可用 preset；用于明确要求每张封面都换一套完整风格的探索型任务。",
+      "styleIds": [
+        "series",
+        "original",
+        "editorial",
+        "atutun",
+        "gbro",
+        "oil",
+        "baoyu",
+        "impact"
+      ],
+      "selectionRule": "unique_style_per_item"
     }
   ]
 }

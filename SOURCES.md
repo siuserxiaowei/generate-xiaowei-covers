@@ -25,3 +25,7 @@ The bundled Qwen sample was checked on 2026-08-16. It is an example and must be 
 ## Contest fixture facts
 
 The contest fixture makes only repository-verifiable implementation claims. The statement “efficiency improves 10×” is intentionally retained as `unknown` and blocked; it is not presented as a fact.
+
+## 2026-10-14 art-direction research
+
+Read-only review of the three user-supplied repositories, pinned commits and usage boundaries is recorded in [references/upstream-research.md](references/upstream-research.md). No upstream implementation, prompt or image assets were copied. New local planning and output-validation scripts are independently authored; historical provenance remains above.

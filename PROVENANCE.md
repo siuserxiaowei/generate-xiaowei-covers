@@ -37,3 +37,7 @@ Early visual research acknowledged the Swiss social-card idea in [`op7418/guizan
 - It does not treat a passing renderer as proof that a public post is lawful or factually correct.
 
 See `THIRD_PARTY_NOTICES.md`, `ASSET_RIGHTS.csv`, `SOURCES.md`, and `NOTICE.md` for the complementary source and rights records.
+
+## 2026-10-14 art-direction research
+
+Read-only review of the three user-supplied repositories, pinned commits and usage boundaries is recorded in [references/upstream-research.md](references/upstream-research.md). No upstream implementation, prompt or image assets were copied. New local planning and output-validation scripts are independently authored; historical provenance remains above.

@@ -1,4 +1,22 @@
+## 0.8.0 — 2026-10-14
+
+- Rewrite the default around source-derived concepts and complete art direction; distinguish single, requested multi-style and opt-in series without adding five covers implicitly.
+- Add COVER_PLAN v2 compilation: real asset and article archival checks, exact count, semantic composition collision checks, project-only complete custom styles, complete per-ratio prompts and truthful planned generation records.
+- Add actual PNG/JPEG output validation and explicit visual inspection records; reject ratio mismatch, padding/stretch/crop and repetitive cross-item composition records.
+- Add four independently authored candidate directions; correct atutun to the requested original repository; record all three supplied repositories and licensing boundaries without copying their implementations.
+- Archive ten unchanged PNGs from the hardware-cover task, with original dimensions/hashes and explicit ratio/padding failure labels; exclude the private article and generation records.
+- Preserve historical fixtures and attribution; scripted checks do not certify visual quality.
+
 # Changelog
+
+## Unreleased — 2026-09-23
+
+- Added an explicit `style_pack` mode for “整套/每张不同风格” requests. Each item now receives a complete unique preset with structured Visual DNA, independent seeds and item-level style records; sibling ratios reuse only that item's style.
+- Added `xiaowei-diverse-5` and `xiaowei-diverse-8` style packs plus `select-cover-style-pack.mjs`; the allocator rejects duplicate styles and pairs with fewer than three DNA differences instead of faking variety with color/layout swaps.
+- Kept single-preset `series` behavior for explicit “统一系列/同款” requests and downgraded the legacy light-blue `xiaowei-cover-system` to a non-implicit compatibility entry.
+- Integrated practical visual methods from `weilanx-cover-skill` and `xialingguo-ip` into the existing inspiration playbook without changing this Skill as the sole execution entry point.
+- Added Xiaowei's current WeChat preference, 3.35:1, as an independently composed imagegen target; legacy 21:9 + 1:1 HTML and Claim-to-Pixel paths remain explicitly labeled as legacy.
+- Documented thumbnail checks, typography/color restraint, meaningful depth layers, reference attribution, and the local generated-identity rule when it conflicts with upstream portrait-lock workflows.
 
 ## 0.6.4
 

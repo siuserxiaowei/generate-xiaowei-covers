@@ -4,28 +4,20 @@
 
 **了解实际复用与维护：** [两组真实任务案例](docs/cases/README.md) · [工作流、可执行校验与维护计划](docs/maintainer-workflow.md) · [Codex OSS 申请说明](docs/oss/README.md) · [可直接粘贴的中英文申请文案](docs/oss/application.md)。案例保留历史成品与可编辑来源；固定测试演示单独标记。
 
+本轮已有生成图片见 [小智硬件案例：4张原稿、5张历史导出与总览](docs/cases/xiaozhi-hardware-20261014/README.md)。其中比例失败与补边稿明确标记，不作为v0.8成功样图。
+
 ## 给朋友快速测试
 
-这是 Codex Skill，需要在**支持生图并能读取参考图片的 Codex 环境**中使用。选择脚本本身不调用模型；只支持文本的运行环境无法产出封面。当前默认是按主题变化配色、背景、布局和动作的真人大字系列，不是固定深蓝模板。
-
-1. 按下方[安装说明](#安装到-codex)安装，重新打开会话。
-2. 提供一张自己的清晰照片作为身份主参考；辅助照片可选。也可明确“先用仓库的小伟演示形象测试”。自己的照片优先，不会被强制套上小伟的发型或眼镜。
-3. 复制下面的测试请求；三张只做3:4，方便并排比较。
+需要支持生图和参考图片的Codex环境。脚本编译策划与验收文件，不自行调用模型。提供一张自己的清晰照片，直接输入：
 
 ```text
 $generate-xiaowei-covers
-请用我附上的照片作为唯一人物身份主参考，做三张3:4视频封面：
-1. AI封面怎么做
-2. 提示词怎么写
-3. 工作流怎么搭
-人物重新生成，照片只参考长相，不贴原照片。
-保留同一作者的大字描边与拼贴辨识度；每张按主题变化配色、背景、
-人物位置、姿势和标题布局，不用固定深蓝背景、展台或同一换字模板。
-这次是概念样稿，不宣称实际软件运行或实测效果。
-生成后检查文字和人脸，打开三张并排给我看。
+请给这篇文章做封面：<原文或链接>
+人物只参考我的身份，按内容设计整张画面。
+不要固定右侧指字，不要用上一张换皮；生成后检查真实比例、文字和人脸。
 ```
 
-测试看三点：像不像本人、能否一眼看出不同主题、既像同一作者又没有重复模板感。当前版本的规则和脚本已验证；修正后的多主题视觉效果仍需要实际生图测试，旧画廊展示的是历史样例。
+单篇默认一个方向。明确“给我三张不同风格”才做三个完整方向；明确“同款”才延续统一系列。规则和脚本通过测试不等于视觉效果已验证，生成图必须实际查看。
 
 ## 小伟内容：文案与封面总入口
 
@@ -49,64 +41,24 @@ ln -s "$HOME/.codex/skills/generate-xiaowei-covers/skills/xiaowei-content" "$HOM
 
 这样两个入口共用一个仓库，更新仓库会同步更新内容入口；命令不会覆盖已有目标。其他安装位置可将 `skills/xiaowei-content` 目录单独安装，并同时保留 `generate-xiaowei-covers`。刷新Skill列表或新开对话后调用。
 
-## 按用途和内容选择风格
+## 从内容到完整画面
 
-小伟视频系列默认统一 **series**：保持个人形象与粗体描边/拼贴语言，每期按主题独立选择配色、背景、布局、动作和对象；不锁深蓝棚景或同一模板。上传照片只供身份参考，重新生成写实人物，不直接贴原照片。“随机出图”只变化内容，不抽风格。七个历史预设保留用于回放、其它渠道及明确的风格实验。详见 [系列规则](references/series-cover.md) 与 [用途分流](references/channel-routing.md)。
+新流程：读原文 → 点击理由 → 主视觉/人物动作/场景 → 完整艺术方向 → 逐画幅提示 → 实际生图 → 图片与尺寸验收。
 
-```text
-$generate-xiaowei-covers
-今天讲 AI 封面制作，按主题设计有变化的系列封面，出小红书和抖音版本。
+十二个候选包括真实记录、杂志、柔黄大字、深色大字、粉彩、暖纸拼贴、冲击拼贴、指定系列，以及本地新增的实物工作台、工程讲义、手绘学习册、文字海报。按内容选，不固定五张pack，也不把换色或换引擎算风格差异。
 
-$generate-xiaowei-covers
-今天讲豆包，用阿囤囤风格，横竖都要，人物放左边。
-
-$generate-xiaowei-covers
-今天讲千问，用上一套的风格，标题换成这篇文稿的主题。
-```
-
-未约定平台时按公域社媒处理，默认 **3:4 + 9:16**；“横竖都要”增加独立横屏 **16:9 + 4:3**；只有明确要求公众号时才输出 **21:9 + 1:1**。小伟真人封面默认真人必须出镜，姿势、动作、位置、景别和占比按选题变化。原仓库与杂志风格使用可编辑HTML，其余六种使用内置生图并保留完整提示词。图片实际尺寸会核验记录，不把目标尺寸或放大结果当成原生高清。
-
-统一交付根目录固定为桌面的 `/Users/siuserxiaowei/Desktop/CRENSTUDIO/`。每个任务创建一个日期项目目录，将最终视频放入 `video/`、字幕和转写放入 `subtitles/`、封面放入 `covers/`，并在同一项目保留 `source/`、`review/`、提示词和 `generation.json`。不要放到 Documents、当前工作区根目录或其它目录。
-
-选择器不会自行调用生图模型：
+Agent依据 [COVER_PLAN v2](references/cover-plan.md) 写完整方案，脚本检查数量、素材与构图碰撞，并生成可直接执行的提示：
 
 ```bash
-node scripts/select-cover-style.mjs /path/to/new-cover-project --style series --ratios 3:4,9:16
-node scripts/select-cover-style.mjs /path/to/another-project --style 阿囤囤 --ratios 3:4,9:16,16:9
+node scripts/build-cover-plan.mjs authored-plan.json /path/to/new-project
+node scripts/validate-cover-output.mjs /path/to/OUTPUT_REVIEW.json --out /path/to/review-report.json
 ```
 
-它生成 `STYLE_SELECTION.json` 和 `STYLE_BRIEF.md`，由执行Agent结合本次素材完成构图、生图和检查。复跑同一项目不会重新抽签；seed只复现风格选择，不保证图片逐像素相同。各预设的来源、制作方式和适配边界见 [风格与系列规则](references/style-presets.md)。
+真实宽高决定比例是否通过；补边、拉伸、机械裁剪不能冒充独立原生构图。验收脚本不自动识别人脸或美学，实际查看由Agent完成。新项目保存 `COVER_PLAN.json`、`prompts/`、真实参考素材、`generation.json` 与验收结果。
 
-[English](README.en.md) · [Claim-to-Pixel 契约](references/claim-to-pixel-contract.md) · [VibeLab 投稿包](contest/README.md) · [高清成品画廊](docs/gallery.md) · [系统架构](docs/architecture.md)
+默认社媒3:4+9:16；横竖都要再加16:9+4:3；小伟公众号偏好3.35:1，不自动加方图。当前工具无法实现时如实说明实际比例。`targetPixels`仅为目标，不是能力承诺。
 
-[![Validate Skill](https://github.com/siuserxiaowei/generate-xiaowei-covers/actions/workflows/validate.yml/badge.svg)](https://github.com/siuserxiaowei/generate-xiaowei-covers/actions/workflows/validate.yml)
-[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
-
-[![公众号横版与独立方版高清配对封面](docs/images/showcase/wechat/hero-field-recap-pair-1944x620.png)](docs/images/showcase/wechat/hero-field-recap-pair-1944x620.png)
-
-这是一个面向中文 AI 内容创作者的 Codex Skill。Claim2Cover 先问“标题里的话凭什么成立”，再处理“封面怎么画”。当用户提供灵感网站、参考图或 moodboard 时，它还会先提炼 Design DNA（层级、构图、排版、色彩材质、密度节奏和一个签名细节），再把视觉语言转成当前主题的独立构图。你可以只给它一句选题、一个官方链接、一篇文稿、一张截图、一段视频或一张现场照片，它会：
-
-1. 理解这篇内容真正要讲什么；
-2. 查找并核对官方资料；
-3. 在六种内容结构中选择合适的一种；
-4. 如果输入是视频，无 API 抽取候选帧、联系图和时间戳，由 Agent 按内容选择；
-5. 生成项目专属的 `COVER_PROMPT.md` 封面提示词；
-6. 选择一个视觉预设，为请求的3:4、9:16、16:9或公众号21:9/1:1分别排版；
-7. 导出PNG、相应的HTML或生图提示词、事实台账和素材来源。
-
-### 从灵感网站到封面
-
-你可以直接给出 Awwwards、Recent Design、Muzli、Designspiration、Design Spells、Loadmo.re 或一张参考图。Skill 会把参考限定为 `visual_language_only`，先确认这次的第一视觉重点（标题、真人、产品、流程、结果或故事），再选择一个构图骨架和最多一个签名细节。网页的动效会被转译成静态的路径、揭示、进度、叠层、光标或状态线索，不会把多个特效堆到封面上。
-
-发布前还会用四个维度检查：层级和美术、缩略图可用性、独特创意锚点、事实与内容边界。这个检查借鉴网页设计评审的思路，不代表封面获得任何奖项。
-
-它不是让图片模型“随便画一张好看的海报”。它要解决的是：
-
-- 读者能不能在缩略图里一眼看懂这篇内容讲什么；
-- 标题里的版本、参数和结论有没有依据；
-- 截图、模型卡、流程图和现场照片能不能证明主题；
-- 人物是否完整、自然，而不是被粗暴抠图或裁断；
-- 不同平台是否真正重新设计，而不是机械裁图。
+详见 [艺术方向](references/art-direction.md)、[风格与数量](references/style-system.md)、[三个指定仓库的研究](references/upstream-research.md)。旧HTML/Claim-to-Pixel演示及下方历史样例保留兼容，不能证明新生图已通过验收。默认产物目录为桌面CRENSTUDIO，用户指定路径优先。
 
 ## 一句话就能开始
 
@@ -134,30 +86,26 @@ Qwen 新版开源了，帮我做公众号和小红书封面。
 
 ```mermaid
 flowchart LR
-    A[一句选题或一个链接] --> B[研究官方资料]
-    V[本地视频] --> VF[候选帧 + 联系图]
-    VF --> C
-    B --> C[选择内容路由]
-    C --> D[生成 COVER_PROMPT.md]
-    D --> E[分别设计 3:4 / 21:9 / 1:1]
-    E --> F[HTML/CSS 排版]
-    F --> G[高清 PNG + 可编辑源文件]
-    B --> H[FACTS.md]
-    D --> I[assets/SOURCES.md]
+    A[原文或链接] --> B[点击理由与真实文案]
+    B --> C[主视觉 / 动作 / 场景 / 完整风格]
+    C --> D[COVER_PLAN v2]
+    D --> E[编译各画幅提示与真实参考]
+    E --> F[实际生图或独立HTML]
+    F --> G[全图 / 缩略图 / 并排检查]
+    G --> H[真实尺寸与来源验收]
+    H --> I[成品PNG + 记录]
 ```
 
-一次任务的核心交付物：
+| 文件 | 用途 |
+| --- | --- |
+| `COVER_PLAN.json` | 完整方向、明确张数、主视觉与各画幅构图 |
+| `prompts/*.md` | 每次实际生成所需完整提示 |
+| `generation.json` | 计划和真实调用分别记录，保留原稿与实际像素 |
+| `OUTPUT_REVIEW.json` / `review-report.json` | 实际看图后的观察与确定性验收 |
+| `covers/*.png` | 通过检查的原图成品 |
+| `FACTS.md` / `assets/SOURCES.md` | 采用文案与素材的来源边界 |
 
-| 文件 | 它解决什么问题 |
-|---|---|
-| `COVER_PROMPT.md` | 把选题、标题、证据、人物、光线、镜头和排版写成可复用的封面提示词 |
-| `STYLE_SELECTION.json` / `STYLE_BRIEF.md` | 同批锁定的随机或指定风格、seed、引擎和画幅 |
-| `generation.json` | 生图的实际像素、完整提示词/参考图位置、原始与交付文件路径、检查结果 |
-| `cover.html` / `prompts/*.md` | HTML预设的可编辑源文件，或生图预设的完整提示词 |
-| `output/*.png` | 小红书、公众号横版、公众号方版等高清成品 |
-| `FACTS.md` | 记录封面中每条版本、日期、参数、价格和结论的依据 |
-| `assets/SOURCES.md` | 记录人物、Logo、截图和外部素材的来源与使用边界 |
-| `assets/evidence/video-frames/` | 视频任务的候选帧、联系图、时间戳和选择记录 |
+以下Claim-to-Pixel和HTML示例属于保留的历史路径。
 
 ## Claim-to-Pixel：从主张到像素的发布门
 
@@ -267,7 +215,7 @@ Skill 负责“判断与执行流程”，不是一张固定海报。
 - 文章重点是三项统一实测 → `model_comparison`；
 - 文章重点是作者参加活动后的判断 → `field_recap`。
 
-## 三种画幅，三套独立构图
+## 历史HTML：三种画幅，三套独立构图
 
 | 发布面 | 生产尺寸 | 核心规则 |
 |---|---:|---|
@@ -570,7 +518,7 @@ npm test
 
 ### 它真的会生成封面提示词吗？
 
-会。每个新项目都会包含 `COVER_PROMPT.md`，记录当前选题的路由、标题、证据、六维视觉描述、分画幅构图和可复制最终提示词。
+会。新流程由 `COVER_PLAN.json` 编译每画幅完整 `prompts/*.md`；旧项目兼容 `COVER_PROMPT.md`。
 
 ### 能自动搜索官方 Logo 和截图吗？
 
@@ -578,7 +526,7 @@ npm test
 
 ### 为什么公众号会生成两张封面？
 
-主封面是 21:9，列表与分享场景还需要方图。两者独立排版，不能依靠裁切解决。
+明确要求旧版21:9时保留独立方图配对；当前小伟默认3.35:1只做横幅，不自动附加方图。实际输出比例需要核验。
 
 ### 方图怎么处理真人？
 

@@ -121,7 +121,7 @@
   - `xiaohongshu / portrait_cover`：竖版封面，通常导出 `1080×1440`。
   - `wechat_official_account / article_cover`：公众号文章横版首图，使用项目当前平台规格，关键标题与人物进入裁切安全区。
 - 同一主题的横版和竖版是独立构图，不做机械裁切或拉伸。
-- 未指定平台时按公域社媒处理，默认 3:4 + 9:16；用户说“横竖都要”时增加独立横屏 16:9 + 4:3；只有用户明确要求公众号时才输出 21:9 + 1:1。
+- 未指定平台时按公域社媒处理，默认 3:4 + 9:16；用户说“横竖都要”时增加独立横屏 16:9 + 4:3；小伟当前公众号偏好为3.35:1，不自动附加方图。明确要求旧版21:9时保留旧HTML路径的21:9 + 1:1配对。
 
 ### `portrait_required` 与 `portrait_identity_goal`
 
@@ -148,15 +148,11 @@
 - 默认 `auto`。执行端按 `content-routing.md` 选择，并记录选择理由。
 - 用户指定结构与材料不匹配时，应说明风险并建议更合适的结构，而不是硬套模板。
 
-### `visual_style` 与 `style_seed`
+### `visual_style`、数量与模式
 
-- `visual_style`：小伟视频系列默认解析为 `series`；其它用途的 `auto` 由 Agent 按用途和内容选预设。保留 `original`、`editorial`、`atutun`、`gbro`、`oil`、`baoyu`、`impact` 用于历史回放与风格实验。“随机生成系列封面”保持series的视觉语言，变化配色/布局/场景/动作/对象；明确跨风格探索才用 `random`。
-- 视频系列增加 `portrait_mode: generated_identity`、`series_profile`、`style_references`（visual_language_only）、`variation_brief`。照片是身份参考，不是可见插图；从已有SERIES.json复用视觉快照和原始身份参考。
-- `channel` 为 `article` 或 `video_social`。两者都要时建立独立 brief 和任务目录；见 [channel-routing.md](channel-routing.md)。
-- `style_seed` 可选，用于复现风格选择，不保证生图像素一致。
-- 每套仅选择一次，写入 `STYLE_SELECTION.json`；同一套的横竖版共用。
-- 未指定平台时默认3:4 + 9:16；明确说横竖都要时加入16:9；公众号仍使用21:9 + 1:1。
-- 内容结构与视觉风格独立，完整规则见 [style-presets.md](style-presets.md)。
+单篇默认single，由内容选择完整风格；明确多张不同风格用style_pack且尊重张数；同款/统一系列才用series。“整套Skill”不是五张封面，“文案+各画幅”也不等于风格包。详见 [style-system.md](style-system.md)。新生成使用 [cover-plan.md](cover-plan.md) 的schemaVersion2；下文字段保留给旧brief输入兼容。
+
+风格seed只复现候选选择；目标画幅/像素不是生成能力或原图尺寸承诺。各比例独立构图，人物动作由内容决定。
 
 ### `visual_focus`、`signature_detail` 与 `reference_sources`
 

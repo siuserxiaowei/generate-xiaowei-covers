@@ -55,7 +55,8 @@ function brief(record) {
     "",
     "## 固定规则",
     "",
-    "同一批次所有画幅共用本次风格、人物身份、主题和强调色；复跑读取现有选择，不重新抽签。",
+    "同一批次所有画幅共用本次完整风格、人物身份、主题和事实边界；复跑读取现有选择，不重新抽签。",
+    "风格是完整 Visual DNA，不得从其它 preset 借字体、材质、调色板或人物处理；换画幅只重新构图，不换风格。",
     "先填写 COVER_PROMPT.md 的本次精确文案与 FACTS.md；这里的风格规则不提供事实或替你决定观点。",
     "先读本Skill references/identity-and-pose.md。身份固定，默认按内容变化姿势，不默认拿话筒；纪实或明确保留原动作时才锁定姿态。旧风格快照中的动作保留词句不能覆盖本次人物要求。",
     "",
@@ -63,6 +64,10 @@ function brief(record) {
     "## 视觉",
     "",
     s.visual,
+    "",
+    "## Visual DNA（单风格锁定）",
+    "",
+    ...Object.entries(s.styleDna || {}).map(([key, value]) => "- " + key + ": " + value),
     "",
     "人物：" + s.portrait,
     "",
@@ -74,7 +79,7 @@ function brief(record) {
     "",
     "## 本次画幅",
     "",
-    ...Object.entries(record.surfaces).map(([ratio, p]) => "- " + ratio + " / " + p.target + "：原生HTML参考尺寸 " + p.nativePixels.join("×") + "；" + p.composition),
+    ...Object.entries(record.surfaces).map(([ratio, p]) => "- " + ratio + " / " + p.target + "：画布参考尺寸 " + p.targetPixels.join("×") + "（非输出尺寸承诺）；" + p.composition),
     "",
     "imagegen 的实际输出尺寸以工具结果为准，逐张记录；不把提示词目标尺寸当成已实现的像素尺寸。",
     "HTML模式保留可编辑源文件；imagegen模式保留完整提示词和参考图片，不能把成品PNG称为可拖动图层模板。",
@@ -118,6 +123,7 @@ async function main() {
   const record = {
     schemaVersion: 1, catalogVersion: catalog.version, catalogSha256: digest(raw),
     mode: requestedStyle ? "specified" : "random", seed, style,
+    styleLock: { mode: "single_style", styleId: style.id, sameStyleAcrossRatios: true, mixedPresetFieldsAllowed: false },
     surfaces: Object.fromEntries(ratios.map(r => [r, catalog.surfaces[r]])),
   };
   // Check both destinations before writing so an existing brief is not overwritten.

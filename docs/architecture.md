@@ -6,23 +6,17 @@ The system separates Agent semantic judgment, deterministic contract validation/
 
 ```mermaid
 flowchart LR
-    A[Topic / source link / draft] --> B[Normalize brief]
-    V[Source video] --> VF[Extract candidate frames + contact sheet]
-    VF --> B
-    B --> C[Verify official facts]
-    C --> CL[Compile fact / judgment / unknown]
-    CL --> PB[Agent authors 3 independent briefs]
-    PB --> CT[Claim-to-Pixel contract]
-    CT --> D[Choose one content route]
-    D --> E[Write COVER_PROMPT.md]
-    E --> F[Author copy and evidence per surface]
-    F --> G[Render selected data-export nodes]
-    G --> H[PENDING HUMAN SIGN-OFF]
-    H --> HR[Human review + clean commit release-check]
-
-    C --> I[FACTS.md]
-    E --> J[assets/SOURCES.md]
+    A[Source / topic] --> B[Reader promise + factual copy]
+    B --> C[Complete concepts + art direction]
+    C --> D[COVER_PLAN compilation]
+    D --> E[Per-ratio generation prompt + real references]
+    E --> F[Actual generation / authored HTML]
+    F --> G[Full image + thumbnail inspection]
+    G --> H[Actual dimensions + provenance gate]
+    H --> I[Local deliverables]
 ```
+
+The layers below retain historical HTML/Claim-to-Pixel components alongside the v2 planning and output gates.
 
 ## Layers
 
@@ -78,15 +72,11 @@ Both paths:
 
 ## Selection model
 
-`--only` normalizes and matches any of:
+New requests use COVER_PLAN v2. The Agent chooses the reader promise, focal subject, human/object interaction, complete art direction and per-ratio composition. build-cover-plan validates count, assets and declared composition collisions; it compiles complete prompts and initializes a planned generation record. It does not generate images or certify factual copy.
 
-- `data-route`;
-- `data-pair`;
-- `data-preview-pair`;
-- DOM `id`;
-- `data-file`, with or without `.png`.
+After a real generation call, validate-cover-output reads actual PNG/JPEG dimensions and checks target ratio, source transforms, inspection completeness and observed cross-item composition fields. It cannot perform face recognition or determine aesthetics from pixels; the Agent must view full-size images and thumbnails. Style IDs and string-DNA distances are candidate metadata only.
 
-This lets one editable template hold multiple content routes while a production command exports only the requested deliverables.
+single defaults to one direction; style_pack respects explicit alternative count; series retains an explicitly requested style. Existing selection files and HTML fixtures remain backward-compatible, not the default structure of every generated cover.
 
 ## Trust boundary
 

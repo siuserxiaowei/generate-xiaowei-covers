@@ -1,42 +1,23 @@
 # Claim2Cover | Xiaowei AI Cover Evidence Chain
 
-> Video-series update: preserve the creator’s identity and recognizable bold-type/collage language, while choosing colors, backgrounds, layouts and poses per topic. Source portraits guide likeness; they are not pasted into covers. See the [friend testing guide](README.md#给朋友快速测试). A Codex environment with image generation and reference-image support is required. Users may supply their own identity photo; author-local paths are not required. Historical gallery images do not certify the revised visual workflow.
+> Art-direction v2: read the source, plan the subject relationships and complete visual language, generate each requested ratio, then inspect actual images. A single article defaults to one direction. Explicit multi-style requests respect the requested count; matching-series mode is opt-in. Identity stays recognizable while scene and pose follow the topic.
 
+Existing generated images are archived in the [Xiaozhi hardware case](docs/cases/xiaozhi-hardware-20261014/README.md): four tool originals, five historical exports and a comparison sheet. Ratio failures and padded exports are labelled explicitly; these are not v0.8 success samples.
 
-> Turn one topic into a reusable cover prompt and a consistent cover set for Xiaohongshu, Douyin, landscape, or WeChat.
+## New workflow
 
-## Copy-to-cover entry
+Use [COVER_PLAN v2](references/cover-plan.md) to author content-derived concepts and all six visible dimensions. The compiler checks real asset files, count, mode and cross-item composition collisions before creating a new project:
 
-The bundled [`xiaowei-content`](skills/xiaowei-content/SKILL.md) skill handles reference research, separate platform drafts, local feedback and handoff to this cover skill. Invoke `$xiaowei-content` with a draft; say `出整套` to include 3:4 and 9:16 covers, or `改口吻` to revise the current copy. Copy-only is the default. See the [Chinese quick start](README.md#小伟内容文案与封面总入口) for local installation. Private drafts and unapproved examples are not bundled or published.
+```bash
+node scripts/build-cover-plan.mjs authored-plan.json /path/to/new-project
+node scripts/validate-cover-output.mjs /path/to/OUTPUT_REVIEW.json --out /path/to/report.json
+```
 
-## Seven visual presets
+The compiler does not call a model. The output validator reads actual image dimensions and verifies declared inspection records; it does not recognize faces or style from pixels. Padding, stretching and mechanical cropping fail the native-cover check. A target ratio or targetPixels field is not a verified tool capability.
 
-Each new set randomly selects one of seven presets: original, editorial, atutun, gbro, oil, baoyu, or impact. Explicit style requests override randomness. The set keeps its identity, palette and typography while composing each requested ratio independently. Defaults are 3:4 + 9:16; requesting portrait and landscape adds 16:9; WeChat uses 21:9 + independent 1:1. When references are supplied, the brief extracts Design DNA and one signature detail before selecting the composition.
+Twelve candidate directions include independently authored workbench, blueprint, handbook and type-led concepts. Different style labels, seeds, colors or generation engines do not prove distinct aesthetics. See [art direction](references/art-direction.md) and [upstream research](references/upstream-research.md). Source identity photos and relevant product/UI assets are inspected and role-labelled before generation.
 
-Run `node scripts/select-cover-style.mjs <project-dir>` to save the selection and visual brief. The selector does not generate images: original/editorial use editable HTML; the other four use native image generation with inspected portrait references. Reusing the project preserves the selection. A seed reproduces the preset choice, not identical generated pixels.
-
-Save full prompts, reference assets, actual pixel dimensions and output paths in the project. Deliver clickable files and verify the viewer when asked to open them. See [preset and delivery rules](references/style-presets.md) for sources and adaptation boundaries. The existing Claim-to-Pixel v1 contract covers its three HTML surfaces only, not these additional ratios or generated raster covers.
-
-[中文说明](README.md) · [Claim-to-Pixel contract](references/claim-to-pixel-contract.md) · [VibeLab pack](contest/README.md) · [Full-resolution gallery](docs/gallery.md) · [Architecture](docs/architecture.md)
-
-[![Validate Skill](https://github.com/siuserxiaowei/generate-xiaowei-covers/actions/workflows/validate.yml/badge.svg)](https://github.com/siuserxiaowei/generate-xiaowei-covers/actions/workflows/validate.yml)
-[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
-
-[![Full-resolution paired WeChat cover](docs/images/showcase/wechat/hero-field-recap-pair-1944x620.png)](docs/images/showcase/wechat/hero-field-recap-pair-1944x620.png)
-
-`generate-xiaowei-covers` is a Codex Skill for Chinese AI content creators. Claim2Cover asks why a headline claim is allowed before deciding how the cover should look. Give it a topic, first-party link, article, screenshot, video, or event photo. It will:
-
-1. understand the actual editorial promise;
-2. research current first-party facts;
-3. select one of six evidence structures;
-4. extract timestamped video candidates and a contact sheet without API calls when needed;
-5. write a task-specific `COVER_PROMPT.md`;
-6. select a visual preset and independently compose the requested ratios;
-7. export PNG, editable HTML or generation prompts/records, and provenance ledgers.
-
-This is not a “make a pretty AI poster” prompt. It is an evidence-aware cover workflow:
-
-> editorial judgment + source verification + cover brief + structured layout + deterministic export
+Historical HTML/Claim-to-Pixel paths and examples below remain available for compatible tasks; they do not certify revised image-generation quality. “Copy plus platform covers” does not implicitly request five design alternatives.
 
 ## Maintainer evidence and reusable workflow
 
@@ -69,26 +50,15 @@ vary the pose and position by topic, and author each surface separately.
 ## What the Skill produces
 
 | File | Purpose |
-|---|---|
-| `COVER_PROMPT.md` | Reusable creative brief covering copy, evidence, subject, environment, visual character, light, composition, and typography |
-| `cover.html` | Editable HTML/CSS source |
-| `output/*.png` | Full-resolution platform-specific covers |
-| `FACTS.md` | Evidence ledger for visible versions, dates, numbers, prices, and claims |
-| `assets/SOURCES.md` | Provenance and rights notes for portraits, logos, screenshots, and external media |
+| --- | --- |
+| `COVER_PLAN.json` | Complete art directions, exact requested count and independent surface compositions |
+| `prompts/*.md` | Full generation prompts with concrete visible dimensions and exact copy |
+| `generation.json` | Planned calls followed by actual tool/output records |
+| `OUTPUT_REVIEW.json` / `review-report.json` | Observed image checks and deterministic validation |
+| `covers/*.png` | Inspected original cover images |
+| `FACTS.md` / `assets/SOURCES.md` | Copy evidence and source/rights records |
 
-## What “cover prompt” means here
-
-The prompt is not a vague sentence such as “make it premium.” The generated `COVER_PROMPT.md` specifies:
-
-- audience, click promise, and editorial stance;
-- exact title, highlight phrase, subtitle, and line breaks per surface;
-- one primary content route and its evidence requirement;
-- subject, environment, visual character, light, camera/composition, and typography;
-- portrait placement and context that must remain visible;
-- independent rules for 3:4, 21:9, and 1:1;
-- required assets, rights status, must-keep elements, and prohibited claims.
-
-It is both Codex's execution brief and a portable prompt for another design or image tool.
+Historical COVER_PROMPT and HTML fixtures below remain compatible.
 
 ## Six content routes
 
@@ -103,7 +73,7 @@ It is both Codex's execution brief and a portable prompt for another design or i
 
 Routes are content structures, not six color variants of one poster.
 
-## Three surfaces, three compositions
+## Historical HTML: three surfaces, three compositions
 
 | Surface | Production size | Rule |
 |---|---:|---|
